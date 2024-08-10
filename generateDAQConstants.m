@@ -1,6 +1,4 @@
-function generateDAQConstants(headerFilePath, outputFilePath)
-    % take the NIDAQmc.h file and generate corresponding constants for
-    % matlab (constants only, not functions)
+function generateDAQConstants(headerFilePath)
     % Open the header file
     fid = fopen(headerFilePath, 'r');
     if fid == -1
@@ -24,11 +22,15 @@ function generateDAQConstants(headerFilePath, outputFilePath)
                 
                 % Check for valid MATLAB identifier
                 if isvarname(name)
-                    % Handle hex and numeric values
+                    % Handle hex, numeric, and bitwise values
                     if startsWith(value, '0x')
                         value = ['hex2dec(''' value(3:end) ''')'];
+                    elseif contains(value, '<<')
+                        % Convert bitwise shift (e.g., 1<<0) to MATLAB's bitshift and force int32
+                        value = regexprep(value, '(\d+)<<(\d+)', 'bitshift(int32($1),$2)');
                     elseif all(isstrprop(value, 'digit') | value == '-')
-                        % Do nothing, value is already a valid number
+                        % Ensure numeric constants are also treated as int32 if applicable
+                        value = ['int32(' value ')'];
                     else
                         continue; % Skip non-numeric and non-hex values
                     end
@@ -45,13 +47,13 @@ function generateDAQConstants(headerFilePath, outputFilePath)
     fclose(fid);
 
     % Open the output file
-    fout = fopen(outputFilePath, 'w');
+    fout = fopen("daqmx_header_consts.m", 'w');
     if fout == -1
         error('Cannot open output file.');
     end
 
     % Write the class definition header
-    fprintf(fout, 'classdef MyDAQConstants\n');
+    fprintf(fout, 'classdef daqmx_header_consts\n');
     fprintf(fout, '    properties (Constant)\n');
 
     % Write the constants and their comments
