@@ -1,21 +1,23 @@
-classdef task
+classdef task < sharedFunctions
     properties
         taskName;         % Name of the task
         taskHandle;       % Task handle
         channels;         % List of channel objects
         lib;              % Library alias (inherited from xfedaq)
         availableChannels % Stored available channels for validation
+        isMaster;         % 1 = this is the task that drives trigger + sample clock
+        numChans = 0;
     end
     
     methods
-        function obj = task(taskName, lib, availableChannels)
+        function obj = task(taskName, lib)
             % Constructor: Initialize task properties and create a DAQmx task
             obj.taskName = taskName;
             obj.lib = lib;
-            obj.availableChannels = availableChannels;
+            %obj.availableChannels = availableChannels;
             obj.taskHandle = libpointer('voidPtr', 0);
             err = calllib(lib, 'DAQmxCreateTask', taskName, obj.taskHandle);
-            handleDAQmxError(lib, err);
+            obj.handleDAQmxError(lib, err);
             obj.channels = {};
         end
         
@@ -25,59 +27,154 @@ classdef task
                 calllib(obj.lib, 'DAQmxClearTask', obj.taskHandle);
             end
         end
+
+        function configSampleClock(obj,sampleClockTerminal,rate,sampleMode,sampsPerChanToAcquire)
+
+            if isempty(sampleClockTerminal) || strcmp(sampleClockTerminal,'')
+                sampleClockTerminal = '';
+            end
+            sampleModeInt = obj.getConstInputVal('sampleMode',sampleMode,{'finite','continuous'},[obj.DAQmx.Val_FiniteSamps,obj.DAQmx.Val_ContSamps]);
+            err = calllib(obj.lib, 'DAQmxCfgSampClkTiming', obj.taskHandle, sampleClockTerminal, rate, obj.DAQmx.Val_Rising, sampleModeInt, uint64(sampsPerChanToAcquire));
+            obj.handleDAQmxError(obj.lib, err);
+        end
         
-        function chanObj = createChannel(obj, channelType, physicalChannel, channelName, varargin)
+        function chanObj = createChannel(obj, channelType, physicalChannel, varargin)
             % Validate the physical channel before creating the channel
             % obj.validateChannel(physicalChannel);
+            switch channelType
+                case 'AIVoltage'
+                    chanObj = AIVoltageChannel(obj.taskHandle, physicalChannel, obj.lib, varargin);
+                    obj.numChans = obj.numChans + 1;
+                case 'CICountEdges'
+                    chanObj = CICountEdgesChannel(obj.taskHandle, physicalChannel, obj.lib, varargin);
+                    obj.numChans = obj.numChans + 1;
+                case 'AIResistance'
+                    chanObj = AIResistanceChannel(obj.taskHandle,physicalChannel,obj.lib,varargin);
+                    obj.numChans = obj.numChans + 1;
+                case 'AIBridge'
+                    chanObj = AIBridgeChannel(obj.taskHandle,physicalChannel,obj.lib,varargin);
+                    obj.numChans = obj.numChans + 1;
+            end
             
             % Create a new channel object and add it to the channels list
-            chanObj = channel(channelType, obj.taskHandle, physicalChannel, channelName, obj.lib, varargin{:});
             obj.channels{end+1} = chanObj;
         end
 
-        function startTask(obj)
+        function startTime = startTask(obj)
             % Start the task
+            startTime(1) = datetime("now");
             [err,~] = calllib(obj.lib, 'DAQmxStartTask', obj.taskHandle);
-            handleDAQmxError(obj.lib, err);
+            startTime(2) = datetime("now");
+            obj.handleDAQmxError(obj.lib, err);
             fprintf('Task "%s" started successfully.\n', obj.taskName);
         end
 
         function stopTask(obj)
             % Stop the task
             [err,~]  = calllib(obj.lib, 'DAQmxStopTask', obj.taskHandle);
-            handleDAQmxError(obj.lib, err);
+            obj.handleDAQmxError(obj.lib, err);
             fprintf('Task "%s" stopped successfully.\n', obj.taskName);
         end
 
-        function data = readAnalog(obj, numSampsPerChan, timeout, arraySizeInSamps)
+        function data = readData(obj, numSampsPerChan,timeout)
             % Read analog data from the task's channels
-            
+            arraySizeInSamps = obj.numChans*numSampsPerChan;
             % Preallocate array to store read data
-            % readArray = zeros(1, arraySizeInSamps);
-            readArray = libpointer('doublePtr', zeros(1, arraySizeInSamps));
+
             sampsPerChanRead = libpointer('int32Ptr', 0);
-            fillMode = uint32(0); % 0 for DAQmx_Val_GroupByChannel, 1 for DAQmx_Val_GroupByScanNumber
-
-            % Call the DAQmx function to read the data
-            % err = calllib(obj.lib, 'DAQmxReadAnalogF64', ...
-            %               obj.taskHandle, int32(numSampsPerChan), ...
-            %               timeout, double(0), readArray, ...
-            %               uint32(arraySizeInSamps), sampsPerChanRead, []);
-
-        err = calllib(obj.lib, 'DAQmxReadAnalogF64', obj.taskHandle, int32(numSampsPerChan), ...
-              timeout, fillMode, readArray, uint32(arraySizeInSamps), sampsPerChanRead, []);
-
-            % voidPtr, int32, double, uint32, doublePtr, uint32, int32Ptr, uint32Ptr)
-            %TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
-
-            handleDAQmxError(obj.lib, err);
+            fillMode = uint32(0); % 0 for DAQmx.Val_GroupByChannel, 1 for DAQmx.Val_GroupByScanNumber
             
-            % Return the data, trimming the array to the number of samples actually read
-            data = readArray.Value(1:sampsPerChanRead.Value);
+            switch obj.taskName(1:2)
+                case 'AI' % read from analog tasks
+            readArray = libpointer('doublePtr', zeros(1, arraySizeInSamps));
+            err = calllib(obj.lib, 'DAQmxReadAnalogF64', obj.taskHandle, int32(numSampsPerChan), ...
+                timeout, fillMode, readArray, uint32(arraySizeInSamps), sampsPerChanRead, []);
+                case 'CI' % read from counter tasks
+                    readArray = libpointer('uint32Ptr', zeros(1, arraySizeInSamps));
+                    err = calllib(obj.lib, 'DAQmxReadCounterU32', obj.taskHandle, int32(numSampsPerChan), ...
+                        timeout, fillMode, readArray, uint32(arraySizeInSamps), sampsPerChanRead, []);
+                otherwise
+                    error('I don''t know how to read data from task type: %s',obj.taskName);
+            end
+
+            obj.handleDAQmxError(obj.lib, err);
+            if sampsPerChanRead.Value > 0
+                data = reshape(readArray.Value(1:sampsPerChanRead.Value*obj.numChans),[sampsPerChanRead.Value,obj.numChans]);
+            else
+                data = [];
+            end
         end
 
 
-        % function validateChannel(obj, physicalChannel)
+        function sampleClockString = getSampleClockTerm(obj)
+            bufferSize = 255;
+            [err,~,sampleClockString] = calllib(obj.lib,'DAQmxGetSampClkTerm',obj.taskHandle,blanks(bufferSize),uint32(bufferSize));
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+      function startTrigTermString = getStartTrigTerm(obj)
+            bufferSize = 255;
+            [err,~,startTrigTermString] = calllib(obj.lib,'DAQmxGetStartTrigTerm',obj.taskHandle,blanks(bufferSize),uint32(bufferSize));
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+
+        function setStartTrigTerm(obj,sampleClockTerm)
+            err = calllib(obj.lib,'DAQmxSetStartTrigType',obj.taskHandle,obj.DAQmx.Val_DigEdge);
+            obj.handleDAQmxError(obj.lib, err);
+            err = calllib(obj.lib,'DAQmxSetDigEdgeStartTrigSrc',obj.taskHandle,sampleClockTerm);
+            obj.handleDAQmxError(obj.lib, err);
+            err = calllib(obj.lib,'DAQmxSetDigEdgeStartTrigEdge',obj.taskHandle,obj.DAQmx.Val_Rising);
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+
+        function setTaskState(obj,targetState)
+            targetStateInt = obj.getConstInputVal('targetState',targetState,{'start','stop','verify','commit','reserve','unreserve','abort'},[obj.DAQmx.Val_Task_Start,obj.DAQmx.Val_Task_Stop,obj.DAQmx.Val_Task_Verify,obj.DAQmx.Val_Task_Commit,obj.DAQmx.Val_Task_Reserve,obj.DAQmx.Val_Task_Unreserve,obj.DAQmx.Val_Task_Abort]);
+            err = calllib(obj.lib,'DAQmxTaskControl',obj.taskHandle,targetStateInt);
+            obj.handleDAQmxError(obj.lib, err);
+        end
+        
+        function rate = getAIConvRate(obj)
+            ratePtr = libpointer('doublePtr',0);
+            [err,~,rate] = calllib(obj.lib,'DAQmxGetAIConvRate',obj.taskHandle,ratePtr);
+            obj.handleDAQmxError(obj.lib, err);
+            % [int32, voidPtr, doublePtr] DAQmxGetAIConvRate(voidPtr, doublePtr)
+            % int32 __CFUNC DAQmxGetAIConvTimebaseSrc(TaskHandle taskHandle, int32 *data);
+
+
+        end
+
+        function rate = getSampClkRate(obj)
+            ratePtr = libpointer('doublePtr',0);
+            [err,~,rate] = calllib(obj.lib,'DAQmxGetSampClkRate',obj.taskHandle,ratePtr);
+            obj.handleDAQmxError(obj.lib, err);
+            % [int32, voidPtr, doublePtr] DAQmxGetAIConvRate(voidPtr, doublePtr)
+            % int32 __CFUNC DAQmxGetAIConvTimebaseSrc(TaskHandle taskHandle, int32 *data);
+
+
+        end
+
+       function sampClkTimebaseSrc = getSampClkTimebaseSrc(obj)
+            bufferSize = uint32(255);
+            [err,~,sampClkTimebaseSrc] = calllib(obj.lib,'DAQmxGetSampClkTimebaseSrc',obj.taskHandle,blanks(bufferSize),bufferSize);
+            obj.handleDAQmxError(obj.lib, err);
+            % [int32, voidPtr, doublePtr] DAQmxGetAIConvRate(voidPtr, doublePtr)
+            % int32 __CFUNC DAQmxGetAIConvTimebaseSrc(TaskHandle taskHandle, int32 *data);
+
+       end
+
+       function setSampClkTimebaseSrc(obj,timebaseSrc)
+            err = calllib(obj.lib,'DAQmxSetSampClkTimebaseSrc',obj.taskHandle,timebaseSrc);
+            obj.handleDAQmxError(obj.lib, err);
+       end
+
+       function setSampClkTimebaseRate(obj,rate)
+           err = calllib(obj.lib,'DAQmxSetSampClkTimebaseRate',obj.taskHandle,rate);
+           obj.handleDAQmxError(obj.lib, err);
+       end
+        
+           % function validateChannel(obj, physicalChannel)
         %     % Iterate through available channels to validate the input channel
         %     validChannels = [];
         %     keys = obj.availableChannels.keys;
@@ -99,129 +196,3 @@ classdef task
     end
 end
 
-
-
-% classdef task
-%     properties
-%         taskName;     % Name of the task
-%         taskHandle;   % Task handle
-%         channels;     % List of channel objects
-%         lib;          % Library alias (inherited from xfedaq)
-%     end
-% 
-%     methods
-%         function obj = task(taskName, lib)
-%             % Constructor: Initialize task properties and create a DAQmx task
-%             obj.taskName = taskName;
-%             obj.lib = lib;
-%             obj.taskHandle = libpointer('voidPtr', 0);
-%             err = calllib(lib, 'DAQmxCreateTask', taskName, obj.taskHandle);
-%             handleDAQmxError(lib, err);
-%             obj.channels = {};
-%         end
-% 
-%         function delete(obj)
-%             % Destructor: Clear the task
-%             if ~isempty(obj.taskHandle)
-%                 calllib(obj.lib, 'DAQmxClearTask', obj.taskHandle);
-%             end
-%         end
-% 
-%         function chanObj = createChannel(obj, channelType, physicalChannel, channelName, varargin)
-%             % Create a new channel object and add it to the channels list
-%             chanObj = channel(channelType, obj.taskHandle, physicalChannel, channelName, obj.lib, varargin{:});
-%             obj.channels{end+1} = chanObj;
-%         end
-% 
-%         function chanObj = getChannel(obj, index)
-%             % Retrieve a channel object by index
-%             if index > 0 && index <= numel(obj.channels)
-%                 chanObj = obj.channels{index};
-%             else
-%                 error('Channel index out of range.');
-%             end
-%         end
-% 
-%         function startTask(obj)
-%             % Start the task
-%             err = calllib(obj.lib, 'DAQmxStartTask', obj.taskHandle);
-%             handleDAQmxError(obj.lib, err);
-%         end
-% 
-%         function stopTask(obj)
-%             % Stop the task
-%             err = calllib(obj.lib, 'DAQmxStopTask', obj.taskHandle);
-%             handleDAQmxError(obj.lib, err);
-%         end
-% 
-%         function readAnalog(obj, numSampsPerChan, timeout, readArray, arraySizeInSamps, sampsPerChanRead)
-%             % Read analog data from the task
-%             err = calllib(obj.lib, 'DAQmxReadAnalogF64', obj.taskHandle, numSampsPerChan, timeout, readArray, arraySizeInSamps, sampsPerChanRead, []);
-%             handleDAQmxError(obj.lib, err);
-%         end
-%     end
-% end
-% 
-% % classdef task
-% %     properties
-% %         taskName;     % Name of the task
-% %         taskHandle;   % Task handle
-% %         channels;     % List of channel objects
-% %         lib;          % Library alias (inherited from xfedaq)
-% %     end
-% % 
-% %     methods
-% %         function obj = task(taskName, lib)
-% %             % Constructor: Initialize task properties and create a DAQmx task
-% %             obj.taskName = taskName;
-% %             obj.lib = lib;
-% %             obj.taskHandle = libpointer('voidPtr', 0);
-% %             err = calllib(lib, 'DAQmxCreateTask', taskName, obj.taskHandle);
-% %             handleDAQmxError(lib, err);
-% %             obj.channels = {};
-% %         end
-% % 
-% %         function delete(obj)
-% %             % Destructor: Clear the task
-% %             if ~isempty(obj.taskHandle)
-% %                 calllib(obj.lib, 'DAQmxClearTask', obj.taskHandle);
-% %             end
-% %         end
-% % 
-% %         function chanObj = createChannel(obj, channelType, physicalChannel, channelName, varargin)
-% %             % Create a new channel object and add it to the channels list
-% %             % Pass along the arguments required by the channel constructor
-% %             chanObj = channel(channelType, obj.taskHandle, physicalChannel, channelName, obj.lib, varargin{:});
-% %             obj.channels{end+1} = chanObj;
-% %         end
-% % 
-% %         function chanObj = getChannel(obj, index)
-% %             % Retrieve a channel object by index
-% %             if index > 0 && index <= numel(obj.channels)
-% %                 chanObj = obj.channels{index};
-% %             else
-% %                 error('Channel index out of range.');
-% %             end
-% %         end
-% % 
-% %         function startTask(obj)
-% %             % Start the task
-% %             err = calllib(obj.lib, 'DAQmxStartTask', obj.taskHandle);
-% %             handleDAQmxError(obj.lib, err);
-% %         end
-% % 
-% %         function stopTask(obj)
-% %             % Stop the task
-% %             err = calllib(obj.lib, 'DAQmxStopTask', obj.taskHandle);
-% %             handleDAQmxError(obj.lib, err);
-% %         end
-% % 
-% %         function readAnalog(obj, numSampsPerChan, timeout, readArray, arraySizeInSamps, sampsPerChanRead)
-% %             % Read analog data from the task
-% %             err = calllib(obj.lib, 'DAQmxReadAnalogF64', obj.taskHandle, numSampsPerChan, timeout, readArray, arraySizeInSamps, sampsPerChanRead, []);
-% %             handleDAQmxError(obj.lib, err);
-% %         end
-% % 
-% %         % Add more task-related methods as needed
-% %     end
-% % end

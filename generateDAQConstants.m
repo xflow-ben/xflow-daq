@@ -53,8 +53,8 @@ function generateDAQConstants(headerFilePath)
     end
 
     % Write the class definition header
-    fprintf(fout, 'classdef daqmx_header_consts\n');
-    fprintf(fout, '    properties (Constant)\n');
+    fprintf(fout, 'function DAQmx = daqmx_header_consts\n');
+    % fprintf(fout, '    properties (Constant)\n');
 
     % Write the constants and their comments
     keys = constants.keys;
@@ -65,11 +65,11 @@ function generateDAQConstants(headerFilePath)
         for j = 1:numel(commentLines)
             fprintf(fout, '        %s\n', commentLines{j});
         end
-        fprintf(fout, '        %s = %s;\n', name, value);
+        fprintf(fout, '        %s = %s;\n', ['DAQmx.',name(7:end)], value);
     end
 
     % Write the class definition footer
-    fprintf(fout, '    end\n');
+    %fprintf(fout, '    end\n');
     fprintf(fout, 'end\n');
 
     fclose(fout);
