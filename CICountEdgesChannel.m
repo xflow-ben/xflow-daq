@@ -1,12 +1,13 @@
 classdef CICountEdgesChannel < channel
 
     methods
-        function obj = CICountEdgesChannel(taskHandle, physicalChannel, lib, inputs)
+        function obj = CICountEdgesChannel(taskHandle, physicalChannel, name, lib, inputs)
             % Constructor: Initialize channel properties and create the channel
             obj.physicalChannel = physicalChannel;
             obj.lib = lib;
             obj.taskHandle = taskHandle;
-            channelName = '';
+            channelName = name;
+            obj.name = name;
 
             % Extract and cast the arguments
             edgeDirection = int32(inputs{1});

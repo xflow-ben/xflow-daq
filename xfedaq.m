@@ -5,75 +5,63 @@ classdef xfedaq < sharedFunctions
     % analog input, as that is the sample clock we use. This could be made
     % more flexible later
     %
+    % sampleClock.source = 'auto', 'userDefined'
+    % sampleClock.terminal = sample clock used by all tasks in this
+    %   xfedaq instance
+    % sampleClock.exportTerminal = where to export the terminal, if
+    %   needed
+    % sampleClock.rate = Acquisition rate
+    %
+    % startTrigger.source = 'software', 'userDefined'
+    % startTrigger.terminal = start trigger used for all tasks in this
+    %   xfedaq instance
+    % startTrigger.exportTerminal = where to export the start trigger
+    %   to, if needed
+    %
+    % logging.mode - options 'off','log', 'log and read'
+    % logging.directoryPath - directory to save files in
+    % logging.fileName - name of files to save
+    %
+    % groupName, name of this collection of tasks, used for group in tdms
+    % logging
 
 
+    % TO DO
 
+    % each task needs to log to its own file
+    % rate can now go just into the main file props, no need to do nonsense
+    % with groups
+    % add task type in addition to name. Name used in file name and in
+    % group name of tdms file
+    % Make start groups? So groups of tasks that are started together can
+    % be indicated? Set up like slave_group_1, master_group_1, etc.
+    % Modify start command to deal with groupings of tasks. Slave tasks get
+    % start time of masters
+    % file names gen via input + task name
 
-    
-% Highest level of object represents task group that will be sampled
-% together - OR highest level is groups of task groups that will be started
-% together (but have different rates)
-
-% NOTE - we could remove "Collection" and just have the Groups be set up
-% with the proper triggering. Could make object class structure simpler.
-
-% Collection - a number of task groups that will be started/stopped
-% together (share start trigger signal). 
-%  METHODS
-%      - set start trigger. Set from external, or set all to start with
-%      master
-%      - Start. Starts all task groups together. Records time of start
-%      - Get data. Called in a loop
-
-% Group - a grouping of tasks that will all run at the same rate and use
-% the same acquisition clock
-%  METHODS
-%      - Need way to get sample clock of the master and pass it to the
-%      other tasks in the group
-
-
-% Task - a collection of channels from a single module with the same
-% settings (I think)
-%  METHODS
-%     - Get data. Get data from this task
-%     - Create/add channel. I beleive channels must be on the same chassis,
-%     and MAYBE on the same module, but could be that can they can be on
-%     different modules of the same type. 
-
-% Functions to create analog, RTD, counter chans
-% functions to get and apply, or set the sample clock and rate
-% function to start and stop the entire group
-% functions to iterate through and get all the available data from the
-% tasks/channels, and return it. This would get called in a while loop from
-% some external function
+    % when the start of this is triggered by another xfedaq instance, it
+    % would be nice to still write the rate in, and any other data needed
 
     properties
-        lib = 'myni';  % Library alias
-        dllPath = 'C:\Windows\System32\nicaiu.dll';
-        headerPath = 'C:\Program Files (x86)\National Instruments\NI-DAQ\DAQmx ANSI C Dev\include\NIDAQmx.h';
-        rate = 0.0; % acquisition rate of this task group
-        bufferSize = 0; % Buffer size (on pc) per channel for
         acquisitionType = ''; % 'finite' or 'continuous' - could leave this out for now
-        startTrigger = struct; % properties pertaining to how this task group starts
-        startTime = [datetime,datetime];
-        numChans = 0;
-        % startTrigger.source = 'software', 'userDefined'
-        % startTrigger.terminal = start trigger used for all tasks in this
-        % xfedaq instance
-        % startTrigger.exportTerminal = where to export the start trigger
-        % to, if needed
-        sampleClock = struct; % properties pertaining to the sample clock
-        % sampleClock.source = 'auto', 'userDefined'
-        % sampleClock.terminal = sample clock used by all tasks in this
-        % xfedaq instance
-        % sampleClock.exportTerminal = where to export the terminal, if
-        % needed
-        % sampleClock.rate = Acquisition rate
-        tasks = task.empty;  % List of task objects
-        isFinalized = 0;
-
+        logging = struct('mode','','directoryPath','','fileNamePrefix','');
+        durationSeconds; % For continuous, number seconds of data per file. For finite, finite length of acquisition
     end
-    
+
+    properties (SetAccess = private, GetAccess = public)
+        % visible to user, but not editable
+        isFinalized = 0;
+        task = taskDef.empty;  % List of task objects
+        loggingConfigured = 0;
+    end
+
+    properties (Access = private)
+        % not externally visible/editable
+        lib = 'myni';  % Library alias
+        dllPath = 'dlls_and_headers\nicaiu.dll';%'C:\Windows\System32\nicaiu.dll';
+        headerPath = 'dlls_and_headers\NIDAQmx.h';%'C:\Program Files (x86)\National Instruments\NI-DAQ\DAQmx ANSI C Dev\include\NIDAQmx.h';
+    end
+
     methods
         function obj = xfedaq(dllPath,headerPath)
             % Constructor: Load the library and retrieve device/channel info
@@ -84,156 +72,114 @@ classdef xfedaq < sharedFunctions
                     obj.dllPath = dllPath;
                     obj.headerPath  = headerPath;
                 end
-                 if isempty(dir(obj.dllPath))
-                        error('dll file not found at %s',obj.dllPath);
-                 end
-                 if isempty(dir(obj.headerPath))
-                        error('dll file not found at %s',obj.dllPath);
-                 end
+                if isempty(dir(obj.dllPath))
+                    error('dll file not found at %s',obj.dllPath);
+                end
+                if isempty(dir(obj.headerPath))
+                    error('dll file not found at %s',obj.dllPath);
+                end
                 warning off MATLAB:loadlibrary:TypeNotFound
                 warning off MATLAB:loadlibrary:TypeNotFoundForStructure
-                loadlibrary(obj.dllPath, obj.headerPath, 'alias', obj.lib);
+                try
+                    loadlibrary(obj.dllPath, obj.headerPath, 'alias', obj.lib);
+                catch
+                    error('Unable to load library. Note, Microsoft Visual C++ Redistributable for Visual Studio is required to be installed');
+                end
             end
             % default options
             obj.acquisitionType = 'continuous';
-            obj.startTrigger.source = 'software'; % options are 'software' and 'userDefined'
-            obj.startTrigger.terminal = '';
-            obj.startTrigger.exportTerminal = '';
-            obj.sampleClock.source = 'auto';
-            obj.sampleClock.terminal = '';
-            obj.sampleClock.exportTerminal = '';
-            obj.rate = 1000;
-            obj.bufferSize = 2000;
-        end
+            obj.logging.mode = 'off';
+            obj.logging.directoryPath = '';
 
-        function checkIfConfigured(obj)
-            % Check if the user has set up all required parameters before
-            if obj.rate == 0.0
-                error('obj.rate Rate must first be set');
-            end
-            if obj.bufferSize == 0
-                error('obj.bufferSize must first be set');
-            end
-            if isempty(obj.acquisitionType)
-                error('obj.acquisitionType must first be set');
-            end
+            obj.durationSeconds = 10;
 
         end
 
-        function start(obj)
-            % start the task group, or prepare it to start before a master
-            % task group or harware trigger
-            if ~obj.isFinalized
-                error('call obj.finalizeSetup before starting')
+        function set.acquisitionType(obj,value)
+            allowableValues = {'finite','continuous'};
+            if ~ismember(value,allowableValues)
+                error('Allowable values for acquisitionType are ''finite'' and ''continuous''')
+            end
+            for i = 1:length(obj.task)
+                obj.task(i).acquisitionType = value;
+            end
+            obj.acquisitionType = value;
+        end
+
+        function set.durationSeconds(obj,value)
+            if mod(value,1) ~= 0
+                error('durationSeconds must be an integer')
+            end
+            obj.durationSeconds = value;
+            for i = 1:length(obj.task)
+                obj.task(i).durationSeconds = value;
+            end
+        end
+
+
+
+        function set.logging(obj,value)
+            allowableFields = {'mode','directoryPath','fileNamePrefix'};
+            allowableModes = {'off','log','log and read'};
+            fieldNames = fields(value);
+            for i = 1:length(fieldNames)
+                if ~ismember(fieldNames{i},allowableFields)
+                    error('Allowable fields for logging are ''mode'', ''fileNamePrefix'', and ''directoryPath''')
+                end
+            end
+            if ~ismember(value.mode,allowableModes)
+                error('Allowable modes for logging are ''off'', ''log'', and ''log and read''')
+            end
+            if ~isempty(value.directoryPath) && isempty(dir(value.directoryPath))
+                error('Directory provided %s not found',value.directoryPath);
+            end
+            obj.logging = value;
+            for i = 1:length(obj.task)
+                obj.task(i).logging = value;
+            end
+        end
+
+        function stop(obj)
+            % Stop all tasks
+            for i = 1:length(obj.task)
+                obj.task(i).stopTask();
             end
 
-            % Start the slave tasks
-            for i = 2:length(obj.tasks)
-                obj.tasks(i).startTask();
-            end
-
-            obj.startTime(1) = datetime("now");
-            obj.tasks(1).startTask();
-            obj.startTime(2) = datetime("now");
-
         end
 
-         function stop(obj)
-            % Stop the task group
-        end
-
-        function data = getData(obj)
-            % gets the data available in the task buffers, if any
-
-
-        end
-        
         function delete(obj)
             % Destructor: Unload the library and clear tasks
-            for i = 1:numel(obj.tasks)
-                delete(obj.tasks(i));  % Ensure all tasks are properly deleted
+            for i = 1:numel(obj.task)
+                delete(obj.task(i));  % Ensure all tasks are properly deleted
             end
-            
+
             if libisloaded(obj.lib)
                 unloadlibrary(obj.lib);
             end
+            if libisloaded('tdmlib')
+                unloadlibrary('tdmlib')
+            end
         end
-        
-        function taskObj = createTask(obj, taskName)
+
+        function taskObj = createTask(obj, taskType, taskName, rate, startOrder)
             % Create a new task object and add it to the tasks list
-            taskObj = task(taskName, obj.lib);
-            obj.tasks(end+1) = taskObj;
-        end
-
-        function addAIVoltageChan(obj,physicalChannel,terminalConfig,inputRange)
-             checkIfConfigured(obj);
-             % check for existing task AIVoltage task, make it if needed
-             % if it already exists, could be good to check if it is on the
-             % same device (cDAQ chassis, USB daq, PCIe-daq, etc.)
-             terminalConfigInt = obj.getConstInputVal('terminalConfig',terminalConfig,{'RSE','Diff','NRSE'},[obj.DAQmx.Val_RSE,obj.DAQmx.Val_Diff,obj.DAQmx.Val_NRSE]);
-
-             taskIndex = getTaskIndex(obj,'AIVoltage');
-             if taskIndex == -1
-                 obj.tasks(1) = createTask(obj,'AIVoltage');
-                 taskIndex = 1;
-             end
-             obj.tasks(taskIndex).createChannel('AIVoltage', physicalChannel, terminalConfigInt, inputRange(1),inputRange(2));
-        end
-
-        function addCICountEdgesChan(obj,counterChannel,edgeDirection,countDirection)
-            checkIfConfigured(obj);
-            edgeDirectionInt = obj.getConstInputVal('edgeDirection',edgeDirection,{'rising','falling'},[obj.DAQmx.Val_Rising,obj.DAQmx.Val_Falling]);
-            countDirectionInt = obj.getConstInputVal('countDirection',countDirection,{'up','down','external'},[obj.DAQmx.Val_CountUp, obj.DAQmx.Val_CountDown, obj.DAQmx.Val_ExtControlled]);
-            taskIndex = getTaskIndex(obj,'CICountEdges');
-            if taskIndex == -1
-                taskHandle = createTask(obj,'CICountEdges');
-            else
-                taskHandle = obj.tasks(taskIndex);
+            % make sure the name doesn't already exist
+            for i = 1:length(obj.task)
+                if strcmp(obj.task(i).taskName,taskName)
+                    error('A task with name %s already exists',taskName);
+                end
             end
-            taskHandle.createChannel('CICountEdges', counterChannel, edgeDirectionInt,int32(0),countDirectionInt);
-
+            taskObj = taskDef(taskType, taskName, rate, startOrder, obj.logging, obj.acquisitionType, obj.durationSeconds, obj.lib);
+            obj.task(end+1) = taskObj;
         end
 
-        function addAIBridgeChan(obj,physicalChannel,units,inputRange,bridgeConfig,voltageExcitSource,voltageExcitVal,nominalBridgeResistance)
-            checkIfConfigured(obj);
-            unitsInt = obj.getConstInputVal('units',units,{'Volts per Volt','mV per Volt'},[obj.DAQmx.Val_VoltsPerVolt,obj.DAQmx.Val_mVoltsPerVolt]);
-            bridgeConfigInt = obj.getConstInputVal('bridgeConfig',bridgeConfig,{'full','half','quarter'},[obj.DAQmx.Val_FullBridge,obj.DAQmx.Val_HalfBridge,obj.DAQmx.Val_QuarterBridge]);
-            voltageExcitSourceInt = obj.getConstInputVal('voltageExcitSource',voltageExcitSource,{'internal','external','none'},[obj.DAQmx.Val_Internal,obj.DAQmx.Val_External,obj.DAQmx.Val_None]);
-      
-            taskIndex = getTaskIndex(obj,'AIBridge');
-            if taskIndex == -1
-                taskHandle = createTask(obj,'AIBridge');
-            else
-                taskHandle = obj.tasks(taskIndex);
-            end
-            taskHandle.createChannel('AIBridge', physicalChannel, inputRange(1),inputRange(2),unitsInt,bridgeConfigInt,voltageExcitSourceInt,voltageExcitVal,nominalBridgeResistance);
-        end
-
-
-        function addAIResistanceChan(obj,physicalChannel,inputRange,resistanceConfig,currentExcitSource,currentExcitVal)
-             checkIfConfigured(obj);
-             % check for existing task AIVoltage task, make it if needed
-             % if it already exists, could be good to check if it is on the
-             % same device (cDAQ chassis, USB daq, PCIe-daq, etc.)
-             resistanceConfigInt = obj.getConstInputVal('resistanceConfig',resistanceConfig,{'2 wire','3 wire','4 wire'},[obj.DAQmx.Val_2Wire,obj.DAQmx.Val_3Wire,obj.DAQmx.Val_4Wire]);
-             currentExcitSourceInt = obj.getConstInputVal('currentExcitSource',currentExcitSource,{'internal','external','none'},[obj.DAQmx.Val_Internal,obj.DAQmx.Val_External,obj.DAQmx.Val_None]);
-
-             taskIndex = getTaskIndex(obj,'AIResistance');
-             if taskIndex == -1
-                 taskHandle = createTask(obj,'AIResistance');
-             else
-                 taskHandle = obj.tasks(taskIndex);
-             end
-             taskHandle.createChannel('AIResistance', physicalChannel, inputRange(1),inputRange(2), resistanceConfigInt,currentExcitSourceInt,currentExcitVal);
-
-        end
 
         function index = getTaskIndex(obj,taskName)
 
-            if isempty(obj.tasks)
+            if isempty(obj.task)
                 index = -1;
             else
-                names = {obj.tasks.taskName};
+                names = {obj.task.taskName};
                 index = find(ismember(names,taskName));
                 if numel(index)>1
                     error('We ended up with more than one task of the same type somehow')
@@ -242,117 +188,325 @@ classdef xfedaq < sharedFunctions
                 end
             end
         end
-           
-        function finalizeSetup(obj)
-            
-            if isempty(obj.tasks)
-                error('You gotta add some channels before calling this')
-            end
-            if ~strcmp(obj.tasks(1).taskName(1:2),'AI')
-                error('This system needs the first task to be some sort of analog input');
-            end
-            
-            % config the first channel sample clock
-            obj.tasks(1).configSampleClock(obj.sampleClock.terminal,obj.rate,obj.acquisitionType,obj.bufferSize);
-            
-            if strcmp(obj.startTrigger.source,'userDefined')
-                obj.tasks(1).setStartTrigTerm(obj.startTigger.terminal)
-            end
-            
-            % get the first task ready enough that the sample clock and
-            % trigger gets set in the DAQ
-            obj.tasks(1).setTaskState('verify');
-            obj.tasks(1).setTaskState('reserve');
 
-            %% CHECK THE SAMPLE CLOCK
-            
-            % get the sample clock and start terminal of the trigger of
-            % first task
-            rate_actual = obj.tasks(1).getSampClkRate();
-            if round(rate_actual) ~= round(obj.rate)
-                warning('Sample rate has been force modified by the DAQ to %.0f, buffer will be set to 2x this',rate_actual);
-                obj.tasks(1).setTaskState('unreserve');
-                obj.bufferSize = round(rate_actual*2);
-                obj.rate = rate_actual;
-                obj.tasks(1).configSampleClock(obj.sampleClock.terminal,obj.rate,obj.acquisitionType,obj.bufferSize);
-                obj.tasks(1).setTaskState('verify');
-                obj.tasks(1).setTaskState('reserve');
-            end
-
-            sampleClockString = obj.tasks(1).getSampleClockTerm();
-            if strcmp(obj.sampleClock.source,'userDefined')
-                if ~strcmp(sampleClockString,obj.sampleClock.terminal)
-                    error('Tried to set sample clock to %s, but it was set to %s',obj.sampleClock.terminal,sampleClockString)
-                end
-            end
-            obj.sampleClock.terminal = sampleClockString;
-
-            startTrigTermString = obj.tasks(1).getStartTrigTerm();
-            if strcmp(obj.startTrigger.source,'userDefined')
-                if ~strcmp(startTrigTermString,obj.startTrigger.terminal)
-                    error('Tried to set start trigger terimal to %s, but it was set to %s',obj.startTrigger.terminal,startTrigTermString)
-                end
-            end
-            obj.startTrigger.terminal = startTrigTermString;
-
-            obj.tasks(1).setTaskState('commit');
-            obj.numChans = obj.tasks(1).numChans;
-            % Now we can set up the rest of the tasks
-            for i = 2:length(obj.tasks)
-                obj.tasks(i).configSampleClock(obj.sampleClock.terminal,obj.rate,obj.acquisitionType,obj.bufferSize);
-                % obj.tasks(i).setStartTrigTerm(obj.startTrigger.terminal);
-                obj.tasks(i).setTaskState('verify');
-                obj.tasks(i).setTaskState('reserve');
-                obj.tasks(i).setTaskState('commit');
-                obj.numChans = obj.numChans + obj.tasks(i).numChans;
-            end
-            % fprintf('Daq object is ready to star\n')
-            
-            obj.isFinalized = 1;
-
-
-        end
+        % function finalizeSetup(obj)
+        %
+        %
+        %
+        %     if isempty(obj.task)
+        %         error('You gotta add some channels before calling this')
+        %     end
+        %
+        %     obj.task(1).configSampleClock(obj.acquisitionType);
+        %
+        %     if strcmp(obj.startTrigger.source,'userDefined') || ~isempty(obj.startTrigger.terminal)
+        %         obj.task(1).setStartTrigTerm(obj.startTrigger.terminal)
+        %         obj.startedExternally = 1;
+        %     else
+        %         obj.startedExternally = 0;
+        %     end
+        %
+        %
+        %
+        %     % get the first task ready enough that the sample clock and
+        %     % trigger gets set in the DAQ
+        %     obj.task(1).setTaskState('verify');
+        %     obj.task(1).setTaskState('reserve');
+        %
+        %     configureLogging(obj,directoryPath,fileNamePrefix,loggingMode,fileDurationSeconds)
+        %
+        %     if strcmp(obj.acquisitionType,'finite')
+        %         obj.bufferSize = round(obj.durationSeconds*obj.rate);
+        %     elseif strcmp(obj.acquisitionType,'continuous')
+        %         obj.bufferSize = round(obj.rate);
+        %     end
+        %
+        %     %% CHECK THE SAMPLE CLOCK
+        %
+        %     % get the sample clock and start terminal of the trigger of
+        %     % first task
+        %     rate_actual = obj.task(1).getSampClkRate();
+        %     if rate_actual ~= obj.rate
+        %         warning('Sample rate has been force modified by the DAQ to %.0f, buffer will be set to 2x this',rate_actual);
+        %         obj.task(1).setTaskState('unreserve');
+        %         obj.rate = rate_actual;
+        %         if strcmp(obj.acquisitionType,'finite')
+        %             obj.bufferSize = round(obj.durationSeconds*obj.rate);
+        %         elseif strcmp(obj.acquisitionType,'continuous')
+        %             obj.bufferSize = round(obj.rate);
+        %         end
+        %         obj.task(1).configSampleClock(obj.sampleClock.terminal,obj.rate,obj.acquisitionType,obj.bufferSize);
+        %         obj.task(1).setTaskState('verify');
+        %         obj.task(1).setTaskState('reserve');
+        %     end
+        %
+        %     obj.task(1).setTaskState('commit');
+        %     obj.numChans = obj.task(1).numChans;
+        %     % Now we can set up the rest of the tasks
+        %     for i = 2:length(obj.task)
+        %         obj.task(i).configSampleClock(obj.sampleClock.autoTerminal,obj.rate,obj.acquisitionType,obj.bufferSize);
+        %         if strcmp(obj.startTrigger.source,'userDefined')
+        %             obj.task(i).setStartTrigTerm(obj.startTrigger.terminal);
+        %         else
+        %             obj.task(i).setStartTrigTerm(obj.startTrigger.autoTerminal);
+        %         end
+        %         obj.task(i).setTaskState('verify');
+        %         err = obj.task(i).setTaskState('reserve');
+        %         if err == -89131
+        %             obj.task(i).configSampleClock('',obj.rate,obj.acquisitionType,obj.bufferSize);
+        %             err = obj.task(i).setTaskState('reserve');
+        %             if err == -89131
+        %                 error('Same terminal routing error for sample clock')
+        %             end
+        %         end
+        %
+        %         obj.task(i).setTaskState('commit');
+        %         obj.numChans = obj.numChans + obj.task(i).numChans;
+        %     end
+        %     % fprintf('Daq object is ready to star\n')
+        %
+        %     obj.isFinalized = 1;
+        %
+        % end
 
         function routeSignal(obj,sourceTerminal,destinationTerminal)
             err = calllib(obj.lib, 'DAQmxConnectTerms', sourceTerminal, destinationTerminal,obj.DAQmx.Val_DoNotInvertPolarity);
             obj.handleDAQmxError(obj.lib, err);
         end
         
+
+
+        function resetDevice(obj,device)
+            err = calllib(obj.lib, 'DAQmxResetDevice', device);
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+
+        % function disconnectAllTerminals(obj)
+        % 
+        % 
+        %     bufferSize = 2048;
+        % 
+        %     % Call DAQmxGetSysDevNames to get a comma-separated list of all device names
+        %     [err, deviceNames] = calllib(obj.lib, 'DAQmxGetSysDevNames', blanks(bufferSize), bufferSize);
+        %     obj.handleDAQmxError(obj.lib,err);
+        % 
+        %     % Split the device names into a cell array
+        %     deviceList = strsplit(strtrim(deviceNames), ',');
+        % 
+        %     % Loop through each device to get and disconnect all terminals
+        %     for i = 1:length(deviceList)
+        %         device = strtrim(deviceList{i});
+        %         bufferSize = 16384;
+        %         % Get the list of terminals for this device
+        %         [err, ~, terminalNames] = calllib(obj.lib, 'DAQmxGetDevTerminals', device, blanks(bufferSize), uint32(bufferSize));
+        %         obj.handleDAQmxError(obj.lib,err);
+        % 
+        %         if err == 0
+        %             % Split the terminal names into a cell array
+        %             terminals = strsplit(strtrim(terminalNames), ',');
+        % 
+        %             % Disconnect each terminal
+        %             for j = 1:length(terminals)
+        %                 terminal = strtrim(terminals{j});
+        %                 err = calllib(obj.lib, 'DAQmxDisconnectTerms', terminal, '');
+        %                 if err ~= 0
+        %                     disp(['Error disconnecting routes from ', terminal]);
+        %                 else
+        %                     disp(['Disconnected all routes from ', terminal]);
+        %                 end
+        %             end
+        %         else
+        %             disp(['Error getting terminals for device: ', device]);
+        %         end
+        %     end
+        % 
+        % end
+
         function data = readData(obj,samplesToRead,timeOut)
+            if strcmp(obj.logging.mode,'log')
+                error('Cannot read data when logging.mode is set to ''log''');
+            end
             data = zeros([samplesToRead,obj.numChans]);
             col = 1;
-            for i = 1:length(obj.tasks)
-                data(:,col:col+obj.tasks(i).numChans-1) = obj.tasks(i).readData(samplesToRead,timeOut);
-                col = col + obj.tasks(i).numChans;
+            for i = 1:length(obj.task)
+                data(:,col:col+obj.task(i).numChans-1) = obj.task(i).readData(samplesToRead,timeOut);
+                col = col + obj.task(i).numChans;
+            end
+        end
+
+        function configureLogging(obj,fileNamePrefix,directoryPath,mode)
+            % Note: If the Logging.LoggingMode attribute/property is set to
+            % Log Only, Logging.SampsPerFile must be divisible by the
+            % Logging.FileWriteSize attribute/property, which is based, by
+            % default, on the buffer size.
+            %
+            % If logging and reading data, ensure the number of samples per
+            % channel to read is evenly divisible by the sector size of the
+            % hard disk.
+
+            % If manually configuring the buffer size, choose a multiple of
+            % eight times the sector size of the hard disk. For instance,
+            % if your sector size is 512 bytes, your buffer size might be
+            % 4,096 samples. default, on the buffer size.
+
+            % sectorSize = 4096; % bytes on a typical HD sector
+
+
+            if nargin>1 && ~isempty(fileNamePrefix)
+                obj.logging.fileNamePrefix = fileNamePrefix;
+            elseif isempty(obj.logging.fileNamePrefix)
+                error('fileName must be configured via this function or the logging.fileName property')
             end
 
+            if nargin>2 && ~isempty(directoryPath)
+                obj.logging.directoryPath = directoryPath;
+            elseif isempty(obj.logging.directoryPath)
+                error('directoryPath must be configured via this function or the logging.directoryPath property')
+            end
+
+            if nargin>3 && ~isempty(mode)
+                obj.logging.mode = mode;
+            elseif isempty(obj.logging.mode)
+                obj.logging.mode = 'log';
+                warning('logging.mode not set. Defaulting to ''log''')
+            end
+
+            for i = 1:length(obj.task)
+                obj.task(i).configureLogging(obj.logging.directoryPath,obj.logging.fileNamePrefix,obj.logging.mode);
+            end
+            obj.loggingConfigured = 1;
+
         end
-   
+
+        function start(obj)
+            % start the task group, or prepare it to start before a master
+            % task group or harware trigger
+            % if ~obj.isFinalized
+            %     error('call obj.finalizeSetup before starting')
+            % end
+
+            if ismember(obj.logging.mode,{'log','log and read'})
+                % then we need to deal with file / meta data
+                setUpTDMSLibrary; % need this to edit the file
+            end
+
+
+
+            % check if any tasks are running
+            for i = 1:length(obj.task)
+                if ~obj.task(i).isTaskDone()
+                    error('task %s is running already, can''t start',obj.task(i).name)
+                end
+                startOrders(i) = obj.task(i).startOrder;
+            end
+
+            if numel(unique(startOrders)) ~= length(startOrders)
+                error('The tasks need to all have unique start order numbers')
+            end
+            [~,startInds] = sort(startOrders,'ascend');
+            % make sure all tasks have a unique start order number
+
+            for i = 1:length(obj.task)
+                obj.task(startInds(i)).startTask();
+            end
+
+
+
+
+        end
+
+
+
+
+
         % function devices = getAvailableDevices(obj)
         %     bufferSize = 1024;  % Define an appropriate buffer size
-        % 
+        %
         %     % Call the function and capture the returned string
         %     [err, deviceNamesStr] = calllib(obj.lib, 'DAQmxGetSysDevNames', blanks(bufferSize), uint32(bufferSize));
-        % 
+        %
         %     % Check for errors
         %     handleDAQmxError(obj.lib, err);
-        % 
+        %
         %     % Trim and split the device names by commas
         %     devices = strsplit(strtrim(deviceNamesStr), ',');
         % end
-        
+
         % function channels = getDeviceAIPhysicalChans(obj, device)
         %     bufferSize = 2048;
-        % 
+        %
         %     % Call the function, passing the pointer to the string buffer
         %      [err, ~,channelNamesStr] = calllib(obj.lib, 'DAQmxGetDevAIPhysicalChans', device, blanks(bufferSize), uint32(bufferSize));
-        % 
+        %
         %      % Check for errors
         %      handleDAQmxError(obj.lib, err);
-        % 
+        %
         %     % Trim and split the channel names by commas
         %     channels = strsplit(strtrim(channelNamesStr), ',');
         % end
+    end
+
+    methods (Access = private)
+
+        function groupHandlesOut = getTDMSGroupHandles(obj,fileHandle)
+            groupNames = {obj.task.taskName};
+
+            % Step 1: Get the number of channel groups
+            numGroupsPtr = libpointer('uint32Ptr', 0);
+            err = calllib('tdmlib', 'DDC_GetNumChannelGroups', fileHandle, numGroupsPtr);
+            numGroups = numGroupsPtr.Value;
+
+            if err ~= 0
+                error('Error getting number of channel groups: %d', err);
+            end
+
+            % Step 2: Get the channel group handles
+            groupHandles = libpointer('int64Ptr', zeros(1, numGroups, 'int64'));
+            err = calllib('tdmlib', 'DDC_GetChannelGroups', fileHandle, groupHandles, uint64(numGroups));
+
+            if err ~= 0
+                error('Error getting channel group handles: %d', err);
+            end
+
+            % Step 3: Get the names of all channel groups at once
+            allGroupNames = cell(1, numGroups);
+            for i = 1:numGroups
+                groupHandle = groupHandles.Value(i);
+
+                % Get the length of the group name
+                nameLengthPtr = libpointer('uint32Ptr', 0);
+                err = calllib('tdmlib', 'DDC_GetChannelGroupStringPropertyLength', groupHandle, 'name', nameLengthPtr);
+                nameLength = nameLengthPtr.Value + 1; % Account for null-terminator
+
+                if err ~= 0
+                    error('Error getting group name length: %d', err);
+                end
+
+                % Get the group name
+
+                [err, ~, groupNameStr] = calllib('tdmlib', 'DDC_GetChannelGroupPropertyString', groupHandle, 'name', blanks(nameLength), uint64(nameLength));
+
+                if err ~= 0
+                    error('Error getting group name: %d', err);
+                end
+
+                % Store the name in the cell array
+                allGroupNames{i} = strtrim(groupNameStr);
+            end
+
+            % Step 4: Find the matching group handles for the provided group names
+            groupHandlesOut = cell(1, numGroups);
+            for k = 1:length(groupNames)
+                idx = find(strcmp(allGroupNames, groupNames{k}));
+                if ~isempty(idx)
+                    groupHandlesOut{k} = groupHandles.Value(idx);
+                else
+                    warning('Group "%s" not found in file.', groupNames{k});
+                end
+            end
+        end
+
     end
 end
 

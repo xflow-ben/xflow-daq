@@ -1,11 +1,12 @@
 classdef AIResistanceChannel < channel
     
     methods
-        function obj = AIResistanceChannel(taskHandle, physicalChannel, lib, inputs)
+        function obj = AIResistanceChannel(taskHandle, physicalChannel, name, lib, inputs)
             % Constructor: Initialize channel properties and create the channel
             obj.physicalChannel = physicalChannel;
             obj.lib = lib;
             obj.taskHandle = taskHandle;
+            obj.name = name;
 
             % Extract and cast the arguments
             minVal = inputs{1};  % double
@@ -15,7 +16,7 @@ classdef AIResistanceChannel < channel
             currentExcitVal = inputs{5};
             units = obj.DAQmx.Val_Ohms;
             customScaleName = '';  
-            channelName = '';
+            channelName = name;
      
             % Call the DAQmxCreateAIVoltageChan function
             err = calllib(lib, 'DAQmxCreateAIResistanceChan', ...

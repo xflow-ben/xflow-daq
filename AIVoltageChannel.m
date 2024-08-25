@@ -1,18 +1,19 @@
 classdef AIVoltageChannel < channel
     
     methods
-        function obj = AIVoltageChannel(taskHandle, physicalChannel, lib, inputs)
+        function obj = AIVoltageChannel(taskHandle, physicalChannel, name, lib, inputs)
             % Constructor: Initialize channel properties and create the channel
             obj.physicalChannel = physicalChannel;
             obj.lib = lib;
             obj.taskHandle = taskHandle;
+            obj.name = name;
 
             % Extract and cast the arguments
             terminalConfig = int32(inputs{1});
             minVal = inputs{2};  % double
             maxVal = inputs{3};  % double
             customScaleName = '';  
-            channelName = '';
+            channelName = name;
             units = obj.DAQmx.Val_Volts;
 
             % Call the DAQmxCreateAIVoltageChan function

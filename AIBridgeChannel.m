@@ -1,11 +1,12 @@
 classdef AIBridgeChannel < channel
     
     methods
-        function obj = AIBridgeChannel(taskHandle, physicalChannel, lib, inputs)
+        function obj = AIBridgeChannel(taskHandle, physicalChannel,name,lib, inputs)
             % Constructor: Initialize channel properties and create the channel
             obj.physicalChannel = physicalChannel;
             obj.lib = lib;
             obj.taskHandle = taskHandle;
+            obj.name = name;
 
             % Extract and cast the arguments
             minVal = inputs{1};  % double
@@ -15,7 +16,7 @@ classdef AIBridgeChannel < channel
             voltageExcitSource = inputs{5};
             voltageExcitVal = inputs{6};
             nominalBridgeResistance = inputs{7};
-            channelName = '';
+            channelName = name;
             customScaleName = ''; 
 
             % Call the DAQmxCreateAIVoltageChan function
