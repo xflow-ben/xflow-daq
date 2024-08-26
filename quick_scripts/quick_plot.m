@@ -16,6 +16,8 @@ for II = 1:length(fileNames)
     start_time(II) = d.group.channel(1).property(strcmp({d.group.channel(1).property.name},'wf_start_time')).value;
 
     % If the start_time is the same between files, keep incrmenting time
+    % NOTE: I'm assuming the files are read in the right order for this...
+    % will be fixed in the future
     if II > 1 && start_time(II-1) == start_time(II)
         start_time(II) = time(end) + seconds(1)/rate;
     end
