@@ -57,6 +57,11 @@ d.task(2).addChannel('AIResistance','cDAQ9188-18F21FFMod8','ai1','Lower Blade Ou
 d.task(2).addChannel('AIRTD','cDAQ9188-18F21FFMod8','ai2','DAQ Temp',[0 70],'Deg C','Pt3750','4 wire','internal',0.001,100);
 d.task(2).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai17','Battery Voltage','RSE',[0 10]);
 
+
+%% Module temperature recording
+d.task(2).recordModuleTemp.interval = -1;
+d.task(2).recordModuleTemp.moduleNames{1} = 'cDAQ9188-18F21FFMod6';
+
 %% Set up timing
 
 % sample clock routing for Strain channels
@@ -64,7 +69,6 @@ sampleClockTimebaseRate = strainAcqRate*256*31;
 d.routeSignal('/cDAQ9188-18F21FF/20MHzTimebase','/cDAQ9188-18F21FF/PFI0')
 d.task(1).setSampClkTimebaseSrc('/cDAQ9188-18F21FF/PFI0');
 d.task(1).setSampClkTimebaseRate(sampleClockTimebaseRate);
-
 
 d.task(1).configSampleClock();
 % route start terminal from strain to RTDs
