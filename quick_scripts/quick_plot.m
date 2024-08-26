@@ -1,20 +1,31 @@
 clear all
-% close all
+close all
 clc
 
 filePath = 'C:\Users\Ian\Documents\GitHub\xflow-daq';
-fileName ='full_hub_test_rotorStrain_0001.tdms';
-d = readTDMS(fileName,filePath);
+fileNames =dir(fullfile(filePath,'*.tdms'));
 
-rate = d.property(strcmp({d.property.name},'rate')).value; % DAQ sample rate [Hz]
+for II = 1:length(fileNames)
+    %% Read tdms file
+    d = readTDMS(fileNames(II).name,filePath);
 
-% NOTE: I'm assuming the start time is the same for all channels in a file
-start_time = d.group.channel(1).property(strcmp({d.group.channel(1).property.name},'wf_start_time')).value;
-num_points = length(d.group.channel(1).data);
-time = start_time + seconds(1:num_points)/rate;
+    %% Extract properties
+    rate = d.property(strcmp({d.property.name},'rate')).value; % DAQ sample rate [Hz]
 
-%%
-for JJ = 1:length(d.group.channel)
-    plot(time,d.group.channel(JJ).data)
-    hold on
+    % NOTE: I'm assuming the start time is the same for all channels in a file
+    start_time(II) = d.group.channel(1).property(strcmp({d.group.channel(1).property.name},'wf_start_time')).value;
+
+    % If the start_time is the same between files, keep incrmenting time
+    if II > 1 && start_time(II-1) == start_time(II)
+        start_time(II) = time(end) + seconds(1)/rate;
+    end
+
+    num_points = length(d.group.channel(1).data);
+    time = start_time(II) + seconds(0:num_points-1)/rate;
+
+    %% Plot
+    for JJ = 1:length(d.group.channel)
+        plot(time,d.group.channel(JJ).data)
+        hold on
+    end
 end
