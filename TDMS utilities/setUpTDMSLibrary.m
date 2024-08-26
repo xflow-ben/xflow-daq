@@ -1,6 +1,7 @@
-function setUpTDMSLibrary
+function alias = setUpTDMSLibrary
 if ~libisloaded('tdmlib')
-    binFolder = 'dlls_and_headers';
+    mFilePath = fileparts(mfilename('fullpath'));
+    binFolder = fullfile(mFilePath,'..\','lib');
     dllPath = fullfile(binFolder,'nilibddc.dll');
     headerPath = fullfile(binFolder,'nilibddc_m.h');
 
@@ -36,4 +37,5 @@ if ~libisloaded('tdmlib')
     loadlibrary(dllPath, headerPath, 'alias', 'tdmlib');
 
 end
+alias = 'tdmlib';
 end

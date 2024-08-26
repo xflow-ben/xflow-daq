@@ -1,0 +1,7 @@
+add nice error handling func for tdmslib
+
+Maybe?
+add "triggeredBy" to task info and write it to the tdms file info. Use in processing to figure out method of alignment of timestamps?
+Not needed if wf_start_time is good between trigged channels
+
+Fix matlab start time field. First val not getting updated?

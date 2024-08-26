@@ -58,8 +58,11 @@ classdef xfedaq < sharedFunctions
     properties (Access = private)
         % not externally visible/editable
         lib = 'myni';  % Library alias
-        dllPath = 'dlls_and_headers\nicaiu.dll';%'C:\Windows\System32\nicaiu.dll';
-        headerPath = 'dlls_and_headers\NIDAQmx.h';%'C:\Program Files (x86)\National Instruments\NI-DAQ\DAQmx ANSI C Dev\include\NIDAQmx.h';
+
+
+
+        dllPath = '..\..\lib\nicaiu.dll';%'C:\Windows\System32\nicaiu.dll';
+        headerPath = '..\..\lib\NIDAQmx.h';%'C:\Program Files (x86)\National Instruments\NI-DAQ\DAQmx ANSI C Dev\include\NIDAQmx.h';
     end
 
     methods
@@ -72,6 +75,10 @@ classdef xfedaq < sharedFunctions
                     obj.dllPath = dllPath;
                     obj.headerPath  = headerPath;
                 end
+                mFilePath = fileparts(mfilename('fullpath'));
+                obj.dllPath = fullfile(mFilePath,obj.dllPath);
+                obj.headerPath = fullfile(mFilePath,obj.headerPath);
+
                 if isempty(dir(obj.dllPath))
                     error('dll file not found at %s',obj.dllPath);
                 end

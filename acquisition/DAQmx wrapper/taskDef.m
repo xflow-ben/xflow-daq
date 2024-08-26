@@ -175,11 +175,11 @@ classdef taskDef < sharedFunctions
                 warning('Sample rate has been force modified by the DAQ to %.0f',rate_actual);
                 obj.setTaskState('unreserve');
                 obj.rate = rate_actual;
-                [obj.bufferSize, ~, ~] = obj.calculateSizes(obj.rate, obj.durationSeconds);
-                obj.task(1).configSampleClock(obj.sampleClock.terminal,obj.rate,obj.acquisitionType,obj.bufferSize);
-                obj.task(1).setTaskState('verify');
-                obj.task(1).setTaskState('commit');
-                obj.task(1).setTaskState('reserve');
+                [obj.bufferSize, ~] = obj.calculateSizes(obj.rate, obj.durationSeconds);
+                obj.configSampleClock();
+                obj.setTaskState('verify');
+                obj.setTaskState('commit');
+                obj.setTaskState('reserve');
             end
    
 
@@ -404,9 +404,9 @@ classdef taskDef < sharedFunctions
            % determine file name
            obj.logFileNamePath = obj.makeNextFileNum(directoryPath,fileNamePrefix,obj.taskName);
            if ismember(loggingMode,{'log','log and read'})
-               if obj.rate > 512 && mod(log2(obj.rate),1) ~= 0
-                   error('For file logging faster than 512 samp/s, rate must be a power of 2')
-               end
+               % if obj.rate > 512 && mod(log2(obj.rate),1) ~= 0
+               %     error('For file logging faster than 512 samp/s, rate must be a power of 2')
+               % end
                if obj.durationSeconds < 1.0
                     error('durationSeconds must be at least 1 second')
                end
@@ -488,9 +488,9 @@ classdef taskDef < sharedFunctions
             samplesPerFile = rate * fileLengthSeconds;
 
             % Ensure rate is a power of 2 if it is above 512
-            if mod(log2(rate), 1) ~= 0 && rate ~= 1
-                error('Rate must be a power of 2, or equal to 1');
-            end
+            % if mod(log2(rate), 1) ~= 0 && rate ~= 1
+            %     error('Rate must be a power of 2, or equal to 1');
+            % end
 
             fileWriteSize = rate;
             % % Calculate fileWriteSize that is a multiple of 64 samples and meets other constraints
