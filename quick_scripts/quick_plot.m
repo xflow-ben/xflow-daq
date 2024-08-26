@@ -24,8 +24,17 @@ for II = 1:length(fileNames)
     time = start_time(II) + seconds(0:num_points-1)/rate;
 
     %% Plot
+    figure(1)
+        title('Quick timeseries')
     for JJ = 1:length(d.group.channel)
         plot(time,d.group.channel(JJ).data)
+        hold on
+    end
+
+    figure(2)
+    title('Quick median')
+    for JJ = 1:length(d.group.channel)
+        plot(median(time),median(d.group.channel(JJ).data),'o')
         hold on
     end
 end
