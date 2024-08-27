@@ -7,7 +7,7 @@ fileNames =dir(fullfile(filePath,'*.tdms'));
 
 for II = 1:length(fileNames)
     %% Read tdms file
-    d = readTDMS(fileNames(II).name,filePath);
+    d = readTDMS(fileNames(II).name,filePath,'Winglet');
 
     %% Extract properties
     rate = d.property(strcmp({d.property.name},'rate')).value; % DAQ sample rate [Hz]

@@ -1,4 +1,4 @@
-function d = readTDMS(fileName,filePath)
+function d = readTDMS(fileName,filePath,channelName)
 %
 % Reads in a TDMS file. This funciton to remain general (read in any TDMS
 % file, don't perform and conversions or computations)
@@ -59,7 +59,7 @@ for groupIndex = 1:numGroups
     groupStruct.property = readProperties(lib,groupHandle, 'group');
 
     % Read group channels
-    groupStruct.channel = readChannels(lib,groupHandle);
+    groupStruct.channel = readChannels(lib,groupHandle,channelName);
 
     % Append group structure to data structure
     d.group = [d.group; groupStruct];
@@ -261,7 +261,7 @@ unloadlibrary(lib);
         end
     end
 
-    function channels = readChannels(lib,groupHandle)
+    function channels = readChannels(lib,groupHandle,channelName)
         err = 0;
         % Get the number of channels in the group
         numChannels = libpointer('uint32Ptr', 0);
@@ -275,21 +275,26 @@ unloadlibrary(lib);
         handleTDMSLibErr(lib, err);
         % Initialize channels structure
         channels = struct;
-
+        countChan = 0;
         % Iterate through each channel
         for chanIndex = 1:numChannels
             channelHandle = channelHandles.Value(chanIndex);
 
             % Read channel name
-            channels(chanIndex).name = readProperty(lib,channelHandle, 'name', 'channel');
+            temp = readProperty(lib,channelHandle, 'name', 'channel');
 
-            % Read channel properties
-            channels(chanIndex).property = readProperties(lib,channelHandle, 'channel');
+            % Only read channel if it is a requested channel name
+            if nargin < 3 || strcmp(temp,channelName) 
+                countChan = countChan + 1;
+                channels(countChan).name = temp;
+                % Read channel properties
+                channels(countChan).property = readProperties(lib,channelHandle, 'channel');
 
-            % Read channel data
-            channels(chanIndex).data = readChannelData(lib,channelHandle);
+                % Read channel data
+                channels(countChan).data = readChannelData(lib,channelHandle);
 
-            % Append channel structure to channels array
+                % Append channel structure to channels array
+            end
         end
     end
 
