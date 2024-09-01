@@ -154,6 +154,19 @@ classdef xfedaq < sharedFunctions
 
         end
 
+        function reserveHardware(obj)
+            for i = 1:length(obj.task)
+                obj.task(i).setTaskState('reserve');
+            end
+        end
+
+
+        function unreserveHardware(obj)
+            for i = 1:length(obj.task)
+                obj.task(i).setTaskState('unreserve');
+            end
+        end
+
         function delete(obj)
             % Destructor: Unload the library and clear tasks
             for i = 1:numel(obj.task)

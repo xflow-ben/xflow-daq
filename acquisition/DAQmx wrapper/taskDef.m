@@ -181,6 +181,8 @@ classdef taskDef < sharedFunctions
                 obj.setTaskState('commit');
                 obj.setTaskState('reserve');
             end
+
+            obj.setTaskState('unreserve');
    
 
 
@@ -196,6 +198,7 @@ classdef taskDef < sharedFunctions
             obj.handleDAQmxError(obj.lib,err)
             % Retrieve the temperature value
             temperature = temperaturePtr.Value;
+            obj.metaData.(['temperature_',strrep(deviceName,'-','_')]) = temperature;
         end
 
         function chanObj = addChannel(obj, channelType, device, physicalChannel, name, varargin)
@@ -220,6 +223,10 @@ classdef taskDef < sharedFunctions
                 case 'AIBridge'
                     if ~strcmp(obj.taskType,'AI')
                         error('Task must be of type ''AI'' to add AIBridge channel')
+                    end
+                case 'CIAngEncoder'
+                    if ~strcmp(obj.taskType,'CI')
+                        error('Task must be of type ''CI'' to add CICountEdges channel')
                     end
                 otherwise
                     error('Channel type %s not yet programmed, or spelled incorrectly',channelType)
@@ -246,15 +253,15 @@ classdef taskDef < sharedFunctions
 
         function startTask(obj)
             
-            if ~isempty(obj.recordModuleTemp) && obj.recordModuleTemp.interval ~= 0
-                if obj.recordModuleTemp.interval == -1
-                    for i = 1:length(obj.recordModuleTemp.moduleNames)
-                        obj.metaData.([temperature,'_',obj.recordModuleTemp.moduleNames{i}]) = obj.getModuleTemperature(obj.recordModuleTemp.moduleNames{i});
-                    end
-                else
-                    error('I haven''t programmed getting the module temps on a reoccuring basis');
-                end
-            end
+            % if ~isempty(obj.recordModuleTemp) && obj.recordModuleTemp.interval ~= 0
+            %     if obj.recordModuleTemp.interval == -1
+            %         for i = 1:length(obj.recordModuleTemp.moduleNames)
+            %             obj.metaData.(['temperature','_',obj.recordModuleTemp.moduleNames{i}]) = obj.getModuleTemperature(obj.recordModuleTemp.moduleNames{i});
+            %         end
+            %     else
+            %         error('I haven''t programmed getting the module temps on a reoccuring basis');
+            %     end
+            % end
             % Start the task
             obj.startTime.t(1) = datetime("now");
             [err,~] = calllib(obj.lib, 'DAQmxStartTask', obj.taskHandle);
@@ -326,6 +333,37 @@ classdef taskDef < sharedFunctions
             strBufferSize = 255;
             [err,~,startTrigTermString] = calllib(obj.lib,'DAQmxGetStartTrigTerm',obj.taskHandle,blanks(strBufferSize),uint32(strBufferSize));
             obj.handleDAQmxError(obj.lib, err);
+        end
+
+        function setCICICountEdgesTerm(obj,channelName,terminalName)
+            err = calllib(obj.lib,'DAQmxSetCICountEdgesTerm',obj.taskHandle,channelName,terminalName);
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+        function enableCICountEdgesFltr(obj,channelName)
+            err = calllib(obj.lib,'DAQmxSetCICountEdgesDigFltrEnable',obj.taskHandle, channelName, uint32(1));
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+        function EnableDIDigFltrE(obj,channelName)
+            err = calllib(obj.lib,'DAQmxSetDIDigFltrEnable',obj.taskHandle, channelName, uint32(1));
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+        function setCICountEdgesDigFltrMinPulseWidth(obj,channelName,pulseWidthSeconds)
+            err = calllib(obj.lib,'DAQmxSetCICountEdgesDigFltrMinPulseWidth',obj.taskHandle,channelName,pulseWidthSeconds);
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+        function SetCICountEdgesTermCfg(obj,channelName)
+            err = calllib(obj.lib,'DAQmxSetCICountEdgesTermCfg',obj.taskHandle,channelName,obj.DAQmx.Val_Diff );
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
+        function setCICountEdgesThreshVoltage(obj,channelName,threshVoltage)
+            err = calllib(obj.lib,'DAQmxSetCICountEdgesThreshVoltage',obj.taskHandle,channelName,threshVoltage);
+            obj.handleDAQmxError(obj.lib, err);
+
         end
 
 
@@ -526,11 +564,12 @@ classdef taskDef < sharedFunctions
 
 
         function insertMetaData(obj,~,~)
-
+            
 
             tdmsFilePath = obj.logFileNamePath;
             
             if strcmp(obj.acquisitionType,'finite') % if acquisition mode is finite, need to
+                
                 % 1) wait until task(s) are done
                 count = 0;
                 tasksDone = 0;
@@ -635,6 +674,7 @@ classdef taskDef < sharedFunctions
                 obj.setTaskState('verify');
                 obj.setTaskState('commit');
                 obj.setTaskState('reserve');
+                fprintf('Finite acqisition complete\n')
             end
 
         end

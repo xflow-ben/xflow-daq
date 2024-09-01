@@ -89,6 +89,67 @@ classdef channel < sharedFunctions
 
                     % Check for errors using the updated error handling function
                     sharedFunctions.handleDAQmxError(lib, err);
+                case 'CIAngEncoder'
+                    if ~strcmp(device(1),'/')
+                        device = ['/',device];
+                    end
+                    AInputTerm = [device,inputs{1}];
+                    obj.settings.AInputTerm = AInputTerm;
+                    BInputTerm = [device,inputs{2}];
+                    obj.settings.BInputTerm = BInputTerm;
+                    if ~isempty(inputs{3})
+                        ZInputTerm = [device,inputs{3}]; % leave empty ('') to disable z reset
+                    else
+                        ZInputTerm = '';
+                    end
+                    obj.settings.ZInputTerm = ZInputTerm;
+
+                    obj.settings.decodingType = inputs{4};
+                    decodingType = sharedFunctions.getConstInputVal('decodingType',inputs{4},{'X1','X2','X4'},[sharedFunctions.DAQmx.Val_X1,sharedFunctions.DAQmx.Val_X2,sharedFunctions.DAQmx.Val_X4]);
+               
+                    obj.settings.pulsesPerRev = inputs{5};
+                    pulsesPerRev = uint32(inputs{5});
+
+                    initialAngle = 0.0;
+
+                    ZidxPhase = sharedFunctions.getConstInputVal('ZidxPhase',inputs{6},{'AHighBHigh','AHighBLow','ALowBHigh','ALowBLow'},[sharedFunctions.DAQmx.Val_AHighBHigh,sharedFunctions.DAQmx.Val_AHighBLow,sharedFunctions.DAQmx.Val_ALowBHigh,sharedFunctions.DAQmx.Val_ALowBLow]);
+                     obj.settings.ZidxPhase = inputs{6};
+                   
+                    if isempty(ZInputTerm)
+                        ZidxEnable = uint32(0);
+                    else
+                        ZidxEnable = uint32(1);
+                    end
+
+                    ZidxVal = 0.0;
+                    customScaleName = '';
+      
+                    units = sharedFunctions.DAQmx.Val_Ticks;
+
+                    err = calllib(lib, 'DAQmxCreateCIAngEncoderChan',...
+                        taskHandle,...
+                        fullChannelPath,...
+                        channelName,...
+                        decodingType,...
+                        ZidxEnable,...
+                        ZidxVal,...
+                        ZidxPhase,...
+                        units,...
+                        pulsesPerRev,...
+                        initialAngle,...
+                        customScaleName);
+
+                    sharedFunctions.handleDAQmxError(lib, err);
+                    % set the intput terminals
+                    err = calllib(lib,'DAQmxSetCIEncoderAInputTerm',taskHandle,channelName,AInputTerm);
+                    sharedFunctions.handleDAQmxError(lib, err);
+                    err = calllib(lib,'DAQmxSetCIEncoderBInputTerm',taskHandle,channelName,BInputTerm);
+                    sharedFunctions.handleDAQmxError(lib, err);
+                    if ~isempty(ZInputTerm)
+                        err = calllib(lib,'DAQmxSetCIEncoderZInputTerm',taskHandle,channelName,ZInputTerm);
+                        sharedFunctions.handleDAQmxError(lib, err);
+                    end
+
 
                 case 'AIResistance'
                     % Extract and cast the arguments
