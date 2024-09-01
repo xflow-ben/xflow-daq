@@ -90,7 +90,7 @@ classdef xfedaq < sharedFunctions
                 try
                     loadlibrary(obj.dllPath, obj.headerPath, 'alias', obj.lib);
                 catch
-                    error('Unable to load library. Note, Microsoft Visual C++ Redistributable for Visual Studio is required to be installed');
+                    error('Unable to load library. Note, Microsoft Visual C++ Redistributable for Visual Studio and MinGW compiler for MATLAB are required to be installed');
                 end
             end
             % default options

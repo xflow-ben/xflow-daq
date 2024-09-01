@@ -59,7 +59,11 @@ for groupIndex = 1:numGroups
     groupStruct.property = readProperties(lib,groupHandle, 'group');
 
     % Read group channels
-    groupStruct.channel = readChannels(lib,groupHandle,channelName);
+    if nargin < 3
+        groupStruct.channel = readChannels(lib,groupHandle);
+    else
+        groupStruct.channel = readChannels(lib,groupHandle,channelName);
+    end
 
     % Append group structure to data structure
     d.group = [d.group; groupStruct];
@@ -293,7 +297,7 @@ unloadlibrary(lib);
                 % Read channel data
                 channels(countChan).data = readChannelData(lib,channelHandle);
 
-                % Append channel structure to channels array
+                % Append channel structure to channels array                
             end
         end
     end
