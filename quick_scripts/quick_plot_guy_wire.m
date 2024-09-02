@@ -1,5 +1,5 @@
-channel = 'Lower GW W';
-filePath = 'E:\loads_data\guy_wire_cal\Lower_GW_W';% 'C:\Users\Ian\Documents\GitHub\xflow-daq';
+channel = 'Lower GW E';
+filePath = 'E:\loads_data\guy_wire_cal\Lower_GW_E';% 'C:\Users\Ian\Documents\GitHub\xflow-daq';
 fileNames = dir(fullfile(filePath,'*towerBaseStrain*.tdms'));
 
 for II = 1:length(fileNames)
@@ -42,6 +42,6 @@ for II = 1:length(fileNames)
     %     plot(applied_load(i),median(df.group.channel(JJ).data),'o')
     %     hold on
     % end
-%     plot(applied_load,V,'o')
 end
-% plot(applied_load,V,'o')
+    plot(applied_load,V,'o')
+

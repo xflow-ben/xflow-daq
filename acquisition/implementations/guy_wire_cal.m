@@ -41,5 +41,5 @@ d.configureLogging();
 %% Run this for every acquisition point
 disp('New point')
 d.task(1).metaData.Applied_Load = 0;
-d.task(1).metaData.Test_Name = 'Lower_GW_W';
+d.task(1).metaData.Test_Name = 'Lower_GW_E';
 d.start();
