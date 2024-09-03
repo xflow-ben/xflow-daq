@@ -1,4 +1,4 @@
-channel = 'Upper Arm My';
+channel = 'Lower Yoke My';
 filePath = pwd;% 'C:\Users\Ian\Documents\GitHub\xflow-daq';
 fileNames = dir(fullfile(filePath,'*rotorStrain*.tdms'));
 
@@ -12,6 +12,8 @@ for II = 1:length(fileNames)
     chanNames = {df.group(1).channel.name};
     chanInd = find(strcmp(chanNames,channel));
     V(II) = median(df.group(1).channel(chanInd).data);
+    figure(99)
+    hold on; plot(df.group(1).channel(chanInd).data);
     %% Extract properties
     rate = df.property(strcmp({df.property.name},'rate')).value; % DAQ sample rate [Hz]
 
@@ -43,4 +45,4 @@ for II = 1:length(fileNames)
     %     hold on
     % end
 end
-plot(applied_load,V,'o')
+figure; plot(applied_load,V,'o')

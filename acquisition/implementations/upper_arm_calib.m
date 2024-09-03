@@ -8,12 +8,12 @@
 % % NOTE - we should make all file rates a power of 2 for TDMS logging
 % durationSeconds = 10; % 20 sec file lg
 
-durationSeconds = 20; % per file for
+durationSeconds = 60; % per file for
 strainAcqRate = 512;
 RTDRate = 4;
 
 d = xfedaq();
-d.resetDevice('Hub'); % make sure any device routs and clock setup is wiped
+d.resetDevice('cDAQ9188-18F21FF'); % make sure any device routs and clock setup is wiped
 pause(5)
 d.logging.fileNamePrefix = 'upper_arm_cal';
 d.acquisitionType = 'finite';
@@ -45,21 +45,21 @@ d.task(2).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai17','Battery Voltage'
 
 % sample clock routing for Strain channels
 sampleClockTimebaseRate = strainAcqRate*256*31;
-d.routeSignal('/Hub/20MHzTimebase','/Hub/PFI0')
-d.task(1).setSampClkTimebaseSrc('/Hub/PFI0');
+d.routeSignal('/cDAQ9188-18F21FF/20MHzTimebase','/cDAQ9188-18F21FF/PFI0')
+d.task(1).setSampClkTimebaseSrc('/cDAQ9188-18F21FF/PFI0');
 d.task(1).setSampClkTimebaseRate(sampleClockTimebaseRate);
 
 d.task(1).configSampleClock();
 % route start terminal from strain to RTDs
-d.routeSignal(d.task(1).startTrigger.autoTerminal,'/Hub/PFI1')
-d.task(2).setStartTrigTerm('/Hub/PFI1')
+d.routeSignal(d.task(1).startTrigger.autoTerminal,'/cDAQ9188-18F21FF/PFI1')
+d.task(2).setStartTrigTerm('/cDAQ9188-18F21FF/PFI1')
 d.task(2).configSampleClock();
 d.configureLogging();
 
 
 %% Run this for every acquisition point
 d.task(1).metaData.Applied_Load = 0;
-d.task(1).metaData.Test_Name = 'Upper_arm_+My';
+d.task(1).metaData.Test_Name = 'Upper_yoke_-My';
 d.unreserveHardware;
 pause(0.25)
 d.task(2).getModuleTemperature('cDAQ9188-18F21FFMod6')
