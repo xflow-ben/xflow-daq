@@ -1,9 +1,12 @@
 function [loads,volts,channel_names] = process_calibration_folder(calib,crosstalk,parent_dir)
 
-files = dir(fullfile(parent_dir,calib.folder,'XFE_Data*.mat'));
+files = dir(fullfile(parent_dir,calib.folder,'*.tdms'));
 
+if isempty(files)
+    error(sprintf('No files found in %s',fullfile(parent_dir,calib.folder)))
+end
 for i = 1:length(files)
-    d(i) = arm_calib_process_point(fullfile(parent_dir,calib.folder,files(i).name),crosstalk.channel_names);
+    d(i) = process_calibration_point(fullfile(parent_dir,calib.folder,files(i).name),crosstalk.channel_names);
 end
 
 %% Loop through data folders
@@ -21,10 +24,12 @@ loads = [d.load];
 volts = [d.median];
 mid_time = [d.mid_time];
 
+%%%%%%%%%%%%%%%%%%%% NEEDS TO BE UPDATED%%%%%%%%%%%%%%%
 inds = find(abs(volts)>9.35);
 if ~isempty(inds)
     warning('Removing %d points as the channel was saturated\n',length(inds))
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % loads(inds) = [];
 % mid_time(inds) = [];
 volts(inds) = NaN;

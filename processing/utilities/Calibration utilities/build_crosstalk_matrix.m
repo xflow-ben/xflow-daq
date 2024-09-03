@@ -1,9 +1,8 @@
-function [K,load_mat,response_mat] = build_crosstalk_matrix(crosstalk,calib,parent_dir,plot_opt,K)
+function cal = build_crosstalk_matrix(crosstalk,calib,parent_dir,plot_opt,savePath)
 %% Process calibration data
 % create the applied loads matricies
 for i = 1:length(calib)
     [loads{i},volts{i},channel_names{i}] = process_calibration_folder(calib(i),crosstalk,parent_dir);
-    figure; plot(loads{i},volts{i},'o');
     if size(calib(i).applied_load_scaling,2)~=1 && size(calib(i).applied_load_scaling,2)~= length(loads{i})
         error('applied_load_scaling must be a column vector')
     elseif size(calib(i).applied_load_scaling,1) ~= length(crosstalk.loads_names)
@@ -19,27 +18,32 @@ end
 
 
 %% Combine loads and response (volts) matricies
-load_mat = [load_mats{:}]; % X matrix
-response_mat = [volts{:}]; % O matrix
+cal.data.load_mat = [load_mats{:}]; % X matrix
+cal.data.response_mat = [volts{:}]; % O matrix
 
 % remove any columns with NaN
-[~,nanind] = find(isnan(response_mat));
-load_mat(:,nanind) = [];
-response_mat(:,nanind) = [];
-[~,nanind] = find(isnan(load_mat));
-load_mat(:,nanind) = [];
-response_mat(:,nanind) = [];
+[~,nanind] = find(isnan(cal.data.response_mat));
+cal.data.load_mat(:,nanind) = [];
+cal.data.response_mat(:,nanind) = [];
+[~,nanind] = find(isnan(cal.data.load_mat));
+cal.data.load_mat(:,nanind) = [];
+cal.data.response_mat(:,nanind) = [];
 %% Compute crosstalk
 % K^(-1) O = X, K^(-1) = X / O
 % x*A = B, x = B / A in matlab lingo
-if nargin < 5
-    K = load_mat/response_mat;
-end
+cal.data.k = cal.data.load_mat/cal.data.response_mat;
+
+%% Finish building output cal struct
+cal.type = 'linear_k';
+cal.output_units = calib.output_units;
+cal.input_channels = crosstalk.channel_names; % name of data columns to input
+cal.output_names = crosstalk.loads_names; % names for output (calibrated) channels
+
 %% Plotting
 % Plot applied load versus calculated load
-if nargin>3 % plot_opt activates plotting
-    r_squared = 1-sum((K*response_mat-load_mat).^2,2)./sum((load_mat-mean(load_mat,2)).^2,2); % r^2 comparing measured versus applied load
-    if  size(K,1) == 1 && size(K,2) == 1 % single channel calibration version
+if nargin > 3 && plot_opt% plot_opt activates plotting
+    r_squared = 1-sum((cal.data.k*cal.data.response_mat-cal.data.load_mat).^2,2)./sum((cal.data.load_mat-mean(cal.data.load_mat,2)).^2,2); % r^2 comparing measured versus applied load
+    if  size(cal.data.k,1) == 1 && size(cal.data.k,2) == 1 % single channel calibration version
         for i = 1:size(load_mats{1},1)
             figure; hold on;
             title([strrep(crosstalk.loads_names{i},'_',' '),', R^2 = ',sprintf('%0.5f',r_squared(i))]);
@@ -50,21 +54,21 @@ if nargin>3 % plot_opt activates plotting
             for j = 1:length(load_mats)
                 if any(load_mats{j}(i,:))
                     k = k + 1;
-                    plot(load_mats{j}(i,:),K*volts{j}(i,:),'o')
+                    plot(load_mats{j}(i,:),cal.data.k*volts{j}(i,:),'o')
                     leg_string{k} = strrep(calib(j).folder,'_',' ');
-                    calculated_loads_max = max(calculated_loads_max(i),max(K*volts{j}(i,:)));
-                    calculated_loads_min = min(calculated_loads_min(i),min(K*volts{j}(i,:)));
+                    calculated_loads_max = max(calculated_loads_max(i),max(cal.data.k*volts{j}(i,:)));
+                    calculated_loads_min = min(calculated_loads_min(i),min(cal.data.k*volts{j}(i,:)));
                 end
             end
         end
-        xlabel('Load Applied [N or N-m]')
-        ylabel(sprintf('Load Computed from Guages\nUsing Single Channel Calibration [N or N-m]'))
+        xlabel(sprintf('Load Applied [%s]',cal.output_units))
+        ylabel(sprintf('Load Computed from Guages\nUsing Single Channel Calibration [%s]',cal.output_units))
         box on
         grid on
         set(gca,'fontsize',12)
         plot([calculated_loads_min, calculated_loads_max],[calculated_loads_min, calculated_loads_max],'--k')
         legend(leg_string,'Location','Best')
-        saveas(gcf,[strrep(crosstalk.loads_names{i},'_',' '),' Using Single Channel Calibration.png'])
+        saveas(gcf,fullfile(savePath,'Figures',[strrep(crosstalk.loads_names{i},'_',' '),' Using Single Channel Calibration.png']))
 
     else % multiple channel calibration version
         fh{1} = figure;
@@ -77,7 +81,7 @@ if nargin>3 % plot_opt activates plotting
             k = k + 1;
             leg_string{k} = strrep(calib(j).folder,'_',' ');
             for m = 1:size(load_mats{j},2) % index for each load applied in a folder
-                calculated_loads(m,:) = K*volts{j}(:,m);
+                calculated_loads(m,:) = cal.data.k*volts{j}(:,m);
                 applied_load(m,:) = load_mats{j}(:,m);
             end
             for i = 1:size(load_mats{1},1) % index for each load channel
@@ -91,14 +95,14 @@ if nargin>3 % plot_opt activates plotting
         for i = 1:size(load_mats{1},1) % index for each load channel
             figure(fh{i}); hold on;
             title([strrep(crosstalk.loads_names{i},'_',' '),', R^2 = ',sprintf('%0.5f',r_squared(i))]);
-            xlabel('Load Applied [N or N-m]')
-            ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [N or N-m]'))
+            xlabel(sprintf('Load Applied [%s]',cal.output_units))
+            ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [%s]',cal.output_units))
             box on
             grid on
             set(gca,'fontsize',12)
             plot([calculated_loads_min(i), calculated_loads_max(i)],[calculated_loads_min(i), calculated_loads_max(i)],'--k')
             legend(leg_string,'Location','Best')
-            saveas(gcf,[strrep(crosstalk.loads_names{i},'_',' '),' Using Crosstalk Matrix.png'])
+            saveas(gcf,fullfile(savePath,'Figures',[strrep(crosstalk.loads_names{i},'_',' '),' Using Crosstalk Matrix.png']))
         end
     end
 end
