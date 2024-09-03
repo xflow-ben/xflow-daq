@@ -1,8 +1,9 @@
-function cal = build_crosstalk_matrix(crosstalk,calib,parent_dir,plot_opt,savePath)
+function cal = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,plot_opt,savePath)
 %% Process calibration data
+data_dir = fullfile(data_path,data_folder);
 % create the applied loads matricies
 for i = 1:length(calib)
-    [loads{i},volts{i},channel_names{i}] = process_calibration_folder(calib(i),crosstalk,parent_dir);
+    [loads{i},volts{i},channel_names{i}] = process_calibration_folder(calib(i),crosstalk,data_dir);
     if size(calib(i).applied_load_scaling,2)~=1 && size(calib(i).applied_load_scaling,2)~= length(loads{i})
         error('applied_load_scaling must be a column vector')
     elseif size(calib(i).applied_load_scaling,1) ~= length(crosstalk.loads_names)
@@ -41,7 +42,7 @@ cal.output_names = crosstalk.loads_names; % names for output (calibrated) channe
 
 %% Plotting
 % Plot applied load versus calculated load
-if nargin > 3 && plot_opt% plot_opt activates plotting
+if nargin > 4 && plot_opt% plot_opt activates plotting
     r_squared = 1-sum((cal.data.k*cal.data.response_mat-cal.data.load_mat).^2,2)./sum((cal.data.load_mat-mean(cal.data.load_mat,2)).^2,2); % r^2 comparing measured versus applied load
     if  size(cal.data.k,1) == 1 && size(cal.data.k,2) == 1 % single channel calibration version
         for i = 1:size(load_mats{1},1)
@@ -68,7 +69,11 @@ if nargin > 3 && plot_opt% plot_opt activates plotting
         set(gca,'fontsize',12)
         plot([calculated_loads_min, calculated_loads_max],[calculated_loads_min, calculated_loads_max],'--k')
         legend(leg_string,'Location','Best')
-        saveas(gcf,fullfile(savePath,'Figures',[strrep(crosstalk.loads_names{i},'_',' '),' Using Single Channel Calibration.png']))
+        saveDir = fullfile(savePath,'Figures',data_folder);
+        if ~exist(saveDir)
+            mkdir(saveDir)
+        end
+        saveas(gcf,fullfile(saveDir,[strrep(crosstalk.loads_names{i},'_',' '),' Using Single Channel Calibration.png']))
 
     else % multiple channel calibration version
         fh{1} = figure;
@@ -102,7 +107,11 @@ if nargin > 3 && plot_opt% plot_opt activates plotting
             set(gca,'fontsize',12)
             plot([calculated_loads_min(i), calculated_loads_max(i)],[calculated_loads_min(i), calculated_loads_max(i)],'--k')
             legend(leg_string,'Location','Best')
-            saveas(gcf,fullfile(savePath,'Figures',[strrep(crosstalk.loads_names{i},'_',' '),' Using Crosstalk Matrix.png']))
+            saveDir = fullfile(savePath,'Figures',data_folder);
+            if ~exist(saveDir)
+                mkdir(saveDir)
+            end
+            saveas(gcf,fullfile(saveDir,[strrep(crosstalk.loads_names{i},'_',' '),' Using Crosstalk Matrix.png']))
         end
     end
 end
