@@ -9,7 +9,7 @@ count_multi = 0;
 %% Constants
 consts.lbf_to_N = 4.44822;
 consts.inch_to_m = 0.0254;
-data_path = 'E:\loads_data\load_calibrations\';
+data_path = 'C:\Users\Ben Strom\Documents\Loads_Data\load_calibrations';%E:\loads_data\load_calibrations\';
 data_folder = 'upper_arm';
 makePlots = 1;
 savePath = fullfile(fileparts(mfilename('fullpath')),'Results');

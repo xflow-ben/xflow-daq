@@ -1,6 +1,6 @@
 function [calib,crosstalk] = calibration_matrix_inputs__low_arm_root(consts)
 
-moment_distance = 5.613; % distance for computing moment, lower arm, THIS VALUE IS TO THE ROTOR AXIS OF ROTATION [m]
+moment_distance = 5.61304498; % Distance from hub face to lower arm-blade hinge, along 0.3 chord spanwise arm line [m]
 moment_distance_MZ = 32*consts.inch_to_m;
 
 %% Crosstalk grouping high level info
