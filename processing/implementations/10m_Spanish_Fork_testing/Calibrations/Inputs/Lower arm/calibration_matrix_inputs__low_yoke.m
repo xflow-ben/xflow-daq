@@ -21,7 +21,7 @@ calib(calibNum).output_units = 'N-m';
 
 %% Calibration of lower yoke +Fz Info
 calibNum = calibNum + 1;
-calib(calibNum).folder = 'Lower_yoke_Fz';
+calib(calibNum).folder = 'Lower_arm_Fz';
 calib(calibNum).applied_load_scaling = [0; consts.lbf_to_N; 0];
 calib(calibNum).output_units = 'N'; 
 

@@ -1,10 +1,11 @@
-function [loads,volts,channel_names] = process_calibration_folder(calib,crosstalk,parent_dir)
+function [loads,volts,channel_names] = process_calibration_folder(calib,crosstalk,parent_dir,tdmsPrefix)
 
-files = dir(fullfile(parent_dir,calib.folder,'*.tdms'));
+files = dir(fullfile(parent_dir,calib.folder,[tdmsPrefix,'*.tdms']));
 
 if isempty(files)
     error(sprintf('No files found in %s',fullfile(parent_dir,calib.folder)))
 end
+
 for i = 1:length(files)
     d(i) = process_calibration_point(fullfile(parent_dir,calib.folder,files(i).name),crosstalk.channel_names);
 end

@@ -1,11 +1,11 @@
-function cal = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,plot_opt,savePath)
+function cal = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,plot_opt,savePath)
 %% Process calibration data
 data_dir = fullfile(data_path,data_folder);
 % create the applied loads matricies
 for i = 1:length(calib)
-    [loads{i},volts{i},channel_names{i}] = process_calibration_folder(calib(i),crosstalk,data_dir);
+    [loads{i},volts{i},channel_names{i}] = process_calibration_folder(calib(i),crosstalk,data_dir,tdmsPrefix);
     if size(calib(i).applied_load_scaling,2)~=1 && size(calib(i).applied_load_scaling,2)~= length(loads{i})
-        error('applied_load_scaling must be a column vector')
+        error('applied_load_scaling must be a column vector OR the number of columns must match the number of measured points')
     elseif size(calib(i).applied_load_scaling,1) ~= length(crosstalk.loads_names)
         error('applied_load_scaling must have number of rows equal to number of load_names')
     end
@@ -42,7 +42,7 @@ cal.output_names = crosstalk.loads_names; % names for output (calibrated) channe
 
 %% Plotting
 % Plot applied load versus calculated load
-if nargin > 4 && plot_opt% plot_opt activates plotting
+if nargin > 5 && plot_opt% plot_opt activates plotting
     r_squared = 1-sum((cal.data.k*cal.data.response_mat-cal.data.load_mat).^2,2)./sum((cal.data.load_mat-mean(cal.data.load_mat,2)).^2,2); % r^2 comparing measured versus applied load
     if  size(cal.data.k,1) == 1 && size(cal.data.k,2) == 1 % single channel calibration version
         for i = 1:size(load_mats{1},1)

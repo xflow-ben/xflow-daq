@@ -20,10 +20,11 @@ calibNum = calibNum + 1;
 calib(calibNum).folder = 'Upper_arm_-My';
 calib(calibNum).applied_load_scaling = [-consts.lbf_to_N; 0; 0];
 calib(calibNum).output_units = 'N'; 
+calib(calibNum).corrections.load = [8 12];
 
 %% Calibration of upper yoke +Fz Info
 calibNum = calibNum + 1;
-calib(calibNum).folder = 'Upper_yoke_+Fz';
+calib(calibNum).folder = 'Uppper_arm_Fz';
 calib(calibNum).applied_load_scaling = [0; consts.lbf_to_N; 0];
 calib(calibNum).output_units = 'N'; 
 
