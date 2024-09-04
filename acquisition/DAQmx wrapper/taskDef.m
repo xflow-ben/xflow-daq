@@ -434,6 +434,11 @@ classdef taskDef < sharedFunctions
             obj.handleDAQmxError(obj.lib, err);
         end
 
+        function setCICountEdgesDigFltrTimebaseSrc(obj,channelName,terminal)
+            err = calllib(obj.lib,'DAQmxSetCICountEdgesDigFltrTimebaseSrc',obj.taskHandle,channelName,terminal);%(TaskHandle taskHandle, const char channel[], const char *data);
+            obj.handleDAQmxError(obj.lib, err);
+        end
+
         function configureLogging(obj,directoryPath,fileNamePrefix,loggingMode)
             %sampsPerFile,fileWriteSize,filePreallocationSize 
             

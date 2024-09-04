@@ -13,8 +13,8 @@ d.logging.fileNamePrefix = 'anno_and_RPM_TEST';
 d.acquisitionType = 'finite';
 d.logging.mode = 'log';
 
-d.logging.directoryPath = 'C:\Users\Ben Strom\Documents\Loads_Data\new_system_cal\rotor_segment';
-d.durationSeconds = 10;
+d.logging.directoryPath = 'C:\Users\Ben Strom\Documents\Loads_Data\load_calibrations';
+d.durationSeconds = 20;
 
 
 %% 9237 Bridge modules (strain channels)
@@ -50,22 +50,29 @@ d.task(4).setCICICountEdgesTerm('RPM','PFI3')
 % d.task(4).enableCICountEdgesFltr('RPM');
 % d.task(4).setCICountEdgesDigFltrMinPulseWidth('RPM',6.4e-6)
 
+% d.task(2).enableCICountEdgesFltr('anno1');
+% d.task(2).setCICountEdgesDigFltrMinPulseWidth('anno1',6.4e-7)
+% d.task(3).enableCICountEdgesFltr('anno2');
+% d.task(3).setCICountEdgesDigFltrMinPulseWidth('anno2',6.4e-7)
 d.task(2).enableCICountEdgesFltr('anno1');
-d.task(2).setCICountEdgesDigFltrMinPulseWidth('anno1',6.4e-7)
+d.task(2).setCICountEdgesDigFltrMinPulseWidth('anno1',20.0e-6)
+d.task(2).setCICountEdgesDigFltrTimebaseSrc('anno1','/cDAQ9184-1A4BA5D/100kHzTimebase')
 d.task(3).enableCICountEdgesFltr('anno2');
-d.task(3).setCICountEdgesDigFltrMinPulseWidth('anno2',6.4e-7)
+d.task(3).setCICountEdgesDigFltrMinPulseWidth('anno2',20.0e-6)
+d.task(3).setCICountEdgesDigFltrTimebaseSrc('anno2','/cDAQ9184-1A4BA5D/100kHzTimebase')
 
-d.createTask('CI','encInput',512,4);
-d.task(5).addChannel('CIAngEncoder', 'cDAQ9184-1A4BA5DMod1', 'ctr0', 'encoder','PFI0','PFI1','PFI2','X4',1000,'AHighBHigh');
-d.task(5).sampleClock.source = 'userDefined';
-d.task(5).sampleClock.terminal = '/cDAQ9184-1A4BA5D/ai/SampleClock';
+% d.createTask('CI','encInput',512,4);
+% d.task(5).addChannel('CIAngEncoder', 'cDAQ9184-1A4BA5DMod1', 'ctr0', 'encoder','PFI0','PFI1','PFI2','X4',1000,'AHighBHigh');
+% d.task(5).sampleClock.source = 'userDefined';
+% d.task(5).sampleClock.terminal = '/cDAQ9184-1A4BA5D/ai/SampleClock';
 
 %%
 d.configureLogging();
-d.task(1).configSampleClock();
 d.task(2).configSampleClock();
 d.task(3).configSampleClock();
 d.task(4).configSampleClock();
-d.task(5).configSampleClock();
+d.task(1).configSampleClock();
+
+% d.task(5).configSampleClock();
 %%
 d.start
