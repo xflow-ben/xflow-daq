@@ -76,9 +76,10 @@ if nargin > 5 && plot_opt% plot_opt activates plotting
         saveas(gcf,fullfile(saveDir,[strrep(crosstalk.loads_names{i},'_',' '),' Using Single Channel Calibration.png']))
 
     else % multiple channel calibration version
-        fh{1} = figure;
-        fh{2} = figure;
-        fh{3} = figure;
+        %initialize figures for each channel
+        for i = 1:size(load_mats{1},1) 
+            fh{i} = figure;
+        end
         calculated_loads_min =zeros(length(load_mats),1);
         calculated_loads_max =zeros(length(load_mats),1);
         k = 0;
@@ -101,7 +102,7 @@ if nargin > 5 && plot_opt% plot_opt activates plotting
             figure(fh{i}); hold on;
             title([strrep(crosstalk.loads_names{i},'_',' '),', R^2 = ',sprintf('%0.5f',r_squared(i))]);
             xlabel(sprintf('Load Applied [%s]',cal.output_units))
-            ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [%s]',cal.output_units))
+            ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [%s]',cal.output_units{i}))
             box on
             grid on
             set(gca,'fontsize',12)

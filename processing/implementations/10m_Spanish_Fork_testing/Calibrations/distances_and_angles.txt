@@ -20,3 +20,8 @@ From center axis to outermost part of blade: 5315.9532 mm
 Blade span
 Minus winglets: 9540mm
 With winglets: 10540 mm
+
+Distance between the hinges
+= Arm spread distance + ...
+    Radius From center axis to 0.3c span line of blade*(tan(Upper arm angle) + tan(Lower arm angle))
+= 5693.62 mm
