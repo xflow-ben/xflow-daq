@@ -87,7 +87,7 @@ if nargin > 5 && plot_opt % plot_opt activates plotting
         grid on
         set(gca,'fontsize',12)
         plot([calculated_loads_min(i), calculated_loads_max(i)],[calculated_loads_min(i), calculated_loads_max(i)],'--k')
-        legend(leg_string,'Location','Best')
+        legend(leg_string,'Location','SouthEast')
         saveDir = fullfile(savePath,'Figures',data_folder);
         if ~exist(saveDir)
             mkdir(saveDir)
