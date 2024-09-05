@@ -10,10 +10,10 @@ calibNum = 0; % Initiate counting varible
 %% Calibration of Lower yoke +Fx Info
 calibNum = calibNum + 1;
 calib(calibNum).folder = 'Lower_arm_+My';
-calib(calibNum).applied_load_scaling = consts.lbf_to_N;
+calib(calibNum).applied_load_scaling = consts.units.lbf_to_N;
 
 %% Calibration of Lower yoke -Fx Info
 calibNum = calibNum + 1;
 calib(calibNum).folder = 'Lower_arm_-My';
-calib(calibNum).applied_load_scaling = -consts.lbf_to_N;
+calib(calibNum).applied_load_scaling = -consts.units.lbf_to_N;
 

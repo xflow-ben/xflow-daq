@@ -1,7 +1,7 @@
 function [calib,crosstalk] = calibration_matrix_inputs__up_yoke_My(consts)
 
-moment_distance_MY_pos = 32*consts.inch_to_m;
-moment_distance_MY_neg = 32*consts.inch_to_m;
+moment_distance_MY = consts.cali.arm_moment_distance;
+
 %% Crosstalk grouping high level info
 
 crosstalk.loads_names = {'Upper_Yoke_My'}; % Names of physical loads of intrest which are applied during calibrations
@@ -12,10 +12,10 @@ calibNum = 0; % Initiate counting varible
 %% Calibration of lower yoke +My Info
 calibNum = calibNum + 1;
 calib(calibNum).folder = 'Upper_yoke_+My';
-calib(calibNum).applied_load_scaling = consts.lbf_to_N*moment_distance_MY_pos;
+calib(calibNum).applied_load_scaling = consts.units.lbf_to_N*moment_distance_MY;
 
 %% Calibration of lower yoke -My Info
 calibNum = calibNum + 1;
 calib(calibNum).folder = 'Upper_yoke_-My';
-calib(calibNum).applied_load_scaling = -consts.lbf_to_N*moment_distance_MY_neg;
+calib(calibNum).applied_load_scaling = -consts.units.lbf_to_N*moment_distance_MY;
 

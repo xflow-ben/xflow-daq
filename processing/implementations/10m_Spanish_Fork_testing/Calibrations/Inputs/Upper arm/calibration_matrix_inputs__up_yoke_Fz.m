@@ -11,5 +11,5 @@ calibNum = 0; % Initiate counting varible
 %% Calibration of lower yoke +Fz Info
 calibNum = calibNum + 1;
 calib(calibNum).folder = 'Uppper_arm_Fz';
-calib(calibNum).applied_load_scaling = consts.lbf_to_N;
+calib(calibNum).applied_load_scaling = consts.units.lbf_to_N;
 

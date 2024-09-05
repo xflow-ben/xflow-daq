@@ -4,10 +4,9 @@ clc
 
 %% Initialize
 count = 0;
+consts = XFlow_Spanish_Fork_testing_constants();
 
 %% Constants
-consts.lbf_to_N = 4.44822;
-consts.inch_to_m = 0.0254;
 data_path = 'E:\loads_data\load_calibrations\';
 data_folder = 'guy_wire_tension';
 makePlots = 1;
