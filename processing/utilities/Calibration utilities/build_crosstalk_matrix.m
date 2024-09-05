@@ -60,6 +60,8 @@ if nargin > 5 && plot_opt % plot_opt activates plotting
     for j = 1:length(load_mats) % index for each calibration folder
         k = k + 1;
         leg_string{k} = strrep(calib(j).folder,'_',' ');
+        calculated_loads = [];
+        applied_load = [];
         for m = 1:size(load_mats{j},2) % index for each load applied in a folder
             calculated_loads(m,:) = cal.data.k*volts{j}(:,m);
             applied_load(m,:) = load_mats{j}(:,m);
