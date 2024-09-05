@@ -36,7 +36,7 @@ cal.data.k = cal.data.load_mat/cal.data.response_mat;
 
 %% Finish building output cal struct
 cal.type = 'linear_k';
-cal.output_units = calib.output_units;
+cal.output_units = {calib.output_units};
 cal.input_channels = crosstalk.channel_names; % name of data columns to input
 cal.output_names = crosstalk.loads_names; % names for output (calibrated) channels
 
@@ -101,7 +101,7 @@ if nargin > 5 && plot_opt% plot_opt activates plotting
         for i = 1:size(load_mats{1},1) % index for each load channel
             figure(fh{i}); hold on;
             title([strrep(crosstalk.loads_names{i},'_',' '),', R^2 = ',sprintf('%0.5f',r_squared(i))]);
-            xlabel(sprintf('Load Applied [%s]',cal.output_units))
+            xlabel(sprintf('Load Applied [%s]',cal.output_units{i}))
             ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [%s]',cal.output_units{i}))
             box on
             grid on
