@@ -23,6 +23,7 @@ consts.upperArm.angle = 25.9; % Arm angle, from horizontal plane [deg]
 consts.lowerArm.span = 5.61304498; % Distance from hub face to arm-blade hinge, along 0.3 chord spanwise arm line [m]
 consts.lowerArm.angle = -28.34; % Arm angle, from horizontal plane [deg]
 
+consts.rotor.chord = 0.5; % Blade and arm chord [m]
 consts.rotor.radius = 5.27050000; % Radius from center axis to 0.3c span line of blade [m]
 consts.rotor.outer_radius = 5.3159532; % Radius from center axis to outermost part of blade [m]
 consts.rotor.arm_seperation = 0.29178352; % istance between intersections of arm 0.3 chord span lines and center axis [m] 
@@ -32,5 +33,7 @@ consts.blade.hinge_to_hinge_distance = consts.rotor.arm_seperation ...
     + consts.rotor.radius*(tand(consts.upperArm.angle)+tand(-consts.lowerArm.angle)); % Blade span between the hinges [m]
 consts.blade.overhang = (consts.blade.span - consts.blade.hinge_to_hinge_distance)/2; % Blade span from hinge to the end of the winglet [m]
 consts.blade.overhang_without_winglets = (consts.blade.span_minus_wignlets - consts.blade.hinge_to_hinge_distance)/2; % Blade span from the hinge to the end of the pultrusion [m]
+
+consts.turb.A = consts.rotor.outer_radius * consts.blade.span; % Rotor frontal area [m^2]
 end
 
