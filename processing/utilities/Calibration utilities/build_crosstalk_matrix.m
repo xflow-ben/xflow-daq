@@ -36,85 +36,67 @@ cal.data.k = cal.data.load_mat/cal.data.response_mat;
 
 %% Finish building output cal struct
 cal.type = 'linear_k';
-cal.output_units = {calib.output_units};
 cal.input_channels = crosstalk.channel_names; % name of data columns to input
 cal.output_names = crosstalk.loads_names; % names for output (calibrated) channels
+cal.output_units = crosstalk.output_units; % units corresponding to output names
 
-%% Plotting
-% Plot applied load versus calculated load
-if nargin > 5 && plot_opt% plot_opt activates plotting
+%% Plot applied load versus calculated load
+isSingleChannelCal = size(cal.data.k,1) == 1 && size(cal.data.k,2) == 1; % Flag for single or multi channel calibration
+
+if nargin > 5 && plot_opt % plot_opt activates plotting
+   
+    % Calculate R^2
     r_squared = 1-sum((cal.data.k*cal.data.response_mat-cal.data.load_mat).^2,2)./sum((cal.data.load_mat-mean(cal.data.load_mat,2)).^2,2); % r^2 comparing measured versus applied load
-    if  size(cal.data.k,1) == 1 && size(cal.data.k,2) == 1 % single channel calibration version
-        for i = 1:size(load_mats{1},1)
-            figure; hold on;
-            title([strrep(crosstalk.loads_names{i},'_',' '),', R^2 = ',sprintf('%0.5f',r_squared(i))]);
-            leg_string = [];
-            k = 0;
-            calculated_loads_min =0;
-            calculated_loads_max = 0;
-            for j = 1:length(load_mats)
-                if any(load_mats{j}(i,:))
-                    k = k + 1;
-                    plot(load_mats{j}(i,:),cal.data.k*volts{j}(i,:),'o')
-                    leg_string{k} = strrep(calib(j).folder,'_',' ');
-                    calculated_loads_max = max(calculated_loads_max(i),max(cal.data.k*volts{j}(i,:)));
-                    calculated_loads_min = min(calculated_loads_min(i),min(cal.data.k*volts{j}(i,:)));
-                end
-            end
+  
+    % Initialize figures for each channel
+    for i = 1:size(load_mats{1},1)
+        fh{i} = figure;
+    end
+
+    % Plot data and store useful quantities for cleaning figure
+    calculated_loads_min =zeros(length(load_mats),1);
+    calculated_loads_max =zeros(length(load_mats),1);
+    k = 0;
+    for j = 1:length(load_mats) % index for each calibration folder
+        k = k + 1;
+        leg_string{k} = strrep(calib(j).folder,'_',' ');
+        for m = 1:size(load_mats{j},2) % index for each load applied in a folder
+            calculated_loads(m,:) = cal.data.k*volts{j}(:,m);
+            applied_load(m,:) = load_mats{j}(:,m);
         end
-        xlabel(sprintf('Load Applied [%s]',cal.output_units))
-        ylabel(sprintf('Load Computed from Guages\nUsing Single Channel Calibration [%s]',cal.output_units))
+        for i = 1:size(load_mats{1},1) % index for each load channel
+            figure(fh{i})
+            hold on
+            plot(applied_load(:,i),calculated_loads(:,i),'o')
+            calculated_loads_max(i) = max(calculated_loads_max(i),max(calculated_loads(:,i)));
+            calculated_loads_min(i) = min(calculated_loads_min(i),min(calculated_loads(:,i)));
+        end
+    end
+
+    % Clean up and save figure
+    for i = 1:size(load_mats{1},1) % index for each load channel
+        figure(fh{i}); hold on;
+        title([strrep(crosstalk.loads_names{i},'_',' '),', R^2 = ',sprintf('%0.5f',r_squared(i))]);
+        xlabel(sprintf('Load Applied [%s]',cal.output_units{i}))
+        if isSingleChannelCal
+            ylabel(sprintf('Load Computed from Guages\nUsing Single Channel Calibration [%s]',cal.output_units{i}))
+        else
+            ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [%s]',cal.output_units{i}))
+        end
         box on
         grid on
         set(gca,'fontsize',12)
-        plot([calculated_loads_min, calculated_loads_max],[calculated_loads_min, calculated_loads_max],'--k')
+        plot([calculated_loads_min(i), calculated_loads_max(i)],[calculated_loads_min(i), calculated_loads_max(i)],'--k')
         legend(leg_string,'Location','Best')
         saveDir = fullfile(savePath,'Figures',data_folder);
         if ~exist(saveDir)
             mkdir(saveDir)
         end
-        saveas(gcf,fullfile(saveDir,[strrep(crosstalk.loads_names{i},'_',' '),' Using Single Channel Calibration.png']))
-
-    else % multiple channel calibration version
-        %initialize figures for each channel
-        for i = 1:size(load_mats{1},1) 
-            fh{i} = figure;
-        end
-        calculated_loads_min =zeros(length(load_mats),1);
-        calculated_loads_max =zeros(length(load_mats),1);
-        k = 0;
-        for j = 1:length(load_mats) % index for each calibration folder
-            k = k + 1;
-            leg_string{k} = strrep(calib(j).folder,'_',' ');
-            for m = 1:size(load_mats{j},2) % index for each load applied in a folder
-                calculated_loads(m,:) = cal.data.k*volts{j}(:,m);
-                applied_load(m,:) = load_mats{j}(:,m);
-            end
-            for i = 1:size(load_mats{1},1) % index for each load channel
-                figure(fh{i})
-                hold on
-                plot(applied_load(:,i),calculated_loads(:,i),'o')
-                calculated_loads_max(i) = max(calculated_loads_max(i),max(calculated_loads(:,i)));
-                calculated_loads_min(i) = min(calculated_loads_min(i),min(calculated_loads(:,i)));
-            end
-        end
-        for i = 1:size(load_mats{1},1) % index for each load channel
-            figure(fh{i}); hold on;
-            title([strrep(crosstalk.loads_names{i},'_',' '),', R^2 = ',sprintf('%0.5f',r_squared(i))]);
-            xlabel(sprintf('Load Applied [%s]',cal.output_units{i}))
-            ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [%s]',cal.output_units{i}))
-            box on
-            grid on
-            set(gca,'fontsize',12)
-            plot([calculated_loads_min(i), calculated_loads_max(i)],[calculated_loads_min(i), calculated_loads_max(i)],'--k')
-            legend(leg_string,'Location','Best')
-            saveDir = fullfile(savePath,'Figures',data_folder);
-            if ~exist(saveDir)
-                mkdir(saveDir)
-            end
+        if isSingleChannelCal
+            saveas(gcf,fullfile(saveDir,[strrep(crosstalk.loads_names{i},'_',' '),' Using Single Channel Calibration.png']))
+        else
             saveas(gcf,fullfile(saveDir,[strrep(crosstalk.loads_names{i},'_',' '),' Using Crosstalk Matrix.png']))
         end
     end
 end
 
-  

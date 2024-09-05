@@ -13,18 +13,17 @@ a = overhang - w/2;
 %% Crosstalk grouping high level info
 crosstalk.loads_names = {'Lower_Blade_Mx'}; % Names of physical loads of intrest which are applied during calibrations
 crosstalk.channel_names = {'Lower Blade bend'}; % Names of load channels of intrest
+crosstalk.output_units = {'N-m'}; 
 calibNum = 0; % Initiate counting varible
 
 %% Calibration of Blade Lower Mx Pulling in +Y 
 calibNum = calibNum + 1;
 calib(calibNum).folder = 'rotor_segment_lower_+Fy';
 calib(calibNum).applied_load_scaling = -consts.lbf_to_N*a;
-calib(calibNum).output_units = 'N-m'; 
 
 %% Calibration of Blade Lower Mx Pulling in -Y 
 calibNum = calibNum + 1;
 calib(calibNum).folder = 'rotor_segment_lower_-Fy';
 calib(calibNum).applied_load_scaling = consts.lbf_to_N*a;
-calib(calibNum).output_units = 'N-m'; 
 % calib(calibNum).corrections.load = [2 27.5];
 
