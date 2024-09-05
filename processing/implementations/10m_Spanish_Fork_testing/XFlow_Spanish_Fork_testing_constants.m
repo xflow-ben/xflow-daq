@@ -1,17 +1,23 @@
 function consts = XFlow_Spanish_Fork_testing_constants()
 
-% Unit conversions
+%% Unit conversions
 consts.units.lbf_to_N = 4.44822;
 consts.units.inch_to_m = 0.0254;
 
-% Calibration
+%% ata files
+consts.data.data_file_name_conventions = {'guy_wire_cal_towerBaseStrain*.tdms',...
+    'full_hub_test_rotorStrain*.tdms',...
+    'lower_arm_cal_rotorStrain*.tdms',...
+    'upper_arm_cal_rotorStrain*.tdms'};
+
+%% Calibration
 consts.cali.arm_moment_distance = 32*consts.units.inch_to_m;
 consts.cali.jig_thickness = (1.375+1/32)*consts.units.inch_to_m; % Thickness of load application jig used for rotor segment calibrations [m]
 
-% Gage locations
+%% Gage locations
 consts.guages.blade_center_to_guage_distance = 0.635; % distance from blade center to guage location in the direction of the upper joint [m]
 
-% Rotor geometry
+%% Rotor geometry
 consts.blade.span = 10.540; % Blade span [m]
 consts.blade.span_minus_wignlets = 9.540; % Blade span minus the winglets [m]
 consts.blade.pitch_25 = 2.27; %Blade angle pitch angle at 0.25 chord [deg]

@@ -9,12 +9,12 @@ if strcmp(cal.type,'linear_k')
     end
     % multiply by k appropriately (should work for single avalue and square
     % and rectangular matricies)
-    if size(cal.data.k,1) == 1
-        result = raw.*cal.data.k;
-    else
-        error('Need to confirm sure the code will work for a k matrix')
-        results = raw*cal.data.k;
-    end
+%     if size(cal.data.k,1) == 1
+%         result = raw.*cal.data.k;
+%     else
+%         error('Need to confirm sure the code will work for a k matrix')
+        result = raw*cal.data.k;
+%     end
     % create out.(field_names), where filed names are from cal.output_names
     for i = 1:length(cal.output_names)
         out.(cal.output_names{i}) = result(:,i);
