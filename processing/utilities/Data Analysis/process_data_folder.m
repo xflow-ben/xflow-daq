@@ -1,4 +1,10 @@
-function [td,sd,bd] = process_data_folder(files,cal,consts)
+function results = process_data_folder(files,cal,consts)
+
+
+if sum(strcmp(fieldnames(files),'data_name_conventions')) == 0
+    files.data_name_conventions = consts.data.data_file_name_conventions;
+end
+
 %% Load tares
 % Check if list of applicable tares is present in dataDir
 tareList = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,'tare*.mat'));
@@ -38,27 +44,24 @@ for II = 1:length(files.data_name_conventions)
     end
 end
 
+
 %% Process data files
-% Loop through all the ata files and run them through AW_process_point
+% Loop through all the data files and run them through process_data_point
 
 % Find file names that start with the specified naming convensions
-if nargin > 3
-    name_conventions = TDMS_prefix;
-else
-    name_conventions = consts.data.data_file_name_conventions;
-end
-for II = 1:length(name_conventions)
-    II
-    dataFiles = dir(fullfile(dataDir,name_conventions{II}));
+for II = 1:length(files.data_name_conventions)
+    II/length(files.data_name_conventions)
+    dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,files.data_name_conventions{II}));
     for JJ = 1:length(dataFiles)
-        td{II}(JJ) = process_data_point(fullfile(dataDir,dataFiles(JJ).name),cal,consts)
+        files.dataFile = dataFiles(JJ).name;
+        results(II,JJ) = process_data_point(files,cal,consts,tare(II));
     end
 end
 %
 % %% Create sd
 % % Create sd (statistical data): do N-second averaging here (e.g. 10 second). Split data up into chunks,
 % % do the averaging
-sd = struct();
+% sd = struct();
 %
 % N = 10; % Length of chuncks in seconds
 % count = 0;
@@ -97,6 +100,6 @@ sd = struct();
 %
 % %% Create bd
 % % Create bd (binned data): Bin data by Re and TSR and compute bin average and std
-bd = struct();
+% bd = struct();
 
 end

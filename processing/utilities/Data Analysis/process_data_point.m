@@ -1,20 +1,45 @@
-function td = process_data_point(file_path,cal,consts)
+function results = process_data_point(files,cal,consts,tare)
 % cal is an array of calibration structs
 % tare is an array of tare structs
 
 %% Load data
-tdms = readTDMS(file_path,'');
+tdms = readTDMS(files.dataFile,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
 in = convertTDMStoXFlowFormat(tdms);
 
 %% Apply the tare(s)
-% for now just use the mean of all the tares provided
 % subtract off the tares from the raw data (for channels with tares)
-in.data = in.data;% - tare.median;
+% tare are applied such that:
+% 1) If the data is before or after all tares just apply the closest tare
+% in time
+% 2) If the data is between tares, linearly intrpolate
 
+data_time_ind = find(strcmp(in.chanNames,'time'));
+tare_time_ind = find(strcmp(tare.chanNames,'time'));
+
+for data_ind = 1:length(in.chanNames)
+    if data_ind == data_time_ind
+        results.tare_applied(data_ind) = 0;
+    else
+        tare_ind = find(strcmp(in.chanNames{data_ind},tare.chanNames));
+        if isempty(tare_ind)
+            results.tare_applied(data_ind) = 0;
+        else
+            results.tare_applied(data_ind) = 1;
+            if size(tare.data,1) == 1
+                in.data(:,data_ind) = in.data(:,data_ind) - tare.data(tare_ind);
+            else
+                in.data(:,data_ind) = in.data(:,data_ind) - ...
+                    interp1_with_closest_extrap(tare.data(:,tare_time_ind), tare.data(:,tare_ind), in.data(:,data_time_ind));
+            end
+        end
+    end
+end
 % might want a catch so that channels that need tares but don't have them,
 % don't get processed
 
-% make function - check for tares
+
+%% Add chanNames to results for comparison with tare_applied
+results.chanNames = in.chanNames;
 
 %% Extract time
 td.time = in.data(:,strcmp(in.chanNames,'time'));
@@ -24,7 +49,7 @@ td.time = in.data(:,strcmp(in.chanNames,'time'));
 % of the data conversion, with the exception of the encoder
 
 for II = 1:length(cal)
-    % Apply calibration if data is avalible for all relevant channels
+    % Check is data is avalible for ALL relevant input channels
     flag = 1;
     for JJ = 1:length(cal(II).input_channels)
         pass = sum(strcmp(cal(II).input_channels{JJ},in.chanNames));
@@ -33,7 +58,8 @@ for II = 1:length(cal)
         end
     end
 
-    
+    % Apply calibration if data is avalible for ALL relevant input channels
+    % (flag = 1)
     if flag
         temp = apply_calibration(in.data,in.chanNames,cal(II));
         fields = fieldnames(temp);
@@ -43,7 +69,6 @@ for II = 1:length(cal)
     end
 end
 
-% add back in bearing losses here
 
 % %% Process encoder
 % % compute theta, omega, and omegadot using multi_poly_diff
@@ -74,4 +99,5 @@ end
 % td.cP =  td.power./(0.5*turb.rho*turb.A*td.U.^3);
 % td.TSR = td.omega.*turb.r./td.U;
 % %td.ReC = td.U*(1+td.TSR)*turb.chord/turb.nu;
+results.td = td;
 end
