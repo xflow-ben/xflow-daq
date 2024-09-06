@@ -1,42 +1,42 @@
-function [td,sd,bd] = process_data_folder(directory,cal,consts,TDMS_prefix)
-% %% Load and average tares
-% % gather up the tare files in directory,
-% % loop through the tare files
-% % create average tare values for the channels indicated in
-% % tare.applicableChannels
-% % put this into some kind of structure
-% % pass into AW_Process_point where those values will be subtracted from the
-% % raw data
-%
-% % Get a list of all files and directories in the current directory
-% tarefiles = dir(fullfile(directory,'tare*.mat'));
-% % Load the first matching file if it exists
-% if isempty(tarefiles)
-%     error('No tare files found.');
-% end
-%
-% % extract all tares into struct array
-% for i = 1:length(tarefiles)
-%     in = load(fullfile(directory,tarefiles(i).name));
-%     all_tares(i) = in.tare;
-% end
-%
-% % compress tares into an array which holds the average tare value for each
-% % channel
-% for i = 1:length(all_tares(1).median)
-%     chunk_lg = 0;
-%     average_tare.median(i) = 0;
-%     for j = 1:length(all_tares)
-%         if all_tares(j).applicableChannels(i)
-%             chunk_lg = chunk_lg + 1;
-%             average_tare.median(i) = average_tare.median(i) + all_tares(j).median(i);
-%         end
-%     end
-%     average_tare.median(i) = average_tare.median(i)/chunk_lg;
-% end
-% average_tare.median(isnan(average_tare.median)) = 0;
-% average_tare.applicableChannels = all_tares(1).applicableChannels;
-% average_tare.metaData = all_tares(1).metaData;
+function [td,sd,bd] = process_data_folder(files,cal,consts)
+%% Load tares
+% Check if list of applicable tares is present in dataDir
+tareList = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,'tare*.mat'));
+
+% If tare list is present, extract all tares into struct array
+if isempty(tareList)
+    error(sprintf('No tare list file in %s',fullfile(files.absolute_data_dir,files.relative_experiment_dir)))
+elseif length(tareList) > 1
+    error(sprintf('These is more than one tare list file in %s',fullfile(files.absolute_data_dir,files.relative_experiment_dir)))
+else
+    load(fullfile(files.absolute_data_dir,files.relative_experiment_dir,tareList.name))
+end
+
+% Create tare struct
+% tare is a struct array with XX elements where XX specifies the naming
+% convention for the files it applies to. Each tare(XX) contains:
+% data_name_conventions: the naming convention for the files this tare 
+% struct applies to
+% chanNames: The data channel names
+% data: The median values from each tare file fom tareList which matches
+% the naming convention
+
+for II = 1:length(files.data_name_conventions)
+    count = 0;
+    pattern = strrep(files.data_name_conventions{II}, '*', '.*');
+    for JJ = 1:length(tareList)
+        if ~isempty(regexp(tareList{JJ},pattern,'once'))
+            count = count + 1;
+            tare_TDMS = readTDMS(tareList{JJ},fullfile(files.absolute_data_dir,files.relative_tare_dir));
+            tare_td = convertTDMStoXFlowFormat(tare_TDMS);
+            tare(II).data(count,:) = median(tare_td.data,1);
+            if count == 1
+                tare(II).data_name_conventions = files.data_name_conventions{II};
+                tare(II).chanNames = tare_td.chanNames;
+            end
+        end
+    end
+end
 
 %% Process data files
 % Loop through all the ata files and run them through AW_process_point
@@ -49,9 +49,9 @@ else
 end
 for II = 1:length(name_conventions)
     II
-    dataFiles = dir(fullfile(directory,name_conventions{II}));
+    dataFiles = dir(fullfile(dataDir,name_conventions{II}));
     for JJ = 1:length(dataFiles)
-        td{II}(JJ) = process_data_point(fullfile(directory,dataFiles(JJ).name),cal,consts)
+        td{II}(JJ) = process_data_point(fullfile(dataDir,dataFiles(JJ).name),cal,consts)
     end
 end
 %
