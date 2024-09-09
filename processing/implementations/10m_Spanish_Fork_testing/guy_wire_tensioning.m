@@ -15,7 +15,6 @@ load('C:\Users\XFlow Energy\Documents\GitHub\xflow-daq\processing\implementation
 consts = XFlow_Spanish_Fork_testing_constants();
 
 %% Process data folder
-
 results = process_data_folder(files,cal,consts);
 
 %% Plot

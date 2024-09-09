@@ -1,6 +1,6 @@
 function results = process_data_folder(files,cal,consts)
 
-
+% Initialize the data name conventions which will be processed
 if sum(strcmp(fieldnames(files),'data_name_conventions')) == 0
     files.data_name_conventions = consts.data.data_file_name_conventions;
 end
