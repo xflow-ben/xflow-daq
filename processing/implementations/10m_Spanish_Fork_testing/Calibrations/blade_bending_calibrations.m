@@ -8,7 +8,7 @@ count_multi = 0;
 consts = XFlow_Spanish_Fork_testing_constants();
 
 %% Constants
-data_path = 'E:\loads_data\load_calibrations\';
+data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\';
 data_folder = 'rotor_segment';
 makePlots = 1;
 savePath = fullfile(fileparts(mfilename('fullpath')),'Results');

@@ -3,13 +3,13 @@ close all
 clc
 
 %% Assign data folder
-files.absolute_data_dir = 'E:\loads_data\';
+files.absolute_data_dir = 'X:\Experiments and Data\20 kW Prototype\Loads_Data';
 files.relative_experiment_dir = 'GW_tensioning'; % This is relative to files.absolute_data_dir
 files.relative_tare_dir= 'tares'; % This is relative to files.absolute_data_dir
 files.data_name_conventions = {'guy_wire_cal_towerBaseStrain_*.tdms'};
 
 %% Load calibration struct
-load('C:\Users\XFlow Energy\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_05_09_24.mat')
+load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_05_09_24.mat')
 
 %% Load constants
 consts = XFlow_Spanish_Fork_testing_constants();
