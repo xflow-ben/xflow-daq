@@ -33,5 +33,4 @@ for JJ = 1:length(fields)
     end
 end
 legend(legStr,'Location','best','Interpreter','none')
-
 ylabel('Tension [lbf]')

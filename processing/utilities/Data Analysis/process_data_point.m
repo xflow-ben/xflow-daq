@@ -21,9 +21,6 @@ in = convertTDMStoXFlowFormat(tdms);
 %% Add chanNames to results for comparison with tare_applied
 results.chanNames = in.chanNames;
 
-%% Extract time
-td.time = in.data(:,strcmp(in.chanNames,'time'));
-
 %% Apply calibrations
 % loop through the cal structs here. This should take care of the majority
 % of the data conversion
@@ -47,7 +44,6 @@ for II = 1:length(cal)
     % Apply calibration if data is avalible for ALL relevant input channels
     % (flag = 1)
     if flag
-        
         temp = apply_calibration(in.data,in.chanNames,cal(II));
         fields = fieldnames(temp);
         for JJ = 1:length(fields) % make sure this works properly
@@ -55,6 +51,12 @@ for II = 1:length(cal)
         end
         results.cal_applied(data_ind) = ones(size(data_ind));
     end
+end
+
+% Copy uncalibrated data to the results array
+uncalibrated_ind = find(results.cal_applied == 0); 
+for II = 1:length(uncalibrated_ind)
+    td.(strrep(results.chanNames{uncalibrated_ind(II)},' ','_')) = in.data(:,uncalibrated_ind(II));
 end
 
 %% Put td in export struct
