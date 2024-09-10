@@ -288,7 +288,7 @@ unloadlibrary(lib);
             temp = readProperty(lib,channelHandle, 'name', 'channel');
 
             % Only read channel if it is a requested channel name
-            if nargin < 3 || strcmp(temp,channelName) 
+            if nargin < 3 || strcmp(temp,channelName)
                 countChan = countChan + 1;
                 channels(countChan).name = temp;
                 % Read channel properties
@@ -297,8 +297,11 @@ unloadlibrary(lib);
                 % Read channel data
                 channels(countChan).data = readChannelData(lib,channelHandle);
 
-                % Append channel structure to channels array                
+                % Append channel structure to channels array
             end
+        end
+        if countChan == 0
+            error('Designated channel name, %s, not in the TDMS data',channelName)
         end
     end
 
