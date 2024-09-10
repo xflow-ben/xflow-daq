@@ -57,7 +57,7 @@ for II = 1:length(files.data_name_conventions)
     dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,files.data_name_conventions{II}));
     for JJ = 1:length(dataFiles)
         files.dataFile = dataFiles(JJ).name;
-        results{II,JJ} = process_data_point(files,cal,consts,tare(II));
+        results(II,JJ) = process_data_point(files,cal,consts,tare(II));
     end
 end
 %

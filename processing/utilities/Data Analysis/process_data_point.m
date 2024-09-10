@@ -4,22 +4,16 @@ function results = process_data_point(files,cal,consts,tare)
 % consts is a struct with project specific values
 % tare is an array of tare structs
 
-results = struct; % initialize result struct
-
 %% Load data
 tdms = readTDMS(files.dataFile,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
 in = convertTDMStoXFlowFormat(tdms);
 
+%% Add chanNames to results for comparison with tare_applied and cal_applied
+results.chanNames = in.chanNames;
+
 %% Apply the tare(s)
 % subtract off the tares from the raw data (for channels with tares)
-
 [in,results] = consts.tare_func(in,tare,results);
-
-% might want a catch so that channels that need tares but don't have them,
-% don't get processed
-
-%% Add chanNames to results for comparison with tare_applied
-results.chanNames = in.chanNames;
 
 %% Apply calibrations
 % loop through the cal structs here. This should take care of the majority
