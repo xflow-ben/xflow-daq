@@ -11,7 +11,7 @@ in = convertTDMStoXFlowFormat(tdms);
 %% Apply the tare(s)
 % subtract off the tares from the raw data (for channels with tares)
 
-[in,results] = time_interped_tare(in,tare,results);
+[in,results] = consts.tare_func(in,tare,results);
 
 % might want a catch so that channels that need tares but don't have them,
 % don't get processed

@@ -4,11 +4,14 @@ function consts = XFlow_Spanish_Fork_testing_constants()
 consts.units.lbf_to_N = 4.44822;
 consts.units.inch_to_m = 0.0254;
 
-%% ata files
+%% Data files
 consts.data.data_file_name_conventions = {'guy_wire_cal_towerBaseStrain*.tdms',...
     'full_hub_test_rotorStrain*.tdms',...
     'lower_arm_cal_rotorStrain*.tdms',...
     'upper_arm_cal_rotorStrain*.tdms'};
+
+%% Tare function
+consts.tare_func = @time_interped_tare;
 
 %% Calibration
 consts.cali.arm_moment_distance = 32*consts.units.inch_to_m;
