@@ -1,4 +1,7 @@
 function results = process_data_folder(files,cal,consts)
+% files contains absolute and relative path information
+% cal is an array of calibration structs
+% consts is a struct with project specific values
 
 % Initialize the data name conventions which will be processed
 if sum(strcmp(fieldnames(files),'data_name_conventions')) == 0
