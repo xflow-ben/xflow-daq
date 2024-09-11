@@ -56,7 +56,7 @@ for II = 1:length(consts.data.file_name_conventions)
 end
 
 %% Create sd (statistical data)
-N_days = consts.data.N/(24*60*60); % Get sd averaging time in days
+N_days = consts.data.N/(24*60*60); % Get sd averaging time in days (our td.time is in datenum which is in units days)
 
 if sum(strcmp(consts.data.save_types, 'sd'))
     % Create sd (statistical data): do N-second averaging here (e.g. 10 second).
@@ -85,19 +85,16 @@ if sum(strcmp(consts.data.save_types, 'sd'))
 
                     if ~isempty(indices)
                         count = count + 1;
-
                         % Compute the average for each field in the struct
                         for LL = 1:numel(fields)
                             if ~strcmp(fields{LL}, 'time')
-                                % Extract the chunk data
+                                % Extract the chunk data statistics
                                 chunk_data = results(II,JJ).td.(fields{LL})(indices);
                                 results(II,JJ).sd.(fields{LL}).mean(count) = mean(chunk_data);
                                 results(II,JJ).sd.(fields{LL}).std(count) = std(chunk_data);
                                 results(II,JJ).sd.(fields{LL}).min(count) = min(chunk_data);
                                 results(II,JJ).sd.(fields{LL}).max(count) = max(chunk_data);
-
                             end
-
                         end
                     end
                 end
