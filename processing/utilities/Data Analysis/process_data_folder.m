@@ -72,7 +72,7 @@ if sum(strcmp(consts.data.save_types, 'sd'))
                 % Determine the number of chunks
                 start_time = min(results(II,JJ).td.time);
                 end_time = max(results(II,JJ).td.time);
-                num_chunks = floor((end_time - start_time) / N_days);
+                num_chunks = ceil((end_time - start_time) / N_days);
 
                 % Loop through each chunk
                 for KK = 1:num_chunks
