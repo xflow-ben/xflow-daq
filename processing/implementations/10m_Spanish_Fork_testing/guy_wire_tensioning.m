@@ -28,13 +28,12 @@ for II = length(results)
     fields = fieldnames(results(II).sd);
     % only plot most recent tensioning attempt
     count = 0;
-    JJ = length(results(II).sd);
-    for KK = 1:length(fields)
-        if ~sum(strcmp(fields{KK},'time'))
+    for JJ = 1:length(fields)
+        if ~sum(strcmp(fields{JJ},'time'))
             count = count + 1;
-            plot(results(II).sd(JJ).(fields{KK})/consts.units.lbf_to_N,'o')
+            errorbar(results(II).sd.(fields{JJ}).mean/consts.units.lbf_to_N,results(II).sd.(fields{JJ}).std/consts.units.lbf_to_N,'o')
             hold on
-            legStr{count} = fields{KK};
+            legStr{count} = fields{JJ};
         end
     end
     legend(legStr,'Location','best','Interpreter','none')

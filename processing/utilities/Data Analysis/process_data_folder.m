@@ -91,7 +91,11 @@ if sum(strcmp(consts.data.save_types, 'sd'))
                             if ~strcmp(fields{LL}, 'time')
                                 % Extract the chunk data
                                 chunk_data = results(II,JJ).td.(fields{LL})(indices);
-                                results(II,JJ).sd.(fields{LL})(count) = mean(chunk_data);
+                                results(II,JJ).sd.(fields{LL}).mean(count) = mean(chunk_data);
+                                results(II,JJ).sd.(fields{LL}).std(count) = std(chunk_data);
+                                results(II,JJ).sd.(fields{LL}).min(count) = min(chunk_data);
+                                results(II,JJ).sd.(fields{LL}).max(count) = max(chunk_data);
+
                             end
 
                         end
