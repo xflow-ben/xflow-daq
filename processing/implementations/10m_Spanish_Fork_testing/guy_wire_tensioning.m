@@ -18,16 +18,16 @@ consts = XFlow_Spanish_Fork_testing_constants();
 results = process_data_folder(files,cal,consts);
 
 %% Plot
-fields = fieldnames(results(1,1).td);
+fields = fieldnames(results.td);
 
 % only plot most recent tensioning attempt
 figure
 count = 0;
-II = length(results(1,1).td);
+II = length(results.td);
 for JJ = 1:length(fields)
     if ~sum(strcmp(fields{JJ},'time'))
         count = count + 1;
-        plot(results(1,1).td(II).(fields{JJ})/consts.units.lbf_to_N)
+        plot(results.td(II).(fields{JJ})/consts.units.lbf_to_N)
         hold on
         legStr{count} = fields{JJ};
     end
