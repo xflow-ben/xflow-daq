@@ -148,7 +148,7 @@ classdef taskDef < sharedFunctions
             end
         
 
-            obj.sampleClock.autoTerminal = obj.getSampleClockTerm();
+%            obj.sampleClock.autoTerminal = obj.getSampleClockTerm();
             % sampleClockString = obj.getSampleClockTerm();
             % if strcmp(obj.sampleClock.source,'userDefined')
             %     if ~strcmp(sampleClockString,obj.sampleClock.terminal)
@@ -159,7 +159,7 @@ classdef taskDef < sharedFunctions
             %     obj.sampleClock.autoTerminal = sampleClockString;
             % end
 
-            obj.startTrigger.autoTerminal = obj.getStartTrigTerm();
+ %           obj.startTrigger.autoTerminal = obj.getStartTrigTerm();
             % startTrigTermString = obj.getStartTrigTerm();
             % if strcmp(obj.startTrigger.source,'userDefined')
             %     if ~strcmp(startTrigTermString,obj.startTrigger.terminal)

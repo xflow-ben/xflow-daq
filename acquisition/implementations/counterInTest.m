@@ -13,7 +13,7 @@ d.logging.fileNamePrefix = 'anno_and_RPM_TEST';
 d.acquisitionType = 'finite';
 d.logging.mode = 'log';
 
-d.logging.directoryPath = 'C:\Users\Ben Strom\Documents\Loads_Data\';
+d.logging.directoryPath = 'E:\loads_data';
 d.durationSeconds = 60;
 
 
