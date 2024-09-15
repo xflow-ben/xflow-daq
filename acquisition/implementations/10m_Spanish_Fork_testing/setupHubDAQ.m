@@ -8,18 +8,35 @@ function d = setupHubDAQ
 % % NOTE - we should make all file rates a power of 2 for TDMS logging
 % durationSeconds = 10; % 20 sec file lg
 
-durationSeconds = 10; % per file for
-strainAcqRate = 512;
-RTDRate = 4;
+durationSeconds = 30; % per file for
+strainAcqRate = 12.8e6/(256*31);
+RTDRate = 1;
+
+chassis_list{1} = 'cDAQ9184-1A4BA5D'; % Nacelle chassis
+chassis_list{2} = 'cDAQ9188-151ABD7'; % Tower Base chassis
+chassis_list{3} = 'cDAQ9188-18F21FF'; % Hub chassis
+
+mod_list = {'cDAQ9184-1A4BA5DMod1','cDAQ9184-1A4BA5DMod2',...
+    'cDAQ9184-1A4BA5DMod3','cDAQ9188-151ABD7Mod1','cDAQ9188-18F21FFMod1'...
+    'cDAQ9188-18F21FFMod2','cDAQ9188-18F21FFMod3','cDAQ9188-18F21FFMod4',...
+    'cDAQ9188-18F21FFMod5','cDAQ9188-18F21FFMod6','cDAQ9188-18F21FFMod7','cDAQ9188-18F21FFMod8'};
+
 
 d = xfedaq();
-d.resetDevice('Hub'); % make sure any device routs and clock setup is wiped
-pause(5)
-d.logging.fileNamePrefix = 'upper_arm_tests';
+for i = 1:length(chassis_list)
+    d.resetDevice(chassis_list{i});
+end
+pause(10)% wait for them to reconnect
+for i = 1:length(mod_list)
+    d.resetDevice(mod_list{i});
+end
+pause(2)
+
+d.logging.fileNamePrefix = 'timing_testing';
 d.acquisitionType = 'finite';
 d.logging.mode = 'log';
 
-d.logging.directoryPath = 'C:\Users\Ben Strom\Documents\Loads_Data\new_system_cal\rotor_segment';
+d.logging.directoryPath = 'C:\Users\XFlow Energy\Documents\GitHub\xflow-daq';
 d.durationSeconds = durationSeconds;
 
 
@@ -55,21 +72,28 @@ d.task(2).addChannel('AIResistance','cDAQ9188-18F21FFMod7','ai3','Center Blade I
 d.task(2).addChannel('AIResistance','cDAQ9188-18F21FFMod8','ai0','Lower Blade Inner',[30 70],'4 wire','internal',0.001);
 d.task(2).addChannel('AIResistance','cDAQ9188-18F21FFMod8','ai1','Lower Blade Outer',[30 70],'4 wire','internal',0.001);
 d.task(2).addChannel('AIRTD','cDAQ9188-18F21FFMod8','ai2','DAQ Temp',[0 70],'Deg C','Pt3750','4 wire','internal',0.001,100);
-d.task(2).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai17','Battery Voltage','RSE',[0 10]);
+% d.task(2).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai17','Battery Voltage','RSE',[0 10]);
 
 
 %% Set up timing
 
 % sample clock routing for Strain channels
-sampleClockTimebaseRate = strainAcqRate*256*31;
-d.routeSignal('/Hub/20MHzTimebase','/Hub/PFI0')
-d.task(1).setSampClkTimebaseSrc('/Hub/PFI0');
-d.task(1).setSampClkTimebaseRate(sampleClockTimebaseRate);
+% 
+% d.routeSignal('/cDAQ9188-18F21FFMod1/ai/SampleClockTimebase','/cDAQ9188-18F21FF/PFI0')
+% d.task(1).setSampClkTimebaseSrc('/cDAQ9188-18F21FF/PFI0');
+% d.task(1).setSampClkTimebaseRate(12.8e6);
+% 
+% 
+% d.routeSignal('/cDAQ9188-18F21FFMod1/ai/SampleClockTimebase','/cDAQ9188-18F21FFMod3/ai/SampleClockTimebase')
+% d.routeSignal('/cDAQ9188-18F21FFMod1/ai/SampleClockTimebase','/cDAQ9188-18F21FFMod4/ai/SampleClockTimebase')
+% d.routeSignal('/cDAQ9188-18F21FFMod1/ai/SampleClockTimebase','/cDAQ9188-18F21FFMod5/ai/SampleClockTimebase')
+% 
+% d.task(1).configSampleClock();
 
-d.task(1).configSampleClock();
 % route start terminal from strain to RTDs
-d.routeSignal(d.task(1).startTrigger.autoTerminal,'/Hub/PFI1')
-d.task(2).setStartTrigTerm('/Hub/PFI1')
+d.task(1).configSampleClock();
+d.routeSignal(d.task(1).startTrigger.autoTerminal,'/cDAQ9188-18F21FF/PFI1')
+d.task(2).setStartTrigTerm('/cDAQ9188-18F21FF/PFI1')
 d.task(2).configSampleClock();
 d.configureLogging();
 

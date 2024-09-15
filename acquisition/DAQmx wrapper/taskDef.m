@@ -129,11 +129,11 @@ classdef taskDef < sharedFunctions
             end
 
             if ismember(obj.logging.mode,{'log','log and read'}) % make sure buffer isze is right if we are logging
-                [obj.bufferSize, ~, ~] = obj.calculateSizes(obj.rate, obj.durationSeconds);
+                [obj.bufferSize, ~, sampsPerFile] = obj.calculateSizes(obj.rate, obj.durationSeconds);
             end
             sampleModeInt = obj.getConstInputVal('sampleMode',obj.acquisitionType,{'finite','continuous'},[obj.DAQmx.Val_FiniteSamps,obj.DAQmx.Val_ContSamps]);
             if strcmp(obj.acquisitionType,'finite')
-                err = calllib(obj.lib, 'DAQmxCfgSampClkTiming', obj.taskHandle, sampleClockTerminal, obj.rate, obj.DAQmx.Val_Rising, sampleModeInt, uint64(obj.rate*obj.durationSeconds));
+                err = calllib(obj.lib, 'DAQmxCfgSampClkTiming', obj.taskHandle, sampleClockTerminal, obj.rate, obj.DAQmx.Val_Rising, sampleModeInt, uint64(sampsPerFile));
             else
                  err = calllib(obj.lib, 'DAQmxCfgSampClkTiming', obj.taskHandle, sampleClockTerminal, obj.rate, obj.DAQmx.Val_Rising, sampleModeInt, uint64(obj.bufferSize));
             end
@@ -148,7 +148,7 @@ classdef taskDef < sharedFunctions
             end
         
 
-%            obj.sampleClock.autoTerminal = obj.getSampleClockTerm();
+            obj.sampleClock.autoTerminal = obj.getSampleClockTerm();
             % sampleClockString = obj.getSampleClockTerm();
             % if strcmp(obj.sampleClock.source,'userDefined')
             %     if ~strcmp(sampleClockString,obj.sampleClock.terminal)
@@ -159,7 +159,7 @@ classdef taskDef < sharedFunctions
             %     obj.sampleClock.autoTerminal = sampleClockString;
             % end
 
- %           obj.startTrigger.autoTerminal = obj.getStartTrigTerm();
+            obj.startTrigger.autoTerminal = obj.getStartTrigTerm();
             % startTrigTermString = obj.getStartTrigTerm();
             % if strcmp(obj.startTrigger.source,'userDefined')
             %     if ~strcmp(startTrigTermString,obj.startTrigger.terminal)
@@ -522,20 +522,27 @@ classdef taskDef < sharedFunctions
         function [bufferSize, fileWriteSize, samplesPerFile] = calculateSizes(~,rate, fileLengthSeconds)
 
             % Constants
-            SECTOR_SIZE = 512;          % bytes
+            SECTOR_SIZE = 4096;          % bytes
             SAMPLE_SIZE = 8;            % bytes per sample (float64)
             SAMPLES_PER_SECTOR = SECTOR_SIZE / SAMPLE_SIZE; % 64 samples
             BUFFER_MULTIPLIER = 8;      % Buffer size should be a multiple of 8 times the sector size
 
             % Calculate samplesPerFile
-            samplesPerFile = rate * fileLengthSeconds;
+            samplesPerFile = round(rate) * fileLengthSeconds;
 
             % Ensure rate is a power of 2 if it is above 512
             % if mod(log2(rate), 1) ~= 0 && rate ~= 1
             %     error('Rate must be a power of 2, or equal to 1');
             % end
+            
+            fileWriteSize = round(rate);
+            if fileWriteSize > SAMPLES_PER_SECTOR && mod(fileWriteSize,SAMPLES_PER_SECTOR) ~= 0
+                fileWriteSize = floor(fileWriteSize/SAMPLES_PER_SECTOR)*SAMPLES_PER_SECTOR;
+                samplesPerFile = ceil(samplesPerFile/fileWriteSize)*fileWriteSize;
+            end
 
-            fileWriteSize = rate;
+            
+                
             % % Calculate fileWriteSize that is a multiple of 64 samples and meets other constraints
             % % If samplesPerFile is small, choose the smallest aligned fileWriteSize
             % if samplesPerFile < SAMPLES_PER_SECTOR

@@ -24,6 +24,7 @@ end
 % chanNames: The data channel names
 % data: The median values from each tare file fom tareList which matches
 % the naming convention
+tare(1:length(consts.data.file_name_conventions)) = struct();
 
 for II = 1:length(consts.data.file_name_conventions)
     count = 0;
@@ -42,7 +43,9 @@ for II = 1:length(consts.data.file_name_conventions)
     end
 end
 
-
+if isempty(fieldnames(tare))
+    error('No tares were loaded')
+end
 %% Process data files
 % Loop through all the data files and run them through process_data_point
 
