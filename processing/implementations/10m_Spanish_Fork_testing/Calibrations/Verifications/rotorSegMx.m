@@ -2,64 +2,54 @@ clear all
 close all
 clc
 
-rotorSegFXPath = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment\rotor_segment_upper_+Fz';
+%% Common inputs
+consts = XFlow_Spanish_Fork_testing_constants();
+verify.func = @(x) -x(1)/(consts.lowerArm.span)*cosd(consts.lowerArm.angle)...
+    -x(2)/(consts.upperArm.span)*cosd(consts.upperArm.angle)...
+    +x(3)*sind(consts.lowerArm.angle)...
+    +x(4)*sind(consts.upperArm.angle);
+verify.data.measurment_channels = {'Lower Arm Mx','Upper Arm Mx','Lower Yoke Fz','Upper Yoke Fz'};
+verify.data.physical_loads = {'Lower_Arm_Mx','Upper_Arm_Mx','Lower_Yoke_Fz','Upper_Yoke_Fz'};
+verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\';
+verify.data.relative_cali_struct = {'lower_arm_cal_single_axis_struct.mat',...
+    'upper_arm_cal_single_axis_struct.mat',...
+    'lower_arm_cal_single_axis_struct.mat',...
+    'upper_arm_cal_single_axis_struct.mat'};
 
-files = dir(fullfile(rotorSegFXPath,'*rotorStrain*.tdms'));
+% %% Rotor segment on ground
+% verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';
+% verify.tdms_filter = '*rotorStrain*.tdms';
+% verify.applied_load_var_name = 'Applied_Load';
+% verify.relative_data_folder = 'rotor_segment_upper_+Fz';
+% verify.applied_load_scaling = consts.units.lbf_to_N*consts.upperArm.span*cosd(consts.upperArm.angle);
+% 
+% [applied_load, measured_load] = calibration_verification(verify);
+% 
+% figure
+% plot(applied_load,measured_load,'o')
+% hold on
 
-consts.lbf_to_N = 4.44822;
+%% Raised rotor
+verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
+verify.tdms_filter = '*rotor_strain*.tdms';
+verify.applied_load_var_name = 'appliedLoad';
 
-upperArmSpan = 5.49192071; %Distance from hub face to arm-blade hinge, along 0.3 chord spanwise arm line [m]
-upperArmAngle = 25.9; %deg
-momentDistance = upperArmSpan*cosd(upperArmAngle);
+data_folders = {'-Z_pos_1','-Z_pos_2'};
+applied_load_scaling = consts.units.lbf_to_N*[-1 -1];
 
-lowerArmSpan = 5.61304498; %Distance from hub face to arm-blade hinge, along 0.3 chord spanwise arm line [m]
-lowerArmAngle = -28.34; %deg
+for II = 1:length(data_folders)
+    verify.relative_data_folder = data_folders{II};
+    verify.applied_load_scaling = applied_load_scaling(II);
 
+    [applied_load, measured_load] = calibration_verification(verify);
 
-for II =1:length(files)
-    TDMS = readTDMS(files(II).name,rotorSegFXPath);
-    d = convertTDMStoXFlowFormat(TDMS);
-
-    ind1 = find(strcmp(d.chanNames,'Lower Yoke Fz'));
-    load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\lower_arm_cal_single_axis_struct.mat')
-    k_ind1 = find(strcmp([cal_single.output_names],'Lower_Yoke_Fz'));
-    lowerYokeFz_preTare(II) = cal_single(k_ind1).data.k*median(d.data(:,ind1))
-
-    ind2 = find(strcmp(d.chanNames,'Upper Yoke Fz'));
-    load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\upper_arm_cal_single_axis_struct.mat')
-    k_ind2 = find(strcmp([cal_single.output_names],'Upper_Yoke_Fz'));
-    upperYokeFz_preTare(II) = cal_single(k_ind2).data.k*median(d.data(:,ind2));
-
-    ind3 = find(strcmp(d.chanNames,'Lower Arm Mx'));
-    load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\lower_arm_cal_single_axis_struct.mat')
-    k_ind3 = find(strcmp([cal_single.output_names],'Lower_Arm_Mx'));
-    lowerArmMx_preTare(II) = cal_single(k_ind3).data.k*median(d.data(:,ind3));
-
-    ind4 = find(strcmp(d.chanNames,'Upper Arm Mx'));
-    load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\upper_arm_cal_single_axis_struct.mat')
-    k_ind4 = find(strcmp([cal_single.output_names],'Upper_Arm_Mx'));
-    upperArmMx_preTare(II) = cal_single(k_ind4).data.k*median(d.data(:,ind4));
-
-    applied_load_ind = find(strcmp({TDMS.property.name},'Applied_Load'));
-    TDMS.property(applied_load_ind).value
-    applied_load(II) = consts.lbf_to_N*str2double(TDMS.property(applied_load_ind).value);
+    plot(applied_load,measured_load,'o')
+    hold on
 end
 
-%% Remove tares
-ind_tare = applied_load==0;
-lowerYokeFz = lowerYokeFz_preTare - median(lowerYokeFz_preTare(ind_tare));
-upperYokeFz = upperYokeFz_preTare - median(upperYokeFz_preTare(ind_tare));
-lowerArmMx = lowerArmMx_preTare - median(lowerArmMx_preTare(ind_tare));
-upperArmMx = upperArmMx_preTare - median(upperArmMx_preTare(ind_tare));
-
-
-%% Calc
-measured =  -upperArmMx/(upperArmSpan)*cosd(upperArmAngle)-lowerArmMx/(lowerArmSpan)*cosd(lowerArmAngle)...
-    +upperYokeFz*sind(upperArmAngle)+lowerYokeFz*sind(lowerArmAngle);
-
-
-%% Plot
-plot(applied_load,measured,'o')
-hold on
-x = [min(applied_load),max(applied_load)];
+%% Cleanup figure
+x = [-400 100];
 plot(x,x,'--k')
+legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
+xlabel('Applied Load')
+ylabel('Measured Load')

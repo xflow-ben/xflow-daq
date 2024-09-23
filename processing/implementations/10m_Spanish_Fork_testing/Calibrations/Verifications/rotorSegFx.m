@@ -3,7 +3,7 @@ close all
 clc
 
 %% Common inputs
-verify.consts = XFlow_Spanish_Fork_testing_constants();
+consts = XFlow_Spanish_Fork_testing_constants();
 verify.func = @(x) x(1) + x(2);
 verify.data.measurment_channels = {'Lower Yoke Fx','Upper Yoke Fx'};
 verify.data.physical_loads = {'Lower_Yoke_Fx','Upper_Yoke_Fx'};
@@ -16,7 +16,7 @@ verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\
 verify.tdms_filter = '*rotorStrain*.tdms';
 verify.applied_load_var_name = 'Applied_Load';
 verify.relative_data_folder = 'rotor_segment_center_Fx';
-verify.applied_load_sign = 1;
+verify.applied_load_scaling = consts.units.lbf_to_N;
 
 [applied_load, measured_load] = calibration_verification(verify);
 
@@ -30,11 +30,11 @@ verify.tdms_filter = '*rotor_strain*.tdms';
 verify.applied_load_var_name = 'appliedLoad';
 
 data_folders = {'-X','+X'};
-applied_load_sign = [1 -1];
+applied_load_scaling = consts.units.lbf_to_N*[1 -1];
 
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
-    verify.applied_load_sign = applied_load_sign(II);
+    verify.applied_load_scaling = applied_load_scaling(II);
 
     [applied_load, measured_load] = calibration_verification(verify);
 

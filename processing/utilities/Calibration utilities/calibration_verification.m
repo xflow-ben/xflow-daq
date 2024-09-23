@@ -2,7 +2,6 @@ function [applied_load, calculated_load] = calibration_verification(verify)
 
 
 % verify is a struct with the following elements
-% - verify.consts is the project specific constants
 % - verify.absolute_data_path is the absolute path to the data directory
 % - verify.relative_data_folder is the relative path from
 % verify.absolute_data_path to the relevant data folder
@@ -19,7 +18,7 @@ function [applied_load, calculated_load] = calibration_verification(verify)
 % each of the load channels in verify.data.chanNames
 
 
-files = dir(fullfile(verify.absolute_data_path,verify.relative_data_folder,verify.tdms_filter));
+files = dir(fullfile(verify.absolute_data_path,verify.relative_data_folder,verify.tdms_filter))
 
 for JJ =1:length(files)
     TDMS = readTDMS(files(JJ).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
@@ -27,7 +26,7 @@ for JJ =1:length(files)
 
     %% Extract applied load
     applied_load_ind = find(strcmp({TDMS.property.name},verify.applied_load_var_name));
-    applied_load(JJ) = verify.applied_load_sign*verify.consts.units.lbf_to_N*str2double(TDMS.property(applied_load_ind).value);
+    applied_load(JJ) = verify.applied_load_scaling*str2double(TDMS.property(applied_load_ind).value);
 
     %% Calculate measured load
     for KK = 1:length(verify.data.measurment_channels)
