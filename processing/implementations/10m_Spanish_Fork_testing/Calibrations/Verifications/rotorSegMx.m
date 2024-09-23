@@ -54,12 +54,12 @@ upperArmMx = upperArmMx_preTare - median(upperArmMx_preTare(ind_tare));
 
 
 %% Calc
-    measured =  -upperArmMx/(upperArmSpan)*cosd(upperArmAngle)-lowerArmMx/(lowerArmSpan)*cosd(lowerArmAngle)...
-        +upperYokeFz*sind(upperArmAngle)+lowerYokeFz*sind(lowerArmAngle);
+measured =  -upperArmMx/(upperArmSpan)*cosd(upperArmAngle)-lowerArmMx/(lowerArmSpan)*cosd(lowerArmAngle)...
+    +upperYokeFz*sind(upperArmAngle)+lowerYokeFz*sind(lowerArmAngle);
 
 
 %% Plot
-    plot(applied_load,measured,'o')
+plot(applied_load,measured,'o')
 hold on
 x = [min(applied_load),max(applied_load)];
 plot(x,x,'--k')
