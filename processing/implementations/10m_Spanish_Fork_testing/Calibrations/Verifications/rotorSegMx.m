@@ -48,8 +48,9 @@ for II = 1:length(data_folders)
 end
 
 %% Cleanup figure
+title('Rotor Segment Mx')
 x = [-400 100];
 plot(x,x,'--k')
-legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
+legend('Rotor Raised, -Z_pos_1', 'Rotor Raised, -Z_pos_2','Location','SouthEast','interpreter','none') %'Rotor Segment on Ground',
 xlabel('Applied Load')
 ylabel('Measured Load')

@@ -51,6 +51,7 @@ for II = 1:length(data_folders)
 end
 
 %% Cleanup figure
+title('Rotor Segment My')
 x = [-3000 4000];
 plot(x,x,'--k')
 legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
