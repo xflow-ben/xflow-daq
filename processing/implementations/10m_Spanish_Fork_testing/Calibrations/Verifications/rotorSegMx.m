@@ -1,5 +1,5 @@
 clear all
-close all
+% close all
 clc
 
 %% Common inputs
@@ -11,7 +11,6 @@ verify.func = @(x) -x(1)/(verify.consts.lowerArm.span)*cosd(verify.consts.lowerA
 verify.data.measurment_channels = {'Lower Arm Mx','Upper Arm Mx','Lower Yoke Fz','Upper Yoke Fz'};
 verify.data.physical_loads = {'Lower_Arm_Mx','Upper_Arm_Mx','Lower_Yoke_Fz','Upper_Yoke_Fz'};
 verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_05_09_24.mat';
-
 
 % %% Rotor segment on ground
 % verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';

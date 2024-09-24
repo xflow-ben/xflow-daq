@@ -20,7 +20,7 @@ consts.data.file_name_conventions = {...
     '*rpm_sensor*.tdms'};
 
 consts.data.save_types = {'td','sd'};
-consts.data.N = 20; % sd averaging time [s]
+consts.data.N = NaN; % sd averaging time [s], if is NaN, the entire file will be averaged
 
 %% Tare function
 consts.tare_func = @time_interped_tare;

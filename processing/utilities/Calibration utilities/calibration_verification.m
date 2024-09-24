@@ -57,9 +57,12 @@ for KK = 1:size(results,2) % for each file in the data folder
             end
         end
         if isempty(ind)
-            error
+            error(sprintf('Physical load of intrest, %s,not found in the data',verify.data.physical_loads{II}))
         end
-        physical_load(II) = mean(results(ind,KK).sd.(verify.data.physical_loads{II}).mean);
+        if length(results(ind,KK).sd.(verify.data.physical_loads{II}).mean)>1
+            error('Set consts.data.N = NaN so that sd averages the entire file')
+        end
+        physical_load(II) = results(ind,KK).sd.(verify.data.physical_loads{II}).mean;
     end
     calculated_load(KK) = verify.func(physical_load);
 end
