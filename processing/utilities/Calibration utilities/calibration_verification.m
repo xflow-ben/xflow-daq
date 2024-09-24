@@ -18,7 +18,11 @@ function [applied_load, calculated_load] = calibration_verification(verify)
 % each of the load channels in verify.data.chanNames
 
 
-files = dir(fullfile(verify.absolute_data_path,verify.relative_data_folder,verify.tdms_filter))
+files = dir(fullfile(verify.absolute_data_path,verify.relative_data_folder,verify.tdms_filter));
+
+if isempty(files)
+    error(sprintf('No files with the format %s found in %s',verify.tdms_filter,fullfile(verify.absolute_data_path,verify.relative_data_folder)))
+end
 
 for JJ =1:length(files)
     TDMS = readTDMS(files(JJ).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));

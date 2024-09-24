@@ -16,18 +16,23 @@ verify.data.relative_cali_struct = {'lower_arm_cal_single_axis_struct.mat',...
     'lower_arm_cal_single_axis_struct.mat',...
     'upper_arm_cal_single_axis_struct.mat'};
 
-% %% Rotor segment on ground
-% verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';
-% verify.tdms_filter = '*rotorStrain*.tdms';
-% verify.applied_load_var_name = 'Applied_Load';
-% verify.relative_data_folder = 'rotor_segment_upper_+Fz';
-% verify.applied_load_scaling = consts.units.lbf_to_N*consts.upperArm.span*cosd(consts.upperArm.angle);
-% 
-% [applied_load, measured_load] = calibration_verification(verify);
-% 
-% figure
-% plot(applied_load,measured_load,'o')
-% hold on
+%% Rotor segment on ground
+verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';
+verify.tdms_filter = '*rotorStrain*.tdms';
+verify.applied_load_var_name = 'Applied_Load';
+
+data_folders = {'rotor_segment_lower_-Fz','rotor_segment_upper_+Fz'};
+applied_load_scaling = consts.units.lbf_to_N*[1 1];
+
+for II = 1:length(data_folders)
+    verify.relative_data_folder = data_folders{II};
+    verify.applied_load_scaling = applied_load_scaling(II);
+
+    [applied_load, measured_load] = calibration_verification(verify);
+
+    plot(applied_load,measured_load,'o')
+    hold on
+end
 
 %% Raised rotor
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
@@ -49,8 +54,8 @@ end
 
 %% Cleanup figure
 title('Rotor Segment Mx')
-x = [-400 100];
+x = [-400 400];
 plot(x,x,'--k')
-legend('Rotor Raised, -Z_pos_1', 'Rotor Raised, -Z_pos_2','Location','SouthEast','interpreter','none') %'Rotor Segment on Ground',
+legend('Rotor Segment on Ground, rotor_segment_lower_-Fz','Rotor Segment on Ground, rotor_segment_upper_+Fz','Rotor Raised, -Z_pos_1', 'Rotor Raised, -Z_pos_2','Location','SouthEast','interpreter','none')
 xlabel('Applied Load')
 ylabel('Measured Load')
