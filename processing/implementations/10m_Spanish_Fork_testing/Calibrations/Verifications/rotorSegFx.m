@@ -8,8 +8,8 @@ verify.func = @(x) x(1) + x(2);
 verify.data.measurment_channels = {'Lower Yoke Fx','Upper Yoke Fx'};
 verify.data.physical_loads = {'Lower_Yoke_Fx','Upper_Yoke_Fx'};
 verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\';
-verify.data.relative_cali_struct = {'lower_arm_cal_single_axis_struct.mat',...
-    'upper_arm_cal_single_axis_struct.mat'};
+verify.data.relative_cali_struct = {'lower_arm_cal_multi_axis_struct.mat',...
+    'upper_arm_cal_multi_axis_struct.mat'};
 
 %% Rotor segment on ground
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';

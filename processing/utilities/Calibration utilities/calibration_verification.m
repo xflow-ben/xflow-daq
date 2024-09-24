@@ -24,22 +24,42 @@ if isempty(files)
     error(sprintf('No files with the format %s found in %s',verify.tdms_filter,fullfile(verify.absolute_data_path,verify.relative_data_folder)))
 end
 
-for JJ =1:length(files)
-    TDMS = readTDMS(files(JJ).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
+for II =1:length(files)
+    TDMS = readTDMS(files(II).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
     d = convertTDMStoXFlowFormat(TDMS);
 
     %% Extract applied load
     applied_load_ind = find(strcmp({TDMS.property.name},verify.applied_load_var_name));
-    applied_load(JJ) = verify.applied_load_scaling*str2double(TDMS.property(applied_load_ind).value);
+    applied_load(II) = verify.applied_load_scaling*str2double(TDMS.property(applied_load_ind).value);
 
     %% Calculate measured load
-    for KK = 1:length(verify.data.measurment_channels)
-        ind = find(strcmp(d.chanNames,verify.data.measurment_channels{KK}));
-        load(fullfile(verify.data.absolute_cali_path,verify.data.relative_cali_struct{KK}))
-        k_ind = find(strcmp([cal_single.output_names],verify.data.physical_loads{KK}));
-        physical_load(KK) = cal_single(k_ind).data.k*median(d.data(:,ind));
+    for JJ = 1:length(verify.data.measurment_channels)
+        ind = find(strcmp(d.chanNames,verify.data.measurment_channels{JJ}));
+        cal = load(fullfile(verify.data.absolute_cali_path,verify.data.relative_cali_struct{JJ}));
+        temp = fieldnames(cal); % This is needed since some cal structs have different top level fieldnames
+        cal_fieldname = temp{1};
+
+        % Find the relevant element in the calibration struct for applying
+        % the calibration
+        cali_ind = [];
+        for KK = 1:length(cal.(cal_fieldname))
+            if sum(strcmp(cal.(cal_fieldname)(KK).output_names,verify.data.physical_loads{JJ})) > 0
+                cali_ind = KK;
+            end
+        end
+        if isempty(cali_ind)
+            error(sprintf('%s is not a calibrated channel name in the cal struct found at %s',...
+                verify.data.physical_loads{JJ},fullfile(verify.data.absolute_cali_path,verify.data.relative_cali_struct{JJ})))
+        end
+
+        % Apply calibration
+        out = apply_calibration(d.data,d.chanNames,cal.(cal_fieldname)(cali_ind));
+
+        % Extract median of physical load of intrest
+        physical_load(JJ) = median(out.(verify.data.physical_loads{JJ}));
+
     end
-    calculated_load_pre_tare(JJ) = verify.func(physical_load);
+    calculated_load_pre_tare(II) = verify.func(physical_load);
 
 end
 

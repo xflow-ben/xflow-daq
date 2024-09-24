@@ -5,7 +5,11 @@ if strcmp(cal.type,'linear_k')
     % get the indicies of the dataColumns listed in cal.input_channels
     % Grab out that data
     for i = 1:length(cal.input_channels)
-        raw(:,i) = data(:,strcmp(dataColumns,cal.input_channels(i)));
+        ind = flexibleStrCmp(dataColumns,cal.input_channels(i));
+        if sum(ind) == 0
+            error('The desired input channels are not in the data provided.')
+        end
+        raw(:,i) = data(:,ind);
     end
     % multiply by k appropriately (should work for single avalue and square
     % and rectangular matricies)
