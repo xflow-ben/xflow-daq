@@ -24,45 +24,42 @@ if isempty(files)
     error(sprintf('No files with the format %s found in %s',verify.tdms_filter,fullfile(verify.absolute_data_path,verify.relative_data_folder)))
 end
 
+%% Extract applied load
 for II =1:length(files)
     TDMS = readTDMS(files(II).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
     d = convertTDMStoXFlowFormat(TDMS);
 
-    %% Extract applied load
     applied_load_ind = find(strcmp({TDMS.property.name},verify.applied_load_var_name));
     applied_load(II) = verify.applied_load_scaling*str2double(TDMS.property(applied_load_ind).value);
-
-    %% Calculate measured load
-    for JJ = 1:length(verify.data.measurment_channels)
-        ind = find(strcmp(d.chanNames,verify.data.measurment_channels{JJ}));
-        cal = load(fullfile(verify.data.absolute_cali_path,verify.data.relative_cali_struct{JJ}));
-        temp = fieldnames(cal); % This is needed since some cal structs have different top level fieldnames
-        cal_fieldname = temp{1};
-
-        % Find the relevant element in the calibration struct for applying
-        % the calibration
-        cali_ind = [];
-        for KK = 1:length(cal.(cal_fieldname))
-            if sum(strcmp(cal.(cal_fieldname)(KK).output_names,verify.data.physical_loads{JJ})) > 0
-                cali_ind = KK;
-            end
-        end
-        if isempty(cali_ind)
-            error(sprintf('%s is not a calibrated channel name in the cal struct found at %s',...
-                verify.data.physical_loads{JJ},fullfile(verify.data.absolute_cali_path,verify.data.relative_cali_struct{JJ})))
-        end
-
-        % Apply calibration
-        out = apply_calibration(d.data,d.chanNames,cal.(cal_fieldname)(cali_ind));
-
-        % Extract median of physical load of intrest
-        physical_load(JJ) = median(out.(verify.data.physical_loads{JJ}));
-
-    end
-    calculated_load_pre_tare(II) = verify.func(physical_load);
-
 end
 
-%% Apply simple tare
-tare = median(calculated_load_pre_tare(applied_load==0));
-calculated_load = calculated_load_pre_tare - tare;
+%% Create tareList in the data directory
+tareList = {files(applied_load == 0).name};
+save(fullfile(verify.absolute_data_path,verify.relative_data_folder,'tareList.mat'),'tareList')
+
+%% Process data folder
+files = struct;
+files.absolute_data_dir = '';
+files.relative_experiment_dir =  fullfile(verify.absolute_data_path,verify.relative_data_folder); % This is relative to files.absolute_data_dir
+files.relative_tare_dir = files.relative_experiment_dir; % This is relative to files.absolute_data_dir
+
+load(verify.data.absolute_cali_path)
+results = process_data_folder(files,cal,verify.consts);
+
+%% Calculate load of intrest
+for KK = 1:size(results,2) % for each file in the data folder
+    physical_load = [];
+    for II = 1:length(verify.data.physical_loads)
+        ind = [];
+        for JJ = 1:size(results,1)
+            if isstruct(results(JJ,1).sd) & sum(flexibleStrCmp(verify.data.physical_loads{II},fieldnames(results(JJ,1).sd))) > 0
+                ind = JJ;
+            end
+        end
+        if isempty(ind)
+            error
+        end
+        physical_load(II) = mean(results(ind,KK).sd.(verify.data.physical_loads{II}).mean);
+    end
+    calculated_load(KK) = verify.func(physical_load);
+end
