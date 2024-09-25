@@ -3,14 +3,16 @@ function [calib,crosstalk] = calibration_matrix_inputs__tower_top_pulls(consts)
 % Inputs are in nacelle-tower interfance coordiante system [m]
 
 % Guy wire foundations
-E = [10, -1];  % x-y coordinates of east guy wire foundation point [m]
-W = [-10, -1];  % x-y coordinates of west guy wire foundation point [m]
-S = [0, -10];  % x-y coordinates of south guy wire foundation point [m]
+E_GW__SW_bolt = [-16,-291.9]*consts.units.inch_to_m;  % x-y coordinates of east guy wire foundation, SW bolt point [m]
+S_GW__NE_bolt = [-294.4,-4]*consts.units.inch_to_m;  % x-y coordinates of south guy wire foundation, NE bolt point [m]
+S_GW__NW_bolt = [-294.4,4]*consts.units.inch_to_m;  % x-y coordinates of south guy wire foundation, NW bolt point [m]
+W_GW__SE_bolt = [-20.7,286.7]*consts.units.inch_to_m;  % x-y coordinates of west guy wire foundation, SE bolt point [m]
+N_GW__SW_bolt = [290.5,10.5]*consts.units.inch_to_m;  % x-y coordinates of north guy wire foundation, SW bolt point [m]
+N_GW__SE_bolt = [290.5,-10.5]*consts.units.inch_to_m;  % x-y coordinates of north guy wire foundation, SE bolt point [m]
 
 % Pull locations
-pull_A = [-1,-1,0]; % Coordiante of location where the pull occured [m]
-pull_B = [-1,-1,0]; % Coordiante of location where the pull occured [m]
-pull_C = [-1,-1,10]; % Coordiante of location where the pull occured [m]
+pull_height_nacelle = 618*consts.units.inch_to_m; % Height of location where nacelle was pulled from [m]
+pull_height_hub = 707.25*consts.units.inch_to_m; % Height of location where hub was pulled from [m]
 
 tol = 0.5; % Tolerance for comparison of solutions between pairs of guy wire foundations for plumb bob location[m]
 

@@ -49,6 +49,16 @@ load(verify.data.absolute_cali_path)
 results = process_data_folder(files,cal,verify.consts);
 
 %% Calculate load of intrest
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%THIS IS A FIX TO A MISNAMED LOAD. %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%THIS DOES NOT IMPACT FUTURE DATA%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if sum(strcmp([results.chanNames],'LowerArm Mz'))>0 && ~isempty(strcmp(verify.data.physical_loads,'Lower_Arm_Mz'))
+    verify.data.physical_loads{strcmp(verify.data.physical_loads,'Lower_Arm_Mz')} = 'LowerArm_Mz';
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 for KK = 1:size(results,2) % for each file in the data folder
     physical_load = [];
     for II = 1:length(verify.data.physical_loads)

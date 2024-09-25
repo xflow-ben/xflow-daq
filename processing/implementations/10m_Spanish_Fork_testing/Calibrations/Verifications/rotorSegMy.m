@@ -14,18 +14,18 @@ verify.data.physical_loads = {'Lower_Arm_My','Lower_Arm_Mz',...
     'Upper_Arm_My','Upper_Arm_Mz'};
 verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_05_09_24.mat';
 
-% %% Rotor segment on ground
-% verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';
-% verify.tdms_filter = '*rotorStrain*.tdms';
-% verify.applied_load_var_name = 'Applied_Load';
-% verify.relative_data_folder = 'rotor_segment_center_Fx';
-% verify.applied_load_scaling = verify.consts.units.lbf_to_N*verify.consts.upperArm.span*cosd(verify.consts.upperArm.angle);
-% 
-% [applied_load, measured_load] = calibration_verification(verify);
-% 
-% figure
-% plot(applied_load,measured_load,'o')
-% hold on
+%% Rotor segment on ground
+verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';
+verify.tdms_filter = '*rotorStrain*.tdms';
+verify.applied_load_var_name = 'Applied_Load';
+verify.relative_data_folder = 'rotor_segment_center_Fx';
+verify.applied_load_scaling = verify.consts.units.lbf_to_N*verify.consts.upperArm.span*cosd(verify.consts.upperArm.angle);
+
+[applied_load, measured_load] = calibration_verification(verify);
+
+figure
+plot(applied_load,measured_load,'o')
+hold on
 
 %% Raised rotor
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
@@ -36,7 +36,6 @@ verify.data.measurment_channels = {'Lower Arm My','Lower Arm Mz',...
 data_folders = {'-X','+X'};
 applied_load_scaling = verify.consts.units.lbf_to_N*[1 -1]*verify.consts.upperArm.span*cosd(verify.consts.upperArm.angle);
 
-figure
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
     verify.applied_load_scaling = applied_load_scaling(II);
