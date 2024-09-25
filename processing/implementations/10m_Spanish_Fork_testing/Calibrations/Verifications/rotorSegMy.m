@@ -1,5 +1,5 @@
 clear all
-close all
+% close all
 clc
 
 %% Common inputs
@@ -36,6 +36,7 @@ verify.data.measurment_channels = {'Lower Arm My','Lower Arm Mz',...
 data_folders = {'-X','+X'};
 applied_load_scaling = verify.consts.units.lbf_to_N*[1 -1]*verify.consts.upperArm.span*cosd(verify.consts.upperArm.angle);
 
+figure
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
     verify.applied_load_scaling = applied_load_scaling(II);
@@ -50,6 +51,6 @@ end
 title('Rotor Segment My')
 x = [-3000 4000];
 plot(x,x,'--k')
-legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
+% legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
 xlabel('Applied Load')
 ylabel('Measured Load')

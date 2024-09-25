@@ -1,6 +1,5 @@
 function out = apply_calibration(data,dataColumns,cal)
 
-% find an example cal struct in csat_factory_cal.m
 if strcmp(cal.type,'linear_k')
     % get the indicies of the dataColumns listed in cal.input_channels
     % Grab out that data

@@ -38,6 +38,7 @@ verify.applied_load_var_name = 'appliedLoad';
 data_folders = {'-Z_pos_1','-Z_pos_2'};
 applied_load_scaling = verify.consts.units.lbf_to_N*[-1 -1];
 
+figure
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
     verify.applied_load_scaling = applied_load_scaling(II);
@@ -52,6 +53,6 @@ end
 title('Rotor Segment Mx')
 x = [-400 400];
 plot(x,x,'--k')
-legend('Rotor Segment on Ground, rotor_segment_lower_-Fz','Rotor Segment on Ground, rotor_segment_upper_+Fz','Rotor Raised, -Z_pos_1', 'Rotor Raised, -Z_pos_2','Location','SouthEast','interpreter','none')
+% legend('Rotor Segment on Ground, rotor_segment_lower_-Fz','Rotor Segment on Ground, rotor_segment_upper_+Fz','Rotor Raised, -Z_pos_1', 'Rotor Raised, -Z_pos_2','Location','SouthEast','interpreter','none')
 xlabel('Applied Load')
 ylabel('Measured Load')

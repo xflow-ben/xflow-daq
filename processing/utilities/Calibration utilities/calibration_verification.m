@@ -25,6 +25,8 @@ if isempty(files)
 end
 
 %% Extract applied load
+% This is done first so we can generate the tare list when using
+% process_data_folder
 for II =1:length(files)
     TDMS = readTDMS(files(II).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
     d = convertTDMStoXFlowFormat(TDMS);
