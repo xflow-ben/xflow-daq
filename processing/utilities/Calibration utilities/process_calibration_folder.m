@@ -34,14 +34,17 @@ end
 % loads(inds) = [];
 % mid_time(inds) = [];
 volts(inds) = NaN;
+
 % Separate out the tare points
 tare_inds = loads == 0;
 tare_volts = volts(:,tare_inds);
 tare_time = mid_time(tare_inds);
+
 % delete tare points from non-tare data
 volts(:,tare_inds) = [];
 loads(tare_inds) = [];
 mid_time(tare_inds) = [];
+
 % Subtract off time-interpolated tare
 volts = volts - interp1(tare_time',tare_volts',mid_time')';
 

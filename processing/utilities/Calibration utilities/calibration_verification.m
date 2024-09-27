@@ -52,7 +52,7 @@ results = process_data_folder(files,cal,verify.consts);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%THIS IS A FIX TO A MISNAMED LOAD. %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%THIS DOES NOT IMPACT FUTURE DATA%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if sum(strcmp([results.chanNames],'LowerArm Mz'))>0 && ~isempty(strcmp(verify.data.physical_loads,'Lower_Arm_Mz'))
+if sum(strcmp([results.chanNames],'LowerArm Mz'))>0 && sum(strcmp(verify.data.physical_loads,'Lower_Arm_Mz'))>0
     verify.data.physical_loads{strcmp(verify.data.physical_loads,'Lower_Arm_Mz')} = 'LowerArm_Mz';
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

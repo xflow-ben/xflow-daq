@@ -7,7 +7,7 @@ verify.consts = XFlow_Spanish_Fork_testing_constants();
 verify.func = @(x) x(1) + x(2);
 verify.data.measurment_channels = {'Lower Yoke Fx','Upper Yoke Fx'};
 verify.data.physical_loads = {'Lower_Yoke_Fx','Upper_Yoke_Fx'};
-verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_05_09_24.mat';
+verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_single_axis_struct_27_09_24.mat';
 
 %% Rotor segment on ground
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';
@@ -18,10 +18,15 @@ verify.applied_load_scaling = verify.consts.units.lbf_to_N;
 
 [applied_load, measured_load] = calibration_verification(verify);
 
-figure
+fh1 = figure;
 plot(applied_load,measured_load,'o')
 hold on
 
+fh2 = figure;
+plot(applied_load,(measured_load./applied_load-1)*100,'o')
+hold on
+
+pause(0.01)
 %% Raised rotor
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
 verify.tdms_filter = '*rotor_strain*.tdms';
@@ -37,14 +42,32 @@ for II = 1:length(data_folders)
 
     [applied_load, measured_load] = calibration_verification(verify);
 
+    figure(fh1)
     plot(applied_load,measured_load,'o')
+    hold on
+
+    figure(fh2)
+    plot(applied_load,(measured_load./applied_load-1)*100,'o')
     hold on
 end
 
 %% Cleanup figure
+figure(fh1)
 title('Rotor Segment Fx')
 x = [-600 800];
 plot(x,x,'--k')
-% legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
+legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
 xlabel('Applied Load')
 ylabel('Measured Load')
+grid on
+box on
+
+figure(fh2)
+title('Rotor Segment Fx')
+axis([x -10 10])
+xlabel('Applied Load')
+ylabel('Percent Error')
+legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','Best')
+plot(x,[0 0],'--k')
+grid on
+box on
