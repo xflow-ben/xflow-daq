@@ -1,4 +1,4 @@
-% function d = setupDAQs(duration,finiteContinuous,filenamePrefix,directory)
+% function d = setupDAQs
 duration = 30;
 finiteContinuous = 'finite';
 filenamePrefix = 'data';
@@ -53,25 +53,25 @@ task(i).name = 'nacelle_voltage';
 task(i).rate = 20e6/round(20e6/4096);
 task(i).startOrder = 4; % start second to last
 
-% i = i + 1;
-% task(i).name = 'anno_1';
-% task(i).rate = 20e6/round(20e6/512);
-% task(i).startOrder = 5; % start second to last
-% 
-% i = i + 1;
-% task(i).name = 'anno_2';
-% task(i).rate = 20e6/round(20e6/512);
-% task(i).startOrder = 6; % start second to last
-% 
-% i = i + 1;
-% task(i).name = 'encoder';
-% task(i).rate = 20e6/round(20e6/512);
-% task(i).startOrder = 7; % start second to last
-% 
-% i = i + 1;
-% task(i).name = 'rpm_sensor';
-% task(i).rate = 20e6/round(20e6/512);
-% task(i).startOrder = 8; % start second to last
+i = i + 1;
+task(i).name = 'anno_1';
+task(i).rate = 20e6/round(20e6/4096);
+task(i).startOrder = 5; % start second to last
+
+i = i + 1;
+task(i).name = 'anno_2';
+task(i).rate = 20e6/round(20e6/4096);
+task(i).startOrder = 6; % start second to last
+
+i = i + 1;
+task(i).name = 'encoder';
+task(i).rate = 20e6/round(20e6/4096);
+task(i).startOrder = 7; % start second to last
+
+i = i + 1;
+task(i).name = 'rpm_sensor';
+task(i).rate = 20e6/round(20e6/4096);
+task(i).startOrder = 8; % start second to last
 
 
 
@@ -173,7 +173,7 @@ d.task(i).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai13','Acc Upper Arm Z'
 d.task(i).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai14','Acc Lower Arm X','RSE',[-10 10]);
 d.task(i).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai15','Acc Lower Arm Y','RSE',[-10 10]);
 d.task(i).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai24','Acc Lower Arm Z','RSE',[-10 10]);
-d.task(i).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai17','Battery Voltage','RSE',[0 10]); 
+d.task(i).addChannel('AIVoltage','cDAQ9188-18F21FFMod6','ai17','Battery Voltage','RSE',[0 10]);
 %% gw_strain: Guy Wire Strain + Tower Base DAQ Temp
 i = i + 1;
 d.createTask('AI',task(i).name,task(i).rate,task(i).startOrder);
@@ -216,33 +216,25 @@ d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai12','Gearbox Temp','R
 d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai13','Generator Temp','RSE',[-10 10]);
 d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai14','Nacelle DAQ Temp','RSE',[-10 10]);
 
-% %% Anno #1
-% i = i + 1;
-% d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
-% d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr1', 'Anno 1', 'rising',0,'up');
-% d.task(i).sampleClock.source = 'userDefined';
-% d.task(i).sampleClock.terminal = '/cDAQ9184-1A4BA5D/ai/SampleClock';
-% d.task(i).setCICICountEdgesTerm('Anno 1','PFI4') % SE anno
-% %% Anno #2
-% i = i + 1;
-% d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
-% d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr2', 'Anno 2', 'rising',0,'up');
-% d.task(i).sampleClock.source = 'userDefined';
-% d.task(i).sampleClock.terminal = '/cDAQ9184-1A4BA5D/ai/SampleClock';
-% d.task(i).setCICICountEdgesTerm('Anno 2','PFI5') % SE anno
-% %% Encoder
-% i = i + 1;
-% d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
-% d.task(i).addChannel('CIAngEncoder', 'cDAQ9184-1A4BA5DMod1', 'ctr0', 'Encoder','PFI0','PFI1','PFI2','X4',encPPR,'AHighBHigh');
-% d.task(i).sampleClock.source = 'userDefined';
-% d.task(i).sampleClock.terminal = '/cDAQ9184-1A4BA5D/ai/SampleClock';
-% %% RPM Sensor
-% i = i + 1;
-% d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
-% d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr3', 'RPM', 'rising',0,'up');
-% d.task(i).sampleClock.source = 'userDefined';
-% d.task(i).sampleClock.terminal = '/cDAQ9184-1A4BA5D/ai/SampleClock';
-% d.task(i).setCICICountEdgesTerm('RPM','PFI3')
+%% Anno #1
+i = i + 1;
+d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
+d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr1', 'Anno 1', 'rising',0,'up');
+d.task(i).setCICICountEdgesTerm('Anno 1','PFI4') % SE anno
+%% Anno #2
+i = i + 1;
+d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
+d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr2', 'Anno 2', 'rising',0,'up');
+d.task(i).setCICICountEdgesTerm('Anno 2','PFI5') % SE anno
+%% Encoder
+i = i + 1;
+d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
+d.task(i).addChannel('CIAngEncoder', 'cDAQ9184-1A4BA5DMod1', 'ctr0', 'Encoder','PFI0','PFI1','PFI2','X4',encPPR,'AHighBHigh');
+%% RPM Sensor
+i = i + 1;
+d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
+d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr3', 'RPM', 'rising',0,'up');
+d.task(i).setCICICountEdgesTerm('RPM','PFI3')
 
 %% Start trigger routing
 
@@ -268,7 +260,7 @@ gw_strain_ind = find(ismember(taskNames,'gw_strain'));
 d.task(gw_strain_ind).configSampleClock();
 d.routeSignal(d.task(gw_strain_ind).startTrigger.autoTerminal,'/cDAQ9188-151ABD7/PFI1');
 
-nacelle_task_to_trig = {'nacelle_strain', 'nacelle_voltage','anno_1','anno_2','encoder','rpm_sensor'};
+nacelle_task_to_trig = {'nacelle_strain', 'nacelle_voltage'};
 for i = 1:length(nacelle_task_to_trig)
     task_ind = find(ismember(taskNames,nacelle_task_to_trig{i}));
     if ~isempty(task_ind)
@@ -277,6 +269,19 @@ for i = 1:length(nacelle_task_to_trig)
     end
 end
 
+% set nacelle counter chans to use nacelle_voltage sample clock
+countChans = {'anno_1','anno_2','encoder','rpm_sensor'};
+nacelle_v_ind = find(ismember(taskNames,'nacelle_voltage'));
+d.reserveHardware;
+scterm = d.task(nacelle_v_ind).getSampleClockTerm;
+d.unreserveHardware;
+for i = 1:length(countChans)
+    ind = find(ismember(taskNames,countChans{i}));
+    if ~isempty(ind)
+        d.task(ind).sampleClock.source = 'userDefined';
+        d.task(ind).sampleClock.terminal = scterm;
+    end
+end
 %% config all tasks again to make sure we are good, and configure logging
 d.unreserveHardware;
 for i = 1:length(task)
@@ -285,3 +290,4 @@ end
 d.configureLogging;
 d.unreserveHardware;
 d.reserveHardware;
+% end
