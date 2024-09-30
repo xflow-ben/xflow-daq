@@ -56,5 +56,18 @@ consts.blade.overhang = (consts.blade.span - consts.blade.hinge_to_hinge_distanc
 consts.blade.overhang_without_winglets = (consts.blade.span_minus_wignlets - consts.blade.hinge_to_hinge_distance)/2; % Blade span from the hinge to the end of the pultrusion [m]
 
 consts.turb.A = consts.rotor.outer_radius * consts.blade.span; % Rotor frontal area [m^2]
+
+%% Guy wire foundations
+% In nacelle-tower interfance coordiante system [m]
+consts.foundation.E_GW__SW_bolt = [-16,-291.9]*consts.units.inch_to_m;  % x-y coordinates of east guy wire foundation, SW bolt point [m]
+consts.foundation.S_GW__NE_bolt = [-294.4,-4]*consts.units.inch_to_m;  % x-y coordinates of south guy wire foundation, NE bolt point [m]
+consts.foundation.S_GW__NW_bolt = [-294.4,4]*consts.units.inch_to_m;  % x-y coordinates of south guy wire foundation, NW bolt point [m]
+consts.foundation.W_GW__SE_bolt = [-20.7,286.7]*consts.units.inch_to_m;  % x-y coordinates of west guy wire foundation, SE bolt point [m]
+consts.foundation.N_GW__SW_bolt = [290.5,10.5]*consts.units.inch_to_m;  % x-y coordinates of north guy wire foundation, SW bolt point [m]
+consts.foundation.N_GW__SE_bolt = [290.5,-10.5]*consts.units.inch_to_m;  % x-y coordinates of north guy wire foundation, SE bolt point [m]
+
+%% Heights
+consts.heights.tower_top = 618*consts.units.inch_to_m; 
+consts.hub_height = 707.25*consts.units.inch_to_m;
 end
 
