@@ -10,7 +10,7 @@ verify.func = @(x) x(1)*cosd(verify.consts.lowerArm.angle) +...
     x(4)*sind(verify.consts.upperArm.angle);
 verify.data.physical_loads = {'Lower_Arm_My','Lower_Arm_Mz',...
     'Upper_Arm_My','Upper_Arm_Mz'};
-verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_26_09_24.mat';
+verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_27_09_24.mat';
 
 %% Rotor segment on ground
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';
@@ -35,8 +35,7 @@ pause(0.01)
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
 verify.tdms_filter = '*rotor_strain*.tdms';
 verify.applied_load_var_name = 'appliedLoad';
-verify.data.measurment_channels = {'Lower Arm My','Lower Arm Mz',...
-    'Upper Arm My','Upper Arm Mz'};
+
 data_folders = {'-X','+X'};
 applied_load_scaling = verify.consts.units.lbf_to_N*[1 -1]*verify.consts.upperArm.span*cosd(verify.consts.upperArm.angle);
 
@@ -63,6 +62,8 @@ plot(x,x,'--k')
 legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
 xlabel('Applied Load')
 ylabel('Measured Load')
+grid on
+box on
 
 figure(fh2)
 title('Rotor Segment My')

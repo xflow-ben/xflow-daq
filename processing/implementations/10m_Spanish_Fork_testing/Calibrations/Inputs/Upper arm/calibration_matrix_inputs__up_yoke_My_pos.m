@@ -3,7 +3,6 @@ function [calib,crosstalk] = calibration_matrix_inputs__up_yoke_My_pos(consts)
 moment_distance_MY = consts.cali.arm_moment_distance;
 
 %% Crosstalk grouping high level info
-
 crosstalk.loads_names = {'Upper_Yoke_Fx' 'Upper_Yoke_Fz' 'Upper_Yoke_My'}; % Names of physical loads of intrest which are applied during calibrations
 crosstalk.channel_names = {'Upper Yoke Fx' 'Upper Yoke Fz' 'Upper Yoke My'}; % Names of load channels of intrest
 crosstalk.output_units = {'N','N','N-m'}; % Units of load channels after calibration

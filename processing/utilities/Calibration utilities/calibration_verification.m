@@ -9,8 +9,6 @@ function [applied_load, calculated_load] = calibration_verification(verify)
 % read
 % - verify.func is a function handle to a function for how the data should be
 % processed to calculate the relevant load
-% - verify.data.measurment_channels is a cell array of the load channels which are used
-% in this verification of the applied loads
 % - verify.data.physical_loads is a cell array of the physical loads of
 % intrest which is produced by the calibration
 % - verify.data.relative_cali_struct is a cell array of relative paths to the

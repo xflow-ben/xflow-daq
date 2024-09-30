@@ -5,9 +5,8 @@ clc
 %% Common inputs
 verify.consts = XFlow_Spanish_Fork_testing_constants();
 verify.func = @(x) x(1) + x(2);
-verify.data.measurment_channels = {'Lower Yoke Fx','Upper Yoke Fx'};
 verify.data.physical_loads = {'Lower_Yoke_Fx','Upper_Yoke_Fx'};
-verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_single_axis_struct_27_09_24.mat';
+verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_27_09_24.mat';
 
 %% Rotor segment on ground
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';

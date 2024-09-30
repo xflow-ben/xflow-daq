@@ -18,22 +18,25 @@ verify.applied_load_var_name = 'Applied_Load';
 
 data_folders = {'rotor_segment_lower_-Fz','rotor_segment_upper_+Fz'};
 applied_load_scaling = verify.consts.units.lbf_to_N*[1 1];
-figure
+
+fh1 = figure;
+fh2 = figure;
+
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
     verify.applied_load_scaling = applied_load_scaling(II);
 
     [applied_load, measured_load] = calibration_verification(verify);
 
-fh1 = figure;
-plot(applied_load,measured_load,'o')
-hold on
+    figure(fh1)
+    plot(applied_load,measured_load,'o')
+    hold on
 
-fh2 = figure;
-plot(applied_load,(measured_load./applied_load-1)*100,'o')
-hold on
+    figure(fh2)
+    plot(applied_load,(measured_load./applied_load-1)*100,'o')
+    hold on
 
-pause(0.01)
+    pause(0.01)
 end
 
 %% Raised rotor
@@ -51,15 +54,15 @@ for II = 1:length(data_folders)
 
     [applied_load, measured_load] = calibration_verification(verify);
 
-figure(fh1)
-plot(applied_load,measured_load,'o')
-hold on
+    figure(fh1)
+    plot(applied_load,measured_load,'o')
+    hold on
 
-figure(fh2)
-plot(applied_load,(measured_load./applied_load-1)*100,'o')
-hold on
+    figure(fh2)
+    plot(applied_load,(measured_load./applied_load-1)*100,'o')
+    hold on
 
-pause(0.01)
+    pause(0.01)
 end
 
 %% Cleanup figure
@@ -70,6 +73,8 @@ plot(x,x,'--k')
 legend('Rotor Segment on Ground','Rotor Raised, -X', 'Rotor Raised, +X','Location','SouthEast')
 xlabel('Applied Load')
 ylabel('Measured Load')
+grid on
+box on
 
 figure(fh2)
 title('Rotor Segment Mx')
