@@ -13,8 +13,6 @@ W_GW__SE_bolt = [-20.7,286.7]*consts.units.inch_to_m;  % x-y coordinates of west
 % Pull locations
 tower_top_height = 618*consts.units.inch_to_m; 
 hub_height = 707.25*consts.units.inch_to_m;
-pull_height_nacelle_V_A = 0; % Height of location where nacelle was pulled from [m]
-pull_height_hub_V_B = hub_height - tower_top_height; % Height of location where hub was pulled from [m]
 
 tol = 0.2; % Tolerance for comparison of solutions between pairs of guy wire foundations for plumb bob location[m]
 
@@ -40,8 +38,7 @@ S_GW_dist = [16*12 + 6, 16*12 + 5.5, 16*12 + 7, 16*12 + 7]*consts.units.inch_to_
 W_GW_dist = [16*12 + 9, 16*12 + 7 16*12 + 6, 16*12 + 6.5]*consts.units.inch_to_m;
 angle = [0.5, 0.3,0.30, 0.50];
 
-coordinate = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,tol,pull_height_nacelle_V_A,angle);
-theta = atand(coordinate(:,2)./ coordinate(:,1));
+theta = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,tol);
 
 calib(calibNum).applied_load_scaling = cosd(angle).*[sind(theta), cosd(theta), sind(theta)*tower_top_height, cosd(theta)*tower_top_height];
 %% V-A, H-C
@@ -50,10 +47,9 @@ calib(calibNum).folder = 'V-A_H-C';
 E_GW_dist = [18*12 + 1, 18*12 + 7, 18*12 + 3, 18*12 + 9]*consts.units.inch_to_m;
 S_GW_dist =[15*12 + 7, 15*12 + 1, 15*12 + 7, 15*12 + 6]*consts.units.inch_to_m;
 W_GW_dist = [39*12 + 3, 39*12 + 2, 39*12 + 1, 39*12 + 1]*consts.units.inch_to_m;
-
 angle = [2.8, 2.8, 2.1, 3];
-coordinate = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NE_bolt,tol,pull_height_nacelle_V_A,angle);
-theta = atand(coordinate(:,2)./ coordinate(:,1));
+
+theta = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NE_bolt,tol);
 
 calib(calibNum).applied_load_scaling = cosd(angle).*[sind(theta), cosd(theta), sind(theta)*tower_top_height, cosd(theta)*tower_top_height];
 
@@ -65,8 +61,8 @@ S_GW_dist =[17*12 + 2, 17*12 + 2.5, 17*12 + 3.5, 17*12 + 7 ]*consts.units.inch_t
 W_GW_dist = [16*12 + 11, 16*12 + 11.5, 16*12 + 10.5, 16*12 + 11 ]*consts.units.inch_to_m;
 angle = [(-9.3+-10.6)/2, (-10.1+-11.5)/2,...
     (-10.4+-11.0)/2, (-9.1+-9.1)/2];
-coordinate = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,tol,pull_height_hub_V_B,angle);
-theta = atand(coordinate(:,2)./ coordinate(:,1));
+
+theta = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,tol);
 
 calib(calibNum).applied_load_scaling = cosd(angle).*[sind(theta), cosd(theta), sind(theta)*tower_top_height, cosd(theta)*tower_top_height];
 
@@ -77,7 +73,7 @@ E_GW_dist = [18*12 + 0, 18*12 + 1, 18*12 + 0, 17*12 + 11 ]*consts.units.inch_to_
 S_GW_dist =[15*12 + 6.5, 15*12 + 4, 15*12 + 6, 15*12 + 6 ]*consts.units.inch_to_m;
 W_GW_dist = [37*12 + 10, 37*12 + 5, 37*12 + 8, 37*12 + 7 ]*consts.units.inch_to_m;
 angle =[-11.9, -12.3, -11.8, -11.9];
-coordinate = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NE_bolt,tol,pull_height_hub_V_B,angle);
-theta = atand(coordinate(:,2)./ coordinate(:,1));
+
+theta = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NE_bolt,tol);
 
 calib(calibNum).applied_load_scaling = cosd(angle).*[sind(theta), cosd(theta), sind(theta)*tower_top_height, cosd(theta)*tower_top_height];

@@ -1,27 +1,23 @@
-function coordinate = get_tower_pull_coordinate(E_GW__SW_bolt_dist,S_GW__NW_bolt_dist,W_GW__SE_bolt_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,tol,pull_height,angle)
+function theta = get_tower_pull_coordinate(E_GW__SW_bolt_dist,S_GW__NW_bolt_dist,W_GW__SE_bolt_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,tol)
 
 for II = 1:length(E_GW__SW_bolt_dist)
     if isnan(E_GW__SW_bolt_dist(II)) && isnan(S_GW__NW_bolt_dist(II)) && isnan(W_GW__SE_bolt_dist(II))
         coordinate(II,:) = [NaN, NaN, NaN];
     else
         coordinate(II,:) = get_pull_coordiante_3D(E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,...
-            E_GW__SW_bolt_dist(II),W_GW__SE_bolt_dist(II),S_GW__NW_bolt_dist(II),...
-            tol,[0, 0, pull_height],angle(II));
+            E_GW__SW_bolt_dist(II),W_GW__SE_bolt_dist(II),S_GW__NW_bolt_dist(II),tol);
     end
 end
+
+theta = atand(coordinate(:,2)./ coordinate(:,1));
+
 end
 
-function coordinate = get_pull_coordiante_3D(E,W,S,dE,dW,dS,tol,fixed_coordinate,angle)
+function coordinate = get_pull_coordiante_3D(E,W,S,dE,dW,dS,tol)
 % Find x,y
-P_avg = trilateration_2D_from_three_measurments(E,W,S,dE,dW,dS,tol);
-
-% Find z
-Z = fixed_coordinate(3) - sind(angle)*distance(P_avg,fixed_coordinate(1:2));
-
-% Concatonate
-coordinate = [P_avg,Z];
-
+coordinate = trilateration_2D_from_three_measurments(E,W,S,dE,dW,dS,tol);
 end
+
 function P_avg = trilateration_2D_from_three_measurments(A,B,C,dA,dB,dC,tol)
 % Initialize a list to store the valid points
 valid_points = [];
@@ -79,10 +75,6 @@ x_B = B(1); y_B = B(2);
 d_AB = sqrt((x_B - x_A)^2 + (y_B - y_A)^2);
 
 if dA + dB < d_AB || abs(dA - dB) > d_AB
-    dA + dB
-    d_AB
-    abs(dA - dB)
-    d_AB
     error('No solution: The circles do not intersect.');
 end
 
