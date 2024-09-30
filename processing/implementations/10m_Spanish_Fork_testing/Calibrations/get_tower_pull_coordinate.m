@@ -9,7 +9,7 @@ for II = 1:length(dA)
     end
 end
 
-theta = atand(coordinate(:,2)./ coordinate(:,1));
+theta = atan2(coordinate(:,2), coordinate(:,1))'*180/pi;
 
 end
 

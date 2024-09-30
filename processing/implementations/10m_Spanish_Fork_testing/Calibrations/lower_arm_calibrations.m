@@ -8,7 +8,7 @@ count_multi = 0;
 consts = XFlow_Spanish_Fork_testing_constants();
 
 %% Constants
-data_path = 'E:\loads_data\load_calibrations\';
+data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\';
 data_folder = 'lower_arm';
 makePlots = 1;
 savePath = fullfile(fileparts(mfilename('fullpath')),'Results');
@@ -75,6 +75,6 @@ fprintf('%.2f   \t%.2f   \t%.2f\n',[cal_single(count_single-2).data.k,0,0;...
 fprintf('\n\n')
 
 %% Save
-save(fullfile(savePath,saveName_single),'cal_single')
-save(fullfile(savePath,saveName_multi),'cal_multi')
+% save(fullfile(savePath,saveName_single),'cal_single')
+% save(fullfile(savePath,saveName_multi),'cal_multi')
 

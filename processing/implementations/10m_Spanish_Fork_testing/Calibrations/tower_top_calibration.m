@@ -18,12 +18,12 @@ tdmsPrefix.applied_load = 'data_rotor_strain';
 %% Tower top
 count = count + 1;
 [calib,crosstalk] = calibration_matrix_inputs__tower_top_pulls(consts);
-cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,savePath);
+cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'tower'));
 
 %% Rotor Torque
 count = count + 1;
 [calib,crosstalk] = calibration_matrix_inputs__rotor_torque(consts);
-cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,savePath);
+cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'installed_rotor'));
 
 %% Save
 save(fullfile(savePath,saveName),'cal')

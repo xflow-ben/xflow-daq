@@ -13,11 +13,11 @@ calibNum = calibNum + 1;
 calib(calibNum).folder = 'installed_rotor\-X';
 
 % Calculated inputs
-calib(calibNum).applied_load_scaling = -consts.rotor.radius*consts.units.lbf_to_N;
+calib(calibNum).applied_load_scaling = -cosd(consts.blade.pitch_30)*consts.rotor.radius*consts.units.lbf_to_N;
 
 %% Rotor torque, +X
 calibNum = calibNum + 1;
 calib(calibNum).folder = 'installed_rotor\+X';
 
 % Calculated inputs
-calib(calibNum).applied_load_scaling = consts.rotor.radius*consts.units.lbf_to_N;
+calib(calibNum).applied_load_scaling = cosd(consts.blade.pitch_30)*consts.rotor.radius*consts.units.lbf_to_N;
