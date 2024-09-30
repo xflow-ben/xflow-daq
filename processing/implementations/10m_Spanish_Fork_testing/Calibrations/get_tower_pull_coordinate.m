@@ -1,4 +1,4 @@
-function theta = get_tower_pull_coordinate(dA,dB,dC,A,B,C,tol)
+function [R, theta] = get_tower_pull_coordinate(dA,dB,dC,A,B,C,tol)
 
 for II = 1:length(dA)
     if isnan(dA(II)) && isnan(dB(II)) && isnan(dC(II))
@@ -10,7 +10,7 @@ for II = 1:length(dA)
 end
 
 theta = atan2(coordinate(:,2), coordinate(:,1))'*180/pi;
-
+R = sqrt(coordinate(:,2).^2+coordinate(:,1).^2)';
 end
 
 function coordinate = get_pull_coordiante_3D(A,B,C,dA,dB,dC,tol)
