@@ -1,11 +1,11 @@
-function theta = get_tower_pull_coordinate(E_GW__SW_bolt_dist,S_GW__NW_bolt_dist,W_GW__SE_bolt_dist,E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,tol)
+function theta = get_tower_pull_coordinate(dA,dB,dC,A,B,C,tol)
 
-for II = 1:length(E_GW__SW_bolt_dist)
-    if isnan(E_GW__SW_bolt_dist(II)) && isnan(S_GW__NW_bolt_dist(II)) && isnan(W_GW__SE_bolt_dist(II))
+for II = 1:length(dA)
+    if isnan(dA(II)) && isnan(dB(II)) && isnan(dC(II))
         coordinate(II,:) = [NaN, NaN, NaN];
     else
-        coordinate(II,:) = get_pull_coordiante_3D(E_GW__SW_bolt,W_GW__SE_bolt,S_GW__NW_bolt,...
-            E_GW__SW_bolt_dist(II),W_GW__SE_bolt_dist(II),S_GW__NW_bolt_dist(II),tol);
+        coordinate(II,:) = get_pull_coordiante_3D(A,C,B,...
+            dA(II),dC(II),dB(II),tol);
     end
 end
 
@@ -13,9 +13,9 @@ theta = atand(coordinate(:,2)./ coordinate(:,1));
 
 end
 
-function coordinate = get_pull_coordiante_3D(E,W,S,dE,dW,dS,tol)
+function coordinate = get_pull_coordiante_3D(A,B,C,dA,dB,dC,tol)
 % Find x,y
-coordinate = trilateration_2D_from_three_measurments(E,W,S,dE,dW,dS,tol);
+coordinate = trilateration_2D_from_three_measurments(A,B,C,dA,dB,dC,tol);
 end
 
 function P_avg = trilateration_2D_from_three_measurments(A,B,C,dA,dB,dC,tol)
