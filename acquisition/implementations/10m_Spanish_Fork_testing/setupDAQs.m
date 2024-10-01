@@ -26,63 +26,70 @@ encPPR = 1000; % CHECK THIS
 i = 1;
 task(i).name = 'rotor_strain';
 task(i).rate = 12.8e6/(256*31);
-task(i).startOrder = 98; % start second to last
+task(i).startOrder = 98; 
 
 i = i + 1;
 task(i).name = 'rotor_RTD';
 task(i).rate = 4;
-task(i).startOrder = 1; % start second to last
+task(i).startOrder = 1; 
 
 i = i + 1;
 task(i).name = 'rotor_acc';
 task(i).rate = 20e6/round(20e6/4096);
-task(i).startOrder = 2; % start second to last
+task(i).startOrder = 2; 
 
 i = i + 1;
 task(i).name = 'gw_strain';
 task(i).rate = 12.8e6/(256*31);
-task(i).startOrder = 99; % start second to last
+task(i).startOrder = 99; 
 
 i = i + 1;
 task(i).name = 'nacelle_strain';
 task(i).rate = 12.8e6/(256*31);
-task(i).startOrder = 3; % start second to last
+task(i).startOrder = 3; 
 
 i = i + 1;
 task(i).name = 'nacelle_voltage';
 task(i).rate = 20e6/round(20e6/4096);
-task(i).startOrder = 4; % start second to last
+task(i).startOrder = 4; 
 
 i = i + 1;
 task(i).name = 'anno_1';
 task(i).rate = 20e6/round(20e6/4096);
-task(i).startOrder = 5; % start second to last
+task(i).startOrder = 5; 
 
 i = i + 1;
 task(i).name = 'anno_2';
 task(i).rate = 20e6/round(20e6/4096);
-task(i).startOrder = 6; % start second to last
+task(i).startOrder = 6; 
 
 i = i + 1;
 task(i).name = 'encoder';
 task(i).rate = 20e6/round(20e6/4096);
-task(i).startOrder = 7; % start second to last
+task(i).startOrder = 7; 
 
 i = i + 1;
 task(i).name = 'rpm_sensor';
 task(i).rate = 20e6/round(20e6/4096);
-task(i).startOrder = 8; % start second to last
+task(i).startOrder = 8; 
+
+i = i + 1;
+task(i).name = 'met_tower';
+task(i).rate = 2000;
+task(i).startOrder = 100; 
 
 
 
 chassis_list{1} = 'cDAQ9184-1A4BA5D'; % Nacelle chassis
 chassis_list{2} = 'cDAQ9188-151ABD7'; % Tower Base chassis
 chassis_list{3} = 'cDAQ9188-18F21FF'; % Hub chassis
+chassis_list{4} = 'cDAQ9188-19772AE'; % Met tower chassis
 
 mod_list = {'cDAQ9184-1A4BA5DMod1','cDAQ9184-1A4BA5DMod2',...
     'cDAQ9184-1A4BA5DMod3','cDAQ9188-151ABD7Mod1','cDAQ9188-18F21FFMod1'...
     'cDAQ9188-18F21FFMod2','cDAQ9188-18F21FFMod3','cDAQ9188-18F21FFMod4',...
-    'cDAQ9188-18F21FFMod5','cDAQ9188-18F21FFMod6','cDAQ9188-18F21FFMod7','cDAQ9188-18F21FFMod8'};
+    'cDAQ9188-18F21FFMod5','cDAQ9188-18F21FFMod6','cDAQ9188-18F21FFMod7',...
+    'cDAQ9188-18F21FFMod8','cDAQ9188-19772AEMod3','cDAQ9188-19772AEMod5'};
 
 
 %% Basic setup tasks
@@ -235,6 +242,9 @@ i = i + 1;
 d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
 d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr3', 'RPM', 'rising',0,'up');
 d.task(i).setCICICountEdgesTerm('RPM','PFI3')
+%% Met Tower
+i = i + 1;
+d.loadTask('AI',task(i).name,task(i).rate,task(i).startOrder);
 
 %% Start trigger routing
 

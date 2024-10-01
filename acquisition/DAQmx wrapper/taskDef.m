@@ -32,7 +32,7 @@ classdef taskDef < sharedFunctions
     end
 
     methods
-        function obj = taskDef(taskType, taskName, rate, startOrder, logging, acquisitionType, durationSeconds,lib)
+        function obj = taskDef(taskType, taskName, rate, startOrder, logging, acquisitionType, durationSeconds,lib,loadFlag)
             % Constructor: Initialize task properties and create a DAQmx task
             obj.durationSeconds = durationSeconds;
             obj.acquisitionType = acquisitionType;
@@ -44,17 +44,17 @@ classdef taskDef < sharedFunctions
             obj.lib = lib;
             %obj.availableChannels = availableChannels;
             obj.taskHandle = libpointer('voidPtr', 0);
-            err = calllib(lib, 'DAQmxCreateTask', taskName, obj.taskHandle);
-            obj.handleDAQmxError(lib, err);
+            if nargin < 9
+                err = calllib(lib, 'DAQmxCreateTask', taskName, obj.taskHandle);
+                obj.handleDAQmxError(lib, err);
+            end
             obj.channels = {};
-
             obj.startTrigger.source = 'software'; % options are 'software' and 'userDefined'
             obj.startTrigger.terminal = '';
             obj.startTrigger.exportTerminal = '';
             obj.sampleClock.source = 'auto';
             obj.sampleClock.terminal = '';
             obj.sampleClock.exportTerminal = '';
-
             obj.bufferSize = round(obj.rate*2);
             obj.startedExternally = 0;
             obj.fileTimer = timer('Name',obj.taskName);
