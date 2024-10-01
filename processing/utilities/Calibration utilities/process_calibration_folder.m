@@ -1,15 +1,23 @@
 function [loads,volts,channel_names] = process_calibration_folder(calib,crosstalk,parent_dir,tdmsPrefix)
 
-files = dir(fullfile(parent_dir,calib.folder,[tdmsPrefix,'*.tdms']));
+if isstruct(tdmsPrefix)% The tower top calibration uses mutliple tdms files so it is handled differntly
+    files = dir(fullfile(parent_dir,calib.folder,[tdmsPrefix.data_files{1},'*.tdms']));
+    if isempty(files)
+        error(sprintf('No files found in %s',fullfile(parent_dir,calib.folder)))
+    end
+    for i = 1:length(files)
+        d(i) = process_calibration_point_tower_top(files(i).name,crosstalk.channel_names,fullfile(parent_dir,calib.folder),tdmsPrefix);
+    end
+else % All other calibration
+    files = dir(fullfile(parent_dir,calib.folder,[tdmsPrefix,'*.tdms']));
+    if isempty(files)
+        error(sprintf('No files found in %s',fullfile(parent_dir,calib.folder)))
+    end
 
-if isempty(files)
-    error(sprintf('No files found in %s',fullfile(parent_dir,calib.folder)))
+    for i = 1:length(files)
+        d(i) = process_calibration_point(fullfile(parent_dir,calib.folder,files(i).name),crosstalk.channel_names);
+    end
 end
-
-for i = 1:length(files)
-    d(i) = process_calibration_point(fullfile(parent_dir,calib.folder,files(i).name),crosstalk.channel_names);
-end
-
 %% Loop through data folders
 
 % Correct mis-entered metadata (applied load only for now)
@@ -34,14 +42,17 @@ end
 % loads(inds) = [];
 % mid_time(inds) = [];
 volts(inds) = NaN;
+
 % Separate out the tare points
 tare_inds = loads == 0;
 tare_volts = volts(:,tare_inds);
 tare_time = mid_time(tare_inds);
+
 % delete tare points from non-tare data
 volts(:,tare_inds) = [];
 loads(tare_inds) = [];
 mid_time(tare_inds) = [];
+
 % Subtract off time-interpolated tare
 volts = volts - interp1(tare_time',tare_volts',mid_time')';
 

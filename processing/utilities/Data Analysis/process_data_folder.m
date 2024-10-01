@@ -75,7 +75,15 @@ if sum(strcmp(consts.data.save_types, 'sd'))
                 % Determine the number of chunks
                 start_time = min(results(II,JJ).td.time);
                 end_time = max(results(II,JJ).td.time);
-                num_chunks = ceil((end_time - start_time) / N_days);
+
+
+                if isnan(consts.data.N)% no time span specified, so average the entire file
+                    N_days = end_time-start_time;
+                    num_chunks = 1;
+                else
+                    num_chunks = ceil((end_time - start_time) / N_days);
+                end
+
 
                 % Loop through each chunk
                 for KK = 1:num_chunks
@@ -88,6 +96,7 @@ if sum(strcmp(consts.data.save_types, 'sd'))
 
                     if ~isempty(indices)
                         count = count + 1;
+               
                         % Compute the average for each field in the struct
                         for LL = 1:numel(fields)
                             if ~strcmp(fields{LL}, 'time')

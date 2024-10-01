@@ -3,17 +3,16 @@ function cal = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdms
 data_dir = fullfile(data_path,data_folder);
 % create the applied loads matricies
 for i = 1:length(calib)
-    [loads{i},volts{i},channel_names{i}] = process_calibration_folder(calib(i),crosstalk,data_dir,tdmsPrefix);
-    if size(calib(i).applied_load_scaling,2)~=1 && size(calib(i).applied_load_scaling,2)~= length(loads{i})
+    [loads,volts{i},~] = process_calibration_folder(calib(i),crosstalk,data_dir,tdmsPrefix);
+    if size(calib(i).applied_load_scaling,2)~=1 && size(calib(i).applied_load_scaling,2)~= length(loads)
         error('applied_load_scaling must be a column vector OR the number of columns must match the number of measured points')
     elseif size(calib(i).applied_load_scaling,1) ~= length(crosstalk.loads_names)
-        error('applied_load_scaling must have number of rows equal to number of load_names')
+         error('applied_load_scaling must have number of rows equal to number of load_names')
     end
     if size(calib(i).applied_load_scaling,2) == 1
-        load_mats{i} = repmat(calib(i).applied_load_scaling,[1,length(loads{i})]);
-        load_mats{i} = load_mats{i}.*loads{i};
+        load_mats{i} = repmat(calib(i).applied_load_scaling,[1,length(loads)]).*loads;
     else
-        load_mats{i} = calib(i).applied_load_scaling.*loads{i};
+        load_mats{i} = calib(i).applied_load_scaling.*loads;
     end
 end
 

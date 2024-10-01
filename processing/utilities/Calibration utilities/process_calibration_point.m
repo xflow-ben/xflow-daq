@@ -21,7 +21,7 @@ time_ind = find(strcmp(in.chanNames,'time'));
 d.mid_time = median(in.data(:,time_ind));
 
 applied_load_ind = strcmp({tdms.property.name},'Applied_Load');
-if ~isempty(applied_load_ind)
+if sum(applied_load_ind) > 0
     d.load = str2double(tdms.property(applied_load_ind).value);
 else
     error('Check Spelling of Applied_Load')
