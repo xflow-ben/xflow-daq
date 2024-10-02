@@ -7,3 +7,5 @@ files.dataFile = 'data_met_tower_0000.tdms';
 files.absolute_data_dir = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\examples\';
 files.relative_experiment_dir = '';
 results = process_data_point(files,cal,consts)
+
+plot(results.td.U_primary)
