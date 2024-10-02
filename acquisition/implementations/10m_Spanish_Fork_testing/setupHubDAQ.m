@@ -3,6 +3,7 @@ function d = setupHubDAQ
 
 
 % Task 1 = strain gauges
+
 % T
 % 
 % % NOTE - we should make all file rates a power of 2 for TDMS logging

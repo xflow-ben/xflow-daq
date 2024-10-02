@@ -193,6 +193,22 @@ classdef xfedaq < sharedFunctions
             obj.task(end+1) = taskObj;
         end
 
+       function taskObj = loadTask(obj, taskType, taskName, rate, startOrder)
+            % Load a task created in NI-MAX
+%             int32 DAQmxLoadTask (const char taskName[], TaskHandle *taskHandle);
+%             [int32, cstring, voidPtrPtr] DAQmxLoadTask(cstring, voidPtrPtr)
+
+            for i = 1:length(obj.task)
+                if strcmp(obj.task(i).taskName,taskName)
+                    error('A task with name %s already exists',taskName);
+                end
+            end
+            taskObj = taskDef(taskType, taskName, rate, startOrder, obj.logging, obj.acquisitionType, obj.durationSeconds, obj.lib,1);
+            err = calllib(obj.lib, 'DAQmxLoadTask', taskName, taskObj.taskHandle);
+            obj.handleDAQmxError(obj.lib, err);
+            obj.task(end+1) = taskObj;
+        end
+
 
         function index = getTaskIndex(obj,taskName)
 

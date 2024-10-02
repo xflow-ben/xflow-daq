@@ -2,7 +2,7 @@
 %% Assign data folder
 files = struct;
 files.absolute_data_dir = '';
-files.relative_experiment_dir =  'E:\loads_data\GW_tensioning'; % This is relative to files.absolute_data_dir
+files.relative_experiment_dir =  'E:\loads_data\load_calibrations\tower'; % This is relative to files.absolute_data_dir
 files.relative_tare_dir = 'E:\loads_data\tares'; % This is relative to files.absolute_data_dir
 
 
