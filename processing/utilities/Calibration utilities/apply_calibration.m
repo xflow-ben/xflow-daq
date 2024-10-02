@@ -28,7 +28,19 @@ if strcmp(cal.type,'linear_k') || strcmp(cal.type,'multi_part_linear_k')
     for i = 1:length(cal.output_names)
         out.(cal.output_names{i}) = result(:,i);
     end
+elseif strcmp(cal.type,'slope_offset')
+    % get the indicies of the dataColumns listed in cal.input_channels
+    % Grab out that data
+    if length(cal.input_channels) ~= 1 || length(cal.output_names) ~= 1
+        error('Slope-offset calibration only works with a single input and output channel')
+    end
+    ind = flexibleStrCmp(dataColumns,cal.input_channels);
 
+    % do the conversion
+    result = cal.data.slope*data(:,ind) + cal.data.offset;
+
+    % create out.(field_names), where filed names are from cal.output_names
+    out.(cal.output_names{1}) = result;
 else
     error(sprintf('%s is not a programmed calibration type',cal.type))
 end

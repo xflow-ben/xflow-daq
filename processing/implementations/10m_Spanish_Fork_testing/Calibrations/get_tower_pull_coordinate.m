@@ -10,7 +10,7 @@ for II = 1:length(dA)
 end
 
 theta = atan2(coordinate(:,2), coordinate(:,1))'*180/pi;
-R = sqrt(coordinate(:,2).^2+coordinate(:,1).^2)';
+R = sqrt(coordinate(:,1).^2 + coordinate(:,2).^2)';
 end
 
 function coordinate = get_pull_coordiante_3D(A,B,C,dA,dB,dC,tol)

@@ -12,20 +12,22 @@ in = convertTDMStoXFlowFormat(tdms);
 results.chanNames = in.chanNames;
 
 %% Apply the tare(s)
-% subtract off the tares from the raw data (for channels with tares)
-[in,results] = consts.tare_func(in,tare,results);
+if nargin == 4 % don't apply tares if not tares are provided
+    % subtract off the tares from the raw data (for channels with tares)
+    [in,results] = consts.tare_func(in,tare,results);
+end
 
 %% Apply calibrations
 % loop through the cal structs here. This should take care of the majority
 % of the data conversion
-results.cal_applied = zeros(size(results.chanNames)); % initialize 
+results.cal_applied = zeros(size(results.chanNames)); % initialize
 
 for II = 1:length(cal)
     % Check is data is avalible for ALL relevant input channels
     flag = 1;
     data_ind = [];
     for JJ = 1:length(cal(II).input_channels)
-         temp = find(strcmp(cal(II).input_channels{JJ},in.chanNames));
+        temp = find(strcmp(cal(II).input_channels{JJ},in.chanNames));
         if isempty(temp)
             flag = 0;
         elseif length(temp) > 1
@@ -48,7 +50,7 @@ for II = 1:length(cal)
 end
 
 % Copy uncalibrated data to the results array
-uncalibrated_ind = find(results.cal_applied == 0); 
+uncalibrated_ind = find(results.cal_applied == 0);
 for II = 1:length(uncalibrated_ind)
     td.(strrep(results.chanNames{uncalibrated_ind(II)},' ','_')) = in.data(:,uncalibrated_ind(II));
 end

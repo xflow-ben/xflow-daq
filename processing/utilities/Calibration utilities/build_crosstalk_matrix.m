@@ -53,8 +53,8 @@ if nargin > 5 && plot_opt % plot_opt activates plotting
     end
 
     % Plot data and store useful quantities for cleaning figure
-    calculated_loads_min =zeros(length(load_mats),1);
-    calculated_loads_max =zeros(length(load_mats),1);
+    calculated_loads_min =zeros(size(load_mats{1},1),1);
+    calculated_loads_max =zeros(size(load_mats{1},1),1);
     k = 0;
     for j = 1:length(load_mats) % index for each calibration folder
         k = k + 1;
