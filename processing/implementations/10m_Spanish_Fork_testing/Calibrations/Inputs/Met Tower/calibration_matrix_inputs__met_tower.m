@@ -6,18 +6,23 @@ count = count + 1;
 cal(count).input_channels = {'Primary'}; % Names of load channels of intrest
 cal(count).output_names = {'U_primary'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).output_units = {'m/s'}; % Units of load channels after calibration
-cal(count).type = 'slope_offset';
+cal(count).type = 'counter_voltage_signal';
 cal(count).data.slope = 0.04632;
 cal(count).data.offset = 0.21886;
 cal(count).data.SN = '7101909'; % Instrument SN. Slope and offset are from the calibration of this instrument
+cal(count).data.threshold = 5; % Voltage threshold for detecting transitions
+cal(count).data.windowSize = 1; % Size of the time window for averaging (in seconds)
 
 count = count + 1;
 cal(count).input_channels = {'Secondary'}; % Names of load channels of intrest
 cal(count).output_names = {'U_secondary'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).output_units = {'m/s'}; % Units of load channels after calibration
-cal(count).type = 'slope_offset';
+cal(count).type = 'counter_voltage_signal';
 cal(count).data.slope = 0.04638;
 cal(count).data.offset = 0.21212;
+cal(count).data.threshold = 5; % Voltage threshold for detecting transitions
+cal(count).data.windowSize = 1; % Size of the time window for averaging (in seconds)
+
 cal(count).data.SN = '7101906'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;

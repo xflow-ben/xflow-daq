@@ -23,7 +23,7 @@ chanNames = {d.group.channel.name};
 chanNames{end + 1} = 'time';
 
 data = [d.group.channel.data];
-data(:,end + 1) = datenum(time);
+data(:,end + 1) = datenum(time)*24*60*60;
 
 td.chanNames = chanNames;
 td.data = data;
