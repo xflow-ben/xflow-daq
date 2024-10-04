@@ -17,14 +17,13 @@ verify.tdms_filter = '*rotorStrain*.tdms';
 verify.applied_load_var_name = 'Applied_Load';
 
 data_folders = {'rotor_segment_lower_-Fz','rotor_segment_upper_+Fz'};
-applied_load_scaling = verify.consts.units.lbf_to_N*[1 1];
+verify.applied_load_scaling  = verify.consts.units.lbf_to_N;
 
 fh1 = figure;
 fh2 = figure;
 
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
-    verify.applied_load_scaling = applied_load_scaling(II);
 
     [applied_load, measured_load] = calibration_verification(verify);
 
@@ -45,12 +44,11 @@ verify.tdms_filter = '*rotor_strain*.tdms';
 verify.applied_load_var_name = 'appliedLoad';
 
 data_folders = {'-Z_pos_1','-Z_pos_2'};
-applied_load_scaling = verify.consts.units.lbf_to_N*[-1 -1];
+verify.applied_load_scaling = -verify.consts.units.lbf_to_N;
 
 
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
-    verify.applied_load_scaling = applied_load_scaling(II);
 
     [applied_load, measured_load] = calibration_verification(verify);
 

@@ -8,8 +8,8 @@ function results = process_data_point(files,cal,consts,tare)
 tdms = readTDMS(files.dataFile,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
 in = convertTDMStoXFlowFormat(tdms);
 
-%% Add chanNames to results for comparison with tare_applied and cal_applied
-results.chanNames = in.chanNames;
+%% Initialize results
+results = struct();
 
 %% Apply the tare(s)
 if nargin == 4 % don't apply tares if not tares are provided
@@ -17,10 +17,26 @@ if nargin == 4 % don't apply tares if not tares are provided
     [in,results] = consts.tare_func(in,tare,results);
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%THIS IS A FIX TO A MISNAMED LOAD FROM THE ROTOR SEGMENT ON THE GROUND TESTS. %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%THIS DOES NOT IMPACT FUTURE DATA%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if sum(strcmp([in.chanNames],'LowerArm Mz'))>0
+    in.chanNames(strcmp([in.chanNames],'LowerArm Mz')) = {'Lower Arm Mz'};
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Add chanNames to results for comparison with tare_applied and cal_applied
+results.chanNames = in.chanNames;
+
 %% Apply calibrations
 % loop through the cal structs here. This should take care of the majority
 % of the data conversion
 results.cal_applied = zeros(size(results.chanNames)); % initialize
+
+
 
 for II = 1:length(cal)
     % Check is data is avalible for ALL relevant input channels
