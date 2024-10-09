@@ -1,5 +1,5 @@
 clear all
-close all
+% close all
 clc
 
 %% Initialize
@@ -20,10 +20,10 @@ count = count + 1;
 [calib,crosstalk] = calibration_matrix_inputs__tower_top_pulls(consts);
 cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'tower'));
 
-% %% Rotor Torque
-% count = count + 1;
-% [calib,crosstalk] = calibration_matrix_inputs__rotor_torque(consts);
-% cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'installed_rotor'));
+%% Rotor Torque
+count = count + 1;
+[calib,crosstalk] = calibration_matrix_inputs__rotor_torque(consts);
+cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'installed_rotor'));
 
-% %% Save
-% save(fullfile(savePath,saveName),'cal')
+%% Save
+save(fullfile(savePath,saveName),'cal')

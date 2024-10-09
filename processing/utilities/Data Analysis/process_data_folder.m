@@ -46,6 +46,7 @@ end
 if isempty(fieldnames(tare))
     error('No tares were loaded')
 end
+
 %% Process data files
 % Loop through all the data files and run them through process_data_point
 

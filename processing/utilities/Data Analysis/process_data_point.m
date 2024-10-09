@@ -36,8 +36,6 @@ results.chanNames = in.chanNames;
 % of the data conversion
 results.cal_applied = zeros(size(results.chanNames)); % initialize
 
-
-
 for II = 1:length(cal)
     % Check is data is avalible for ALL relevant input channels
     flag = 1;
