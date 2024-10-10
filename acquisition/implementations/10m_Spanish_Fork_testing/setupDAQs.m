@@ -68,10 +68,10 @@ task(i).name = 'encoder';
 task(i).rate = 20e6/round(20e6/4096);
 task(i).startOrder = 7; 
 
-i = i + 1;
-task(i).name = 'rpm_sensor';
-task(i).rate = 20e6/round(20e6/4096);
-task(i).startOrder = 8; 
+% i = i + 1;
+% task(i).name = 'rpm_sensor';
+% task(i).rate = 20e6/round(20e6/4096);
+% task(i).startOrder = 8; 
 
 i = i + 1;
 task(i).name = 'met_tower';
@@ -214,6 +214,7 @@ d.createTask('AI',task(i).name,task(i).rate,task(i).startOrder);
 d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai0','Acc Nacelle X Filt','RSE',[-10 10]);
 d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai1','Acc Nacelle Y Filt','RSE',[-10 10]);
 d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai2','Acc Nacelle Z Filt','RSE',[-10 10]);
+d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai7','RPM Sensor','Diff',[-10 10]);
 d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai8','Acc Nacelle X','RSE',[-10 10]);
 d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai9','Acc Nacelle Y','RSE',[-10 10]);
 d.task(i).addChannel('AIVoltage','cDAQ9184-1A4BA5DMod3','ai10','Acc Nacelle Z','RSE',[-10 10]);
@@ -238,10 +239,10 @@ i = i + 1;
 d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
 d.task(i).addChannel('CIAngEncoder', 'cDAQ9184-1A4BA5DMod1', 'ctr0', 'Encoder','PFI0','PFI1','PFI2','X4',encPPR,'AHighBHigh');
 %% RPM Sensor
-i = i + 1;
-d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
-d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr3', 'RPM', 'rising',0,'up');
-d.task(i).setCICICountEdgesTerm('RPM','PFI3')
+% i = i + 1;
+% d.createTask('CI',task(i).name,task(i).rate,task(i).startOrder);
+% d.task(i).addChannel('CICountEdges', 'cDAQ9184-1A4BA5DMod1', 'ctr3', 'RPM', 'rising',0,'up');
+% d.task(i).setCICICountEdgesTerm('RPM','PFI3')
 %% Met Tower
 i = i + 1;
 d.loadTask('AI',task(i).name,task(i).rate,task(i).startOrder);
@@ -280,7 +281,7 @@ for i = 1:length(nacelle_task_to_trig)
 end
 
 % set nacelle counter chans to use nacelle_voltage sample clock
-countChans = {'anno_1','anno_2','encoder','rpm_sensor'};
+countChans = {'anno_1','anno_2','encoder'};
 nacelle_v_ind = find(ismember(taskNames,'nacelle_voltage'));
 d.reserveHardware;
 scterm = d.task(nacelle_v_ind).getSampleClockTerm;
