@@ -4,6 +4,7 @@ function results = calibrate_data(cal,in)
 %% Apply calibrations
 % loop through the cal structs here. This should take care of the majority
 % of the data conversion
+results.tare_applied = in.tare_applied;
 results.cal_applied = zeros(size(in.chanNames)); % initialize
 results.chanNames = in.chanNames;
 
