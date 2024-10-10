@@ -44,7 +44,7 @@ for II = 1:length(consts.data.file_name_conventions)
 end
 
 if isempty(fieldnames(tare))
-    error('No tares were loaded')
+    % error('No tares were loaded')
 end
 
 %% Loop through all the data files, apply their tares, and then combine data of the same filetype
@@ -62,7 +62,11 @@ for II = 1:length(consts.data.file_name_conventions)
 
             % Apply the tare(s)
             % subtract off the tares from the raw data (for channels with tares)
-            raw = consts.tare_func(raw,tare(II));
+            if isempty(fieldnames(tare))
+                raw.tare_applied = zeros(size(raw.chanNames)); % no tares applied
+            else
+                raw = consts.tare_func(raw,tare(II));
+            end
 
 
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -89,28 +93,31 @@ end
 
 
 %% Bring all data at the same rate together and calibrate
-rates = unique([raw_multi_file.rate]);
-rates = rates(~isnan(rates));
+file_ind = strcmp(consts.data.file_name_conventions,'*rotor_strain*.tdms');
+start_time = raw_multi_file(file_ind).data(1,strcmp(raw_multi_file(file_ind).chanNames,'time'));
+end_time = raw_multi_file(file_ind).data(end,strcmp(raw_multi_file(file_ind).chanNames,'time'));
+new_rate = 1/512;
 
-for KK = 1:length(rates)
-    count = 0;
-    for II = find([raw_multi_file.rate] == rates(KK))
-        count = count + 1;
-        if count == 1
+new_time = start_time:new_rate:end_time;
+
+for II = 1:length(raw_multi_file)
+    if ~isnan(raw_multi_file(II).rate)
+        ind_time = strcmp(raw_multi_file(II).chanNames,'time');
+        if II == 1
             raw_combined = raw_multi_file(II);
+            raw_combined.data = interp1(raw_multi_file(II).data(:,ind_time),...
+                raw_multi_file(II).data,new_time);
         else
-            % Interp data to the timestamps of the data from count = 1
-            ind_time_1 = strcmp(raw_combined.chanNames,'time');
-            ind_time_2 = strcmp(raw_multi_file(II).chanNames,'time');
-
-            raw_combined.chanNames = [raw_combined.chanNames, raw_multi_file(II).chanNames(~ind_time_2)];
-            raw_combined.tare_applied = [raw_combined.tare_applied, raw_multi_file(II).tare_applied(~ind_time_2)];
-            raw_combined.data = [raw_combined.data, interp1(raw_multi_file(II).data(:,ind_time_2),...
-                raw_multi_file(II).data(:,~ind_time_2),raw_combined.data(:,ind_time_1))];
+            raw_combined.chanNames = [raw_combined.chanNames, raw_multi_file(II).chanNames(~ind_time)];
+            raw_combined.tare_applied = [raw_combined.tare_applied, raw_multi_file(II).tare_applied(~ind_time)];
+            
+            raw_combined.data = [raw_combined.data, interp1(raw_multi_file(II).data(:,ind_time),...
+                raw_multi_file(II).data(:,~ind_time),new_time')];
         end
     end
-    results(KK) = calibrate_data(cal,raw_combined);
 end
+results = calibrate_data(cal,raw_combined);
+results.td.Time = new_time;
 
 %% Create sd (statistical data)
 N_days = consts.data.N/(24*60*60); % Get sd averaging time in days (our td.time is in datenum which is in units days)
@@ -120,45 +127,43 @@ if sum(strcmp(consts.data.save_types, 'sd'))
     % Split data up into chunks, do the averaging
     sd = struct();
 
-    for II = 1:size(results,2)
-        count = 0;
-        fields = fieldnames(results(II).td);
+    count = 0;
+    fields = fieldnames(results.td);
 
-        % Determine the number of chunks
-        start_time = min(results(II).td.Time);
-        end_time = max(results(II).td.Time);
-
-
-        if isnan(consts.data.N)% no time span specified, so average the entire file
-            N_days = end_time-start_time;
-            num_chunks = 1;
-        else
-            num_chunks = ceil((end_time - start_time) / N_days);
-        end
+    % Determine the number of chunks
+    start_time = min(results.td.Time);
+    end_time = max(results.td.Time);
 
 
-        % Loop through each chunk
-        for KK = 1:num_chunks
-            % Find the start and end times for this chunk
-            chunk_start = start_time + (KK-1) * N_days;
-            chunk_end = start_time + KK * N_days;
+    if isnan(consts.data.N)% no time span specified, so average the entire file
+        N_days = end_time-start_time;
+        num_chunks = 1;
+    else
+        num_chunks = ceil((end_time - start_time) / N_days);
+    end
 
-            % Find indices of data points within this chunk
-            indices = find(results(II).td.Time >= chunk_start & results(II).td.Time < chunk_end);
 
-            if ~isempty(indices)
-                count = count + 1;
+    % Loop through each chunk
+    for KK = 1:num_chunks
+        % Find the start and end times for this chunk
+        chunk_start = start_time + (KK-1) * N_days;
+        chunk_end = start_time + KK * N_days;
 
-                % Compute the average for each field in the struct
-                for LL = 1:numel(fields)
-                    if ~strcmp(fields{LL}, 'Time')
-                        % Extract the chunk data statistics
-                        chunk_data = results(II).td.(fields{LL})(indices);
-                        results(II).sd.(fields{LL}).mean(count) = mean(chunk_data);
-                        results(II).sd.(fields{LL}).std(count) = std(chunk_data);
-                        results(II).sd.(fields{LL}).min(count) = min(chunk_data);
-                        results(II).sd.(fields{LL}).max(count) = max(chunk_data);
-                    end
+        % Find indices of data points within this chunk
+        indices = find(results.td.Time >= chunk_start & results.td.Time < chunk_end);
+
+        if ~isempty(indices)
+            count = count + 1;
+
+            % Compute the average for each field in the struct
+            for LL = 1:numel(fields)
+                if ~strcmp(fields{LL}, 'Time')
+                    % Extract the chunk data statistics
+                    chunk_data = results.td.(fields{LL})(indices);
+                    results.sd.(fields{LL}).mean(count) = mean(chunk_data);
+                    results.sd.(fields{LL}).std(count) = std(chunk_data);
+                    results.sd.(fields{LL}).min(count) = min(chunk_data);
+                    results.sd.(fields{LL}).max(count) = max(chunk_data);
                 end
             end
         end

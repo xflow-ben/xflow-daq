@@ -42,7 +42,7 @@ elseif strcmp(cal.type,'slope_offset')
     % create out.(field_names), where filed names are from cal.output_names
     out.(cal.output_names{1}) = result;
 
-elseif strcmp(cal.type,'counter_voltage_signal')
+elseif strcmp(cal.type,'counter_voltage_signal_basic')
     % get the indicies of the dataColumns listed in cal.input_channels
     % Grab out that data
     if length(cal.input_channels) ~= 1 || length(cal.output_names) ~= 1
@@ -93,8 +93,46 @@ elseif strcmp(cal.type,'counter_voltage_signal')
         end
     end
 
-     % create out.(field_names), where filed names are from cal.output_names
+    % create out.(field_names), where filed names are from cal.output_names
     out.(cal.output_names{1}) = result;
+elseif strcmp(cal.type,'rpm_voltage_signal')
+    % get the indicies of the dataColumns listed in cal.input_channels
+    % Grab out that data
+    if length(cal.input_channels) ~= 1 || length(cal.output_names) ~= 3
+        error('rpm voltage signal calibration only works with a single input and three output channel')
+    end
+    ind = flexibleStrCmp(dataColumns,cal.input_channels);
+    ind_time = flexibleStrCmp(dataColumns,'time');
+
+    x = data(:,ind);
+    t = data(:,ind_time);
+    rate = 1/mean(diff(t));
+    [y, dydt, ddyddt] = process_counter_voltage_signal(t, x, ceil(cal.data.windowSize*rate), cal.data.threshold, rate, cal.data.slope);
+
+    % create out.(field_names), where filed names are from cal.output_names
+    out.(cal.output_names{1}) = y;
+    out.(cal.output_names{2}) = dydt;
+    out.(cal.output_names{3}) = ddyddt;
+    
+elseif strcmp(cal.type,'encoder')
+    % get the indicies of the dataColumns listed in cal.input_channels
+    % Grab out that data
+    if length(cal.input_channels) ~= 1 || length(cal.output_names) ~= 3
+        error('rpm voltage signal calibration only works with a single input and three output channel')
+    end
+    ind = flexibleStrCmp(dataColumns,cal.input_channels);
+    ind_time = flexibleStrCmp(dataColumns,'time');
+
+    y = unwrap(data(:,ind))*(2*pi/cal.data.PPR);
+    t = data(:,ind_time);
+    rate = 1/mean(diff(t));
+
+    [dy, ddy] = multipolydiff(y, ceil(cal.data.windowSize*rate), 2);
+
+    % create out.(field_names), where filed names are from cal.output_names
+    out.(cal.output_names{1}) = y;
+    out.(cal.output_names{2}) = dy * rate;
+    out.(cal.output_names{3}) = ddy * rate^2;
 else
     error(sprintf('%s is not a programmed calibration type',cal.type))
 end

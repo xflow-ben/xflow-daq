@@ -7,6 +7,7 @@ function results = calibrate_data(cal,in)
 results.tare_applied = in.tare_applied;
 results.cal_applied = zeros(size(in.chanNames)); % initialize
 results.chanNames = in.chanNames;
+results.rate = in.rate;
 
 for II = 1:length(cal)
     % Check is data is avalible for ALL relevant input channels
