@@ -57,6 +57,8 @@ consts.blade.overhang = (consts.blade.span - consts.blade.hinge_to_hinge_distanc
 consts.blade.overhang_without_winglets = (consts.blade.span_minus_wignlets - consts.blade.hinge_to_hinge_distance)/2; % Blade span from the hinge to the end of the pultrusion [m]
 
 consts.turb.A = 2* consts.rotor.outer_radius * consts.blade.span; % Rotor frontal area [m^2]
+consts.turb.J = 1.7692e+04; % Rotor moment of inertia [kg-m] % calculated from inertia_7_28_2023_plain_extensions
+% consts.turb.J = 1.5939e+04; % Rotor moment of inertia [kg-m] % calculated from low_wind_inertia_5_17_23
 
 %% Guy wire foundations
 % In nacelle-tower interfance coordiante system [m]
@@ -70,5 +72,13 @@ consts.foundation.N_GW__SE_bolt = [290.5,-10.5]*consts.units.inch_to_m;  % x-y c
 %% Heights
 consts.heights.tower_top = 618*consts.units.inch_to_m; 
 consts.hub_height = 707.25*consts.units.inch_to_m;
+
+%% Met tower
+consts.met.primary_anemometer_height = 17.81; % Hub height anemomerter height [m]
+consts.met.secondary_aneometer_height = 12.54; % Lower anemomerter height [m]
+consts.met.mettowerdist = 50.3; % Met tower distance from rotor [m]
+consts.met.metTowerDir = 155; % Met tower-wind turbine vector compass direction [deg]
+consts.met.R = 287.05; % specific gas constant for dry air [J/kg-K]
+
 end
 
