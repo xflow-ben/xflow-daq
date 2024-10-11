@@ -47,6 +47,24 @@ cal(count).input_channels = {'Encoder'};
 cal(count).output_names = {'theta_encoder','omega_encoder','acc_encoder'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).output_units = {'rad','rad/s','rad/s^2'}; % Units of load channels after calibration
 
+
+count = count + 1;
+cal(count).type = 'linear_k';
+cal(count).data.k = 3603;
+cal(count).input_channels = {'Power Transducer'};
+cal(count).output_names = {'electric_power'};
+cal(count).output_units = {'W'}; %Electrical power at point of grid connection [W]
+
+
+count = count + 1;
+cal(count).type = 'linear_k';
+cal(count).data.k = 3603;
+cal(count).input_channels = {'Power Transducer Filt'};
+cal(count).output_names = {'electric_power_filtered'};
+cal(count).output_units = {'W'}; %Electrical power at point of grid connection [W]
+
+
+
 %% Save
 save(fullfile(savePath,saveName),'cal')
 
