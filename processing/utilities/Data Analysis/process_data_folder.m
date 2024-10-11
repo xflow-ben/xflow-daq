@@ -103,7 +103,6 @@ segment_start_ind = [1,temp + 1]; % indcies where a segment of continous data st
 segment_end_ind = [temp, length(master_time)]; % indcies where a segment of continous data ends
 
 for KK = 1:length(segment_start_ind)
-
     start_time = master_time(segment_start_ind(KK));
     end_time = master_time(segment_end_ind(KK));
 
@@ -114,14 +113,15 @@ for KK = 1:length(segment_start_ind)
             ind_time = strcmp(raw_multi_file(II).chanNames,'time');
             if II == 1
                 raw_combined = raw_multi_file(II);
-                raw_combined.data = interp1(raw_multi_file(II).data(:,ind_time),...
-                    raw_multi_file(II).data,new_time);
+                raw_combined.rate = consts.DAQ.downsampled_rate;
+                [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,raw_multi_file(II).data(:,ind_time),raw_multi_file(II).data);
+                y_resampled(:,ind_time) = t_resampled';
+                raw_combined.data = interp1(t_resampled,y_resampled,new_time);
             else
                 raw_combined.chanNames = [raw_combined.chanNames, raw_multi_file(II).chanNames(~ind_time)];
                 raw_combined.tare_applied = [raw_combined.tare_applied, raw_multi_file(II).tare_applied(~ind_time)];
-
-                raw_combined.data = [raw_combined.data, interp1(raw_multi_file(II).data(:,ind_time),...
-                    raw_multi_file(II).data(:,~ind_time),new_time')];
+                [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,raw_multi_file(II).data(:,ind_time),raw_multi_file(II).data(:,~ind_time));
+                raw_combined.data = [raw_combined.data, interp1(t_resampled,y_resampled,new_time')];
             end
         end
     end

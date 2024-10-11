@@ -54,11 +54,14 @@ end
 %% Power
 td.power_gen = td.omega_sensor.*td.tau_gen;
 td.power_aero = td.omega_sensor.*td.tau_aero;
+td.power_aero_all_segments = td.omega_sensor.*td.tau_aero_single_segment;
 
 %% Non-dimensional quantities
 td.TSR = td.omega_sensor*consts.rotor.radius./td.U;
 td.Cp_gen = td.power_gen./(0.5*td.rho*consts.turb.A.*td.U.^3);
 td.Cp_aero = td.power_aero./(0.5*td.rho*consts.turb.A.*td.U.^3);
+td.Cp_aero_all_segments = td.power_aero_all_segments./(0.5*td.rho*consts.turb.A.*td.U.^3);
+
 td.CQ_gen = td.tau_gen./(0.5*td.rho*consts.turb.A.*td.U.^2*consts.rotor.radius);
 td.CQ_aero = td.tau_aero./(0.5*td.rho*consts.turb.A.*td.U.^2*consts.rotor.radius);
 td.ReC = (1 + td.TSR).*td.U*consts.rotor.chord.*td.rho./td.mew;
