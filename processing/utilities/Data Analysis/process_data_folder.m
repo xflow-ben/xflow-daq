@@ -96,9 +96,8 @@ end
 file_ind = strcmp(consts.data.file_name_conventions,'*rotor_strain*.tdms');
 start_time = raw_multi_file(file_ind).data(1,strcmp(raw_multi_file(file_ind).chanNames,'time'));
 end_time = raw_multi_file(file_ind).data(end,strcmp(raw_multi_file(file_ind).chanNames,'time'));
-new_rate = 1/512;
 
-new_time = start_time:new_rate:end_time;
+new_time = start_time:1/consts.DAQ.downsampled_rate:end_time;
 
 for II = 1:length(raw_multi_file)
     if ~isnan(raw_multi_file(II).rate)

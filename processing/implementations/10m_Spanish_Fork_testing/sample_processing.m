@@ -23,4 +23,5 @@ results = calculate_sd(results,consts);
 figure
 hold on
 % plot(results.td.TSR,results.td.Cp_gen,'.')
-plot(results.td.TSR,results.td.CQ_aero,'.')
+plot(results.td.omega_encoder,'.')
+plot(results.td.omega_sensor,'.')

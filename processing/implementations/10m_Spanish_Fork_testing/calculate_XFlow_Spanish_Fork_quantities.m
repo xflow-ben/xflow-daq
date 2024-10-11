@@ -33,6 +33,10 @@ td.tau_aero = td.tau_gen - td.acc_sensor.*consts.turb.J;
 %     out_rev.tau_aero = out_rev.tau_aero + out_rev.bearingTorque;
 % end
 
+%% Loads
+% Hub loads
+%combined tower forces and moments
+
 
 %% Power
 td.power_gen = td.omega_sensor.*td.tau_gen;

@@ -1,5 +1,7 @@
 function consts = XFlow_Spanish_Fork_testing_constants()
 
+%% DAQ
+consts.DAQ.downsampled_rate = 512; % Rate to downsample data to [Hz]
 %% Unit conversions
 consts.units.lbf_to_N = 4.44822;
 consts.units.inch_to_m = 0.0254;
