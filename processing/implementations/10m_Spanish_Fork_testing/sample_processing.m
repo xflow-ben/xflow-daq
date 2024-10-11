@@ -20,8 +20,15 @@ results = calculate_sd(results,consts);
 %% Plot
 
 
+% figure
+% hold on
+% % plot(results.td.TSR,results.td.Cp_gen,'.')
+% plot(results.td.theta_encoder,'.')
+% plot(results.td.theta_sensor,'.')
+
+
 figure
 hold on
-% plot(results.td.TSR,results.td.Cp_gen,'.')
-plot(results.td.omega_encoder,'.')
-plot(results.td.omega_sensor,'.')
+plot(results.td.tau_aero_all_segments,'.')
+plot(results.td.tau_gen,'.')
+

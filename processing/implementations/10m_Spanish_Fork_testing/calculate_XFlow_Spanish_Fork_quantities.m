@@ -8,6 +8,19 @@ td.mew = (1.458*10^(-6)*td.temp.^(3/2))./(td.temp+110.4); % Sutherland Equation 
 %% Torque
 td.tau_aero = td.tau_gen - td.acc_sensor.*consts.turb.J;
 
+% Calculate torque from arm moments
+td.tau_aero_single_segment =  -(td.Upper_Arm_My*cosd(consts.upperArm.angle) + td.Lower_Arm_My*cosd(consts.lowerArm.angle)...
+    + td.Upper_Arm_Mz*sind(consts.upperArm.angle) - td.Lower_Arm_Mz*sind(consts.lowerArm.angle));
+wrap_inds = find(diff(mod(td.theta_sensor,2*pi))<-1);
+td.tau_aero_all_segments = nan(size(td.tau_aero_single_segment));
+for II = 1:length(wrap_inds) - 1
+num_points_rev = (2*pi*consts.DAQ.downsampled_rate) / mean(td.omega_sensor(wrap_inds(II):wrap_inds(II+1)),'omitnan');
+td.tau_aero_all_segments(wrap_inds(II):wrap_inds(II+1)) = ...
+    circshift(td.tau_aero_single_segment(wrap_inds(II):wrap_inds(II+1)),floor(num_points_rev/3)) ...
+    + circshift(td.tau_aero_single_segment(wrap_inds(II):wrap_inds(II+1)),floor(num_points_rev*2/3)) ...
+    + td.tau_aero_single_segment(wrap_inds(II):wrap_inds(II+1));
+end
+
 % if ~isfield(params.processing,'torqueMethod') || strcmp(params.processing.torqueMethod,'raw')
 %     % Just use tau_gen
 %     out_t.tau_aero = in_t.tau_gen;

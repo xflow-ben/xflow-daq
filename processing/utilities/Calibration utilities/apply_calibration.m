@@ -123,6 +123,7 @@ elseif strcmp(cal.type,'encoder')
     ind = flexibleStrCmp(dataColumns,cal.input_channels);
     ind_time = flexibleStrCmp(dataColumns,'time');
 
+    
     y = unwrap(data(:,ind)*(2*pi/cal.data.PPR));
     t = data(:,ind_time);
     rate = 1/mean(diff(t));
