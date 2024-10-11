@@ -4,7 +4,7 @@ count = 0;
 
 count = count + 1;
 cal(count).input_channels = {'Primary'}; % Names of load channels of intrest
-cal(count).output_names = {'U_primary'}; % Names of physical loads of intrest which are applied during calibrations
+cal(count).output_names = {'U'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).output_units = {'m/s'}; % Units of load channels after calibration
 cal(count).type = 'counter_voltage_signal_basic';
 cal(count).data.slope = 0.04632;
@@ -62,7 +62,7 @@ cal(count).data.SN = 'X26015'; % Instrument SN. Slope and offset are from the ca
 
 count = count + 1;
 cal(count).input_channels = {'Pressure'}; % Names of load channels of intrest
-cal(count).output_names = {'press'}; % Names of physical loads of intrest which are applied during calibrations
+cal(count).output_names = {'pressure'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).output_units = {'Pa'}; % Units of load channels after calibration
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 23.996*10^3;
