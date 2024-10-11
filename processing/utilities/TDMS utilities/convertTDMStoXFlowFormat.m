@@ -1,4 +1,4 @@
-function td = convertTDMStoXFlowFormat(d,previous_start_time,previous_end_time)
+function [td,start_time,end_time] = convertTDMStoXFlowFormat(d,previous_start_time,previous_end_time)
 
 %% Extract timestamps
 td.rate = d.property(strcmp({d.property.name},'rate')).value; % DAQ sample rate [Hz]
@@ -16,7 +16,7 @@ if nargin > 1
 end
 num_points = length(d.group.channel(1).data);
 time = start_time + seconds(0:num_points-1)/td.rate;
-
+end_time = time(end);
 %%
 
 chanNames = {d.group.channel.name};

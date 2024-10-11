@@ -1,4 +1,4 @@
-function results = process_data_folder(files,cal,consts)
+function results_all = process_data_folder(files,cal,consts)
 % files contains absolute and relative path information
 % cal is an array of calibration structs
 % consts is a struct with project specific values
@@ -58,7 +58,11 @@ for II = 1:length(consts.data.file_name_conventions)
         for JJ = 1:length(dataFiles)
             % Load data
             tdms = readTDMS(dataFiles(JJ).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
-            raw = convertTDMStoXFlowFormat(tdms);
+            if JJ == 1
+                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms);
+            else % pass previous start and end times
+                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms,start_time, end_time);
+            end
 
             % Apply the tare(s)
             % subtract off the tares from the raw data (for channels with tares)
@@ -67,7 +71,6 @@ for II = 1:length(consts.data.file_name_conventions)
             else
                 raw = consts.tare_func(raw,tare(II));
             end
-
 
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,26 +97,43 @@ end
 
 %% Bring all data at the same rate together and calibrate
 file_ind = strcmp(consts.data.file_name_conventions,'*rotor_strain*.tdms');
-start_time = raw_multi_file(file_ind).data(1,strcmp(raw_multi_file(file_ind).chanNames,'time'));
-end_time = raw_multi_file(file_ind).data(end,strcmp(raw_multi_file(file_ind).chanNames,'time'));
+master_time =  raw_multi_file(file_ind).data(:,strcmp(raw_multi_file(file_ind).chanNames,'time'));
+temp = find(diff(master_time)>1);
+segment_start_ind = [1,temp + 1]; % indcies where a segment of continous data starts
+segment_end_ind = [temp, length(master_time)]; % indcies where a segment of continous data ends
 
-new_time = start_time:1/consts.DAQ.downsampled_rate:end_time;
+for KK = 1:length(segment_start_ind)
 
-for II = 1:length(raw_multi_file)
-    if ~isnan(raw_multi_file(II).rate)
-        ind_time = strcmp(raw_multi_file(II).chanNames,'time');
-        if II == 1
-            raw_combined = raw_multi_file(II);
-            raw_combined.data = interp1(raw_multi_file(II).data(:,ind_time),...
-                raw_multi_file(II).data,new_time);
-        else
-            raw_combined.chanNames = [raw_combined.chanNames, raw_multi_file(II).chanNames(~ind_time)];
-            raw_combined.tare_applied = [raw_combined.tare_applied, raw_multi_file(II).tare_applied(~ind_time)];
-            
-            raw_combined.data = [raw_combined.data, interp1(raw_multi_file(II).data(:,ind_time),...
-                raw_multi_file(II).data(:,~ind_time),new_time')];
+    start_time = master_time(segment_start_ind(KK));
+    end_time = master_time(segment_end_ind(KK));
+
+    new_time = start_time:1/consts.DAQ.downsampled_rate:end_time;
+
+    for II = 1:length(raw_multi_file)
+        if ~isnan(raw_multi_file(II).rate)
+            ind_time = strcmp(raw_multi_file(II).chanNames,'time');
+            if II == 1
+                raw_combined = raw_multi_file(II);
+                raw_combined.data = interp1(raw_multi_file(II).data(:,ind_time),...
+                    raw_multi_file(II).data,new_time);
+            else
+                raw_combined.chanNames = [raw_combined.chanNames, raw_multi_file(II).chanNames(~ind_time)];
+                raw_combined.tare_applied = [raw_combined.tare_applied, raw_multi_file(II).tare_applied(~ind_time)];
+
+                raw_combined.data = [raw_combined.data, interp1(raw_multi_file(II).data(:,ind_time),...
+                    raw_multi_file(II).data(:,~ind_time),new_time')];
+            end
         end
     end
+    results(KK) = calibrate_data(cal,raw_combined);
+    results(KK).td.Time = new_time';
 end
-results = calibrate_data(cal,raw_combined);
-results.td.Time = new_time;
+
+% Loop through each field and concatenate the arrays from all structs
+results_all = results(1);
+field = fieldnames(results_all.td);
+for II = 2:length(results)
+    for JJ = 1:length(field)
+        results_all.td.(field{JJ}) = [results_all.td.(field{JJ}); results(II).td.(field{JJ})];
+    end
+end

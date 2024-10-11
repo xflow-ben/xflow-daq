@@ -6,7 +6,7 @@ clc
 verify.consts = XFlow_Spanish_Fork_testing_constants();
 
 % verify.data.physical_loads = {'Tower_Top_Fx','Tower_Top_Fy','Tower_Top_Mx','Tower_Top_My'};
-verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_09_10_24.mat';
+verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_11_10_24.mat';
 
 
 %% 
@@ -45,6 +45,8 @@ files.relative_tare_dir = files.relative_experiment_dir; % This is relative to f
 
 load(verify.data.absolute_cali_path)
 results = process_data_folder(files,cal,verify.consts);
+results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,verify.consts);
+results = calculate_sd(results,verify.consts);
 
 %% Cleanup figure
 figure(fh1)

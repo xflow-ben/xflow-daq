@@ -50,10 +50,3 @@ if sum(strcmp(consts.data.save_types, 'sd'))
         end
     end
 end
-
-
-%% Remove td data if it is not a data type flagged to be saved
-
-if strcmp(consts.data.save_types, 'td') == 0
-    results = rmfield(results,'td');
-end
