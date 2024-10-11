@@ -1,5 +1,8 @@
 % data tasks
 
+% Take tare point routine??
+
+
 % master script that starts and stops things, and deals with data moving
 % and compression. make stoppable by command line call. Otherwise run off
 % of a repeated timer

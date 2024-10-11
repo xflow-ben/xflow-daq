@@ -1,4 +1,4 @@
-function streamBBBdata(saveDirectory,fileDurationSeconds)
+function t = streamBBBdata(saveDirectory,fileDurationSeconds)
     % UDPReceiverNonBlockingEnhanced: Receives UDP datagrams without blocking MATLAB.
     %
     % This function sets up a non-blocking UDP receiver using Java's DatagramSocket
@@ -50,14 +50,20 @@ function streamBBBdata(saveDirectory,fileDurationSeconds)
     t = timer;
     t.StartDelay = timerPeriod;              % Set the delay before execution
     t.TimerFcn = @(src,event)timerCallback(src,event);        % Set the function to be executed
+    t.StartFcn = @(src,event)startCallback(src,event);
     % t.ErrorFcn = @timerErrorHandler;
     t.ExecutionMode = 'singleShot'; % Execute the function only once
+    t.UserData = struct();
+    
 
 
-    %% Start the Timer
-    fileStartTime = datetime("now");
-    start(t);
-    disp('UDP Receiver started. Listening for datagrams...');
+    %% StartFcn callback: Called when the timer starts
+    function startCallback(~, ~)
+        t.UserData.fileStartTime = datetime("now");
+        disp('Controller UDP Receiver started. Listening for data...');
+
+    end
+
 
     %% Define the Timer Callback Function
     function timerCallback(~, ~)
@@ -81,7 +87,7 @@ function streamBBBdata(saveDirectory,fileDurationSeconds)
 
                 % Process the received data
 
-                saveData(data.');
+                saveData(data.',t.UserData.fileStartTime);
             end
             
         catch ME
@@ -99,7 +105,7 @@ function streamBBBdata(saveDirectory,fileDurationSeconds)
     end
 
     %% Define the Data Processing Function
-    function saveData(data)
+    function saveData(data,fileStartTime)
         % Example: Convert data to string and display
         persistent formatSpecStored
     
@@ -123,6 +129,7 @@ function streamBBBdata(saveDirectory,fileDurationSeconds)
             fclose(saveFileID);
             saveFileID = fopen(makeNextFileNum(saveDirectory),'w');
             fileStartTime = datetime("now");
+            t.UserData.fileStartTime = fileStartTime;
             fprintf(saveFileID,dateFormatSpec,year(fileStartTime),month(fileStartTime),day(fileStartTime),hour(fileStartTime),minute(fileStartTime),second(fileStartTime));
 
         end

@@ -1,8 +1,8 @@
-% function d = setupDAQs
-duration = 30;
+function d = setupDAQs(duration,tempSaveDir)
+
 finiteContinuous = 'finite';
 filenamePrefix = 'data';
-directory = 'C:\Users\XFlow Energy\Documents\GitHub\xflow-daq';
+directory = tempSaveDir;
 % Togetherness notes
 % same task if
 % - same chassis
@@ -301,4 +301,4 @@ end
 d.configureLogging;
 d.unreserveHardware;
 d.reserveHardware;
-% end
+end
