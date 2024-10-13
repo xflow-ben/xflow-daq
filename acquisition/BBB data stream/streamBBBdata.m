@@ -1,10 +1,5 @@
 function t = streamBBBdata(saveDirectory,fileDurationSeconds)
-    % UDPReceiverNonBlockingEnhanced: Receives UDP datagrams without blocking MATLAB.
-    %
-    % This function sets up a non-blocking UDP receiver using Java's DatagramSocket
-    % and MATLAB's timer. It listens on a specified port and processes all incoming
-    % datagrams available at each timer tick, reducing the chance of backlog and
-    % packet loss.
+
     %% Ensure Cleanup on MATLAB Exit
     % Register the cleanup function to execute when MATLAB exits or the function is cleared
     cleanupObj = onCleanup(@()cleanup());
@@ -13,69 +8,68 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
     if isempty(dir(saveDirectory))
         error('Cant find directory named %s',saveDirectory);
     end
-    saveFilePath = makeNextFileNum(saveDirectory);
-    saveFileID = fopen(saveFilePath,'w');
+  
     dateFormatSpec = '%04d, %02d, %02d, %02d, %02d, %.6f\n';
 
-    %% Import necessary Java classes
-    import java.net.DatagramSocket
-    import java.net.DatagramPacket
-    import java.lang.reflect.Array
-
-    %% Configuration Parameters
-    port = 8888;            % UDP port to listen on
-    bufferSize = 16384;       % Size of the buffer for incoming datagrams (in bytes)
     timerPeriod = 0.25;       % Timer period in seconds (e.g., 0.1s = 100ms)
-    socketTimeout = 50;      % Socket timeout in milliseconds
-
-    %% Initialize the DatagramSocket
-    try
-        socket = DatagramSocket(port);
-        socket.setSoTimeout(socketTimeout);        % Set short timeout for non-blocking
-        socket.setReceiveBufferSize(bufferSize);   % Adjust socket's receive buffer size
-        actualBufferSize = socket.getReceiveBufferSize();
-        disp(['UDP Receiver initialized on port ', num2str(port)]);
-        disp(['Socket receive buffer size set to ', num2str(actualBufferSize), ' bytes']);
-    catch ME
-        error(['Failed to create DatagramSocket: ', ME.message]);
-    end
-
-    %% Create the DatagramPacket Buffer
-    buffer = Array.newInstance(java.lang.Byte.TYPE, bufferSize);
-    packet = DatagramPacket(buffer, bufferSize);
-
-
 
     %% Create the MATLAB Timer
     t = timer;
     t.StartDelay = timerPeriod;              % Set the delay before execution
     t.TimerFcn = @(src,event)timerCallback(src,event);        % Set the function to be executed
-    t.StartFcn = @(src,event)startCallback(src,event);
-    % t.ErrorFcn = @timerErrorHandler;
     t.ExecutionMode = 'singleShot'; % Execute the function only once
     t.UserData = struct();
-    
+    t.UserData.mode = 'continuous'; % continuous or finite
+    t.UserData.startStop = ''; % make "start" to start saving, "stop" to stop
+    t.UserData.save = false; % True/false if saving data
+    t.UserData.windAv = 0; % long average windspeed (max of 2 annos)
+    t.UserData.windInst = 0; % instantaneous windspeed (max of 2 annos)
+    t.UserData.comsDown = false;
+    t.UserData.fileDurationSeconds = fileDurationSeconds;
+    t.UserData.formatSpecStored = '';
+    [t.UserData.socket, t.UserData.packet] = createUDPSocket;
+    start(t);
 
-
-    %% StartFcn callback: Called when the timer starts
-    function startCallback(~, ~)
-        t.UserData.fileStartTime = datetime("now");
-        disp('Controller UDP Receiver started. Listening for data...');
-
-    end
 
 
     %% Define the Timer Callback Function
-    function timerCallback(~, ~)
-        stop(t);
+    function timerCallback(src, ~)
+        stop(src);
+
+
+        if strcmp(src.UserData.startStop,"start")
+            if src.UserData.save
+                warning("BBB saving already running")
+            else
+                saveFilePath = makeNextFileNum(saveDirectory);
+                src.UserData.saveFileID = fopen(saveFilePath,'w');
+                fileStartTime = datetime("now");
+                src.UserData.fileStartTime = fileStartTime;
+                fprintf(src.UserData.saveFileID,dateFormatSpec,year(fileStartTime),month(fileStartTime),day(fileStartTime),hour(fileStartTime),minute(fileStartTime),second(fileStartTime));
+                src.UserData.save = true;
+                if strcmp(src.UserData.mode,"finite")
+                    src.UserData.startTime = fileStartTime;
+                end
+            end
+        elseif strcmp(src.UserData.startStop,"stop")
+            if ~src.UserData.save
+                warning("BBB saving already stopped")
+            else
+                src = stopSaving(src);
+            end
+        elseif ~strcmp(src.UserData.startStop,"")
+            error("Unrecognized command ""%s"" for UserData.startStop",src.UserData.startStop)
+        end
+        src.UserData.startStop = '';
+
         try
             while true
                 % Attempt to receive a datagram
-                socket.receive(packet);
+                src.UserData.socket.receive(src.UserData.packet);
                 % Extract data from the DatagramPacket
 
-                receivedBytes = packet.getData();
-                numBytes = packet.getLength();
+                receivedBytes = src.UserData.packet.getData();
+                numBytes = src.UserData.packet.getLength();
 
                 % Convert Java byte array to MATLAB uint8 array
                 % MATLAB automatically handles Java's 0-based indexing
@@ -85,56 +79,71 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
                     error('Bad packet length?')
                 end
 
+                if isempty(src.UserData.formatSpecStored)
+                    n = length(data)-1;
+                    src.UserData.formatSpecStored = [repmat('%.6f,', 1, n-1), '%.6f\n'];
+                end
+                src.UserData.comsDown = false;
                 % Process the received data
+                
+                src.UserData.windAv = data(354);
+                src.UserData.windInst = max(data(350:351));
+                src.UserData.turbState = data(126); % UPDATE TO 
+                disp(src.UserData.windInst);
+                disp(src.UserData.turbState);
+                
+                if src.UserData.save
+                    src = saveData(data.',src);
+                end
 
-                saveData(data.',t.UserData.fileStartTime);
             end
             
         catch ME
-
+            
             % Handle SocketTimeoutException to exit the loop when no more packets are available
             if isprop(ME,'ExceptionObject') && strcmp(ME.ExceptionObject, 'java.net.SocketTimeoutException: Receive timed out')
                 % No more datagrams available at this time
                 % Optionally, perform other actions or logging here
+                if strcmp(src.UserData.mode,"finite") && src.UserData.save
+                    if seconds(datetime("now") - src.UserData.startTime) > src.UserData.fileDurationSeconds
+                        src.UserData.save = false;
+                    end
+                end
             else
                 % For other exceptions, display an error message
                 disp(['Error in timerCallback: ', ME.message]);
+                src = stopSaving(src);
+                src.UserData.comsDown = true;
             end
         end
-        start(t);
+        start(src);
     end
 
     %% Define the Data Processing Function
-    function saveData(data,fileStartTime)
-        % Example: Convert data to string and display
-        persistent formatSpecStored
-    
-        if isempty(formatSpecStored)
-            % Determine the number of elements in the vector
-            n = length(data)-1;
+    function src = saveData(data,src)
 
-            % Create the format string once based on the first vector's length
-            if n == 0
-                error('Vector is empty. Cannot create a format specification.');
+        fprintf(src.UserData.saveFileID, src.UserData.formatSpecStored, data(1:end-1));  % Write all but the last element with commas
+
+        if seconds(datetime("now")-src.UserData.fileStartTime) > src.UserData.fileDurationSeconds
+           
+            if strcmp(src.UserData.mode,"continuous")
+                fclose(src.UserData.saveFileID);
+                src.UserData.saveFileID = fopen(makeNextFileNum(saveDirectory),'w');
+                fileStartTime = datetime("now");
+                t.UserData.fileStartTime = fileStartTime;
+                fprintf(src.UserData.saveFileID,dateFormatSpec,year(fileStartTime),month(fileStartTime),day(fileStartTime),hour(fileStartTime),minute(fileStartTime),second(fileStartTime));
+            elseif strcmp(src.UserData.mode,"finite")
+                src = stopSaving(src);
             end
 
-            formatSpecStored = [repmat('%.6f,', 1, n-1), '%.6f\n'];
-            
-            fprintf(saveFileID,dateFormatSpec,year(fileStartTime),month(fileStartTime),day(fileStartTime),hour(fileStartTime),minute(fileStartTime),second(fileStartTime));
-        end
-
-        fprintf(saveFileID, formatSpecStored, data(1:end-1));  % Write all but the last element with commas
-
-        if seconds(datetime("now")-fileStartTime) > fileDurationSeconds
-            fclose(saveFileID);
-            saveFileID = fopen(makeNextFileNum(saveDirectory),'w');
-            fileStartTime = datetime("now");
-            t.UserData.fileStartTime = fileStartTime;
-            fprintf(saveFileID,dateFormatSpec,year(fileStartTime),month(fileStartTime),day(fileStartTime),hour(fileStartTime),minute(fileStartTime),second(fileStartTime));
-
         end
 
 
+    end
+
+    function src = stopSaving(src)
+        fclose(src.UserData.saveFileID);
+        src.UserData.save = false;
     end
 
     %% Define the Timer Error Handler
@@ -144,7 +153,7 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
 %     end
 
     %% Define the Cleanup Function
-    function cleanup()
+    function cleanup
         % Stop and delete the timer
         if isvalid(t)
             stop(t);
@@ -153,13 +162,11 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
         end
 
         % Close the DatagramSocket
-        if exist('socket', 'var') && ~isempty(socket)
-            socket.close();
-            disp('DatagramSocket closed.');
+        if ~isempty(t.UserData.socket)
+            t.UserData.socket.close();
         end
 
-        disp('UDP Receiver stopped.');
-        fclose(saveFileID);
+        fclose(t.UserData.saveFileID);
     end
 
 

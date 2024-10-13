@@ -452,6 +452,17 @@ classdef xfedaq < sharedFunctions
 
         end
 
+        function applyConfigs(obj)
+
+            obj.unreserveHardware;
+            for i = 1:length(obj.task)
+                obj.task(i).configSampleClock();
+            end
+            obj.configureLogging;
+            obj.unreserveHardware;
+            obj.reserveHardware;
+        end
+
 
 
 

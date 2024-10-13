@@ -1,30 +1,79 @@
 % NOTE: there can only be 2 saveDir currently
-saveDir{1} = "E:\loads_data\operating";
-saveDir{2} = "D:\loads_data\operating"; 
+compressedDir = "E:\loads_data\operating";
+saveDir = "D:\loads_data\operating"; 
+uploadDir = "X:\Experiments and Data\20 kW Prototype\Loads_Data\operating";
 
 duration = 60*10; % 10 min file duratation
+tareDuration = 60;
 
-tempSaveDir = "C:\Users\XFlow Energy\Documents\GitHub\xflow-daq\tempData";
-
-if isempty(dir(fullfile(tempSaveDir,'*.tdms')))
-    error("The most recent data needs to still be in the tempdir for the file numering to increment correctly")
+%% Check that the save dir exisits, and that the max file number for all the file types is the same
+if isempty(dir(fullfile(saveDir,'*.tdms')))
+    error("No files in saveDir?")
 end
 
-tdmsFiles = dir(fullfile(tempSaveDir,'*.tdms'));
-csvFiles =  dir(fullFile(tempSaveDir,'*.csv'));
+tdmsFiles = dir(fullfile(saveDir,'*.tdms'));
+csvFiles =  dir(fullFile(saveDir,'*.csv'));
 
 tdmsFileNames = {tdmsFiles.name};
 for i = 1:length(tdmsFileNames)
     tdmsFileNames{i} = [tdmsFileNames{i}(1:end-9),'*.tdms'];
 end
-if length(tdmsFileNames) > unique(tdmsFileNames)
-    error('There are multiple sets of TDMS files already in the tempSaveDir: %s', tempSaveDir)
+tdmsFileTypes = unique(tdmsFileNames);
+
+maxNum = ones([1,length(tdmsFileTypes) + 1]).*-1;
+for i = 1:length(tdmsFileTypes)
+    typeFiles = dir(fullfile(saveDir,tdmsFileTypes{i}));
+    fileStrings = {typeFiles.name};
+    fileStrings = cellfun(@(x) x(end-8:end-5), fileStrings, 'UniformOutput', false);
+    fileNums = cellfun(@str2double, fileStrings);
+    maxNum(i) = max(fileNums);
 end
 
-if length(csvFiles) > 1
-    error("there are multiple controller .csv files already in the tempSaveDir: %", tempSaveDir)
+i = i + 1;
+typeFiles = {csvFiles.name};
+fileStrings = {typeFiles.name};
+fileStrings = cellfun(@(x) x(end-7:end-4), fileStrings, 'UniformOutput', false);
+fileNums = cellfun(@str2double, fileStrings);
+maxNum(i) = max(fileNums);
+
+if ~all(maxNum(1) == maxNum)
+    error('Max file number for at least one file type in saveDir differs from the rest')
 end
-csvFileName = [csvFiles.name(1:end-8),'*.csv'];
+
+%% Check the compressed dir and compare to the save dir. Generate the queue of data to be backed up
+compQueue = {};
+k = 0;
+tdmsFileNames = {tdmsFiles.name};
+csvFileNames = {csvFiles.name};
+for i = 1:length(tdmsFiles)
+    file_t = tdmsFiles(i).date;
+    dateFolderName = sprintf("%02d_%02d_%d",month(file_t),day(file_t),year(file_t));
+    compFiles = dir(fullfile(compressedDir,dateFolderName,"data*.7z"));
+    compFileNames = {compFiles.name};
+    compFileNames = cellfun(@(x) x(1:end-1), compFileNames, 'UniformOutput', false);
+    if ~any(ismember(compFileNames,tdmsFiles(i).name(1:end-3)))
+        k = k + 1;
+        compQueue{k} = tdmsFiles(i).name;
+    end
+end
+
+for i = 1:length(csvFiles)
+    file_t = csvFiles(i).date;
+    dateFolderName = sprintf("%02d_%02d_%d",month(file_t),day(file_t),year(file_t));
+    compFiles = dir(fullfile(compressedDir,dateFolderName,"data*.7z"));
+    compFileNames = {compFiles.name};
+    compFileNames = cellfun(@(x) x(1:end-1), compFileNames, 'UniformOutput', false);
+    if ~any(ismember(compFileNames,csvFiles(i).name(1:end-2)))
+        k = k + 1;
+        compQueue{k} = csvFiles(i).name;
+    end
+end
+
+%% Check the status of uploading. make queue of stuff that has not been
+
+
+
+%%
 
 % % check for / create data folders in the data directories
 % t_now = datetime("now");
