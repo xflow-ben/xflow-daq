@@ -3,29 +3,50 @@ close all
 clc
 
 %% Assign data folder
-dataDir = 'E:\loads_data\load_calibrations\lower_arm\Lower_arm_+Mx';%'E:\loads_data\load_calibrations\guy_wire_tension\Lower_GW_E';
-
+files.absolute_data_dir = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\';
+files.relative_experiment_dir = 'sample_data';
+files.relative_tare_dir = 'operating\10_10_24\tare';
 %% Load calibration struct
-load('C:\Users\XFlow Energy\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_05_09_24.mat')
+load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_11_10_24.mat')
 
 %% Load constants
 consts = XFlow_Spanish_Fork_testing_constants();
 
 %% Process data folder
-name_conventions = {'lower_arm_cal_rotorStrain*.tdms'};
+results = process_data_folder(files,cal,consts);
+results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,consts);
+results = calculate_sd(results,consts);
 
-[td,sd,bd] = process_data_folder(dataDir,cal,consts,name_conventions);
-
-%% Plot
-% plot(sd.TSR,sd.cP,'.')
-% grid on
-% box on
-% xlabel('TSR')
-% ylabel('Cp')
-
-for II = 1:length(td{1})
-
-    plot(td{1}(II).Lower_Arm_Mx)
-    hold on
+%% Remove td data if it is not a data type flagged to be saved
+if strcmp(consts.data.save_types, 'td') == 0
+    results = rmfield(results,'td');
 end
 
+%% Plot
+
+% filter = results.td.acc_sensor < .03;
+figure
+hold on
+plot(results.td.TSR,-results.td.Cp_gen,'.')
+plot(results.td.TSR,-results.td.Cp_aero_all_segments,'.')
+
+figure
+hold on
+plot(results.td.Time,results.td.omega_encoder,'.')
+plot(results.td.Time,results.td.omega_sensor,'.')
+
+figure
+hold on
+plot(results.td.Time,results.td.theta_encoder,'.')
+plot(results.td.Time,results.td.theta_sensor,'.')
+
+
+figure
+hold on
+plot(results.td.Time,results.td.tau_aero_all_segments,'.')
+plot(results.td.Time,results.td.tau_gen,'.')
+ylabel('Torque [N-m]')
+legend('Calculated from Arm Root Moments', ...
+    'Calculated from Torque Arms')
+grid on
+box on

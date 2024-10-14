@@ -1,5 +1,7 @@
 function consts = XFlow_Spanish_Fork_testing_constants()
 
+%% DAQ
+consts.DAQ.downsampled_rate = 512; % Rate to downsample data to [Hz]
 %% Unit conversions
 consts.units.lbf_to_N = 4.44822;
 consts.units.inch_to_m = 0.0254;
@@ -17,7 +19,8 @@ consts.data.file_name_conventions = {...
     '*anno_1*.tdms',...
     '*anno_2*.tdms',...
     '*encoder*.tdms',...
-    '*rpm_sensor*.tdms'};
+    '*rpm_sensor*.tdms',...
+    '*met_tower*.tdms'};
 
 consts.data.save_types = {'td','sd'};
 consts.data.N = NaN; % sd averaging time [s], if is NaN, the entire file will be averaged
@@ -55,7 +58,9 @@ consts.blade.hinge_to_hinge_distance = consts.rotor.arm_seperation ...
 consts.blade.overhang = (consts.blade.span - consts.blade.hinge_to_hinge_distance)/2; % Blade span from hinge to the end of the winglet [m]
 consts.blade.overhang_without_winglets = (consts.blade.span_minus_wignlets - consts.blade.hinge_to_hinge_distance)/2; % Blade span from the hinge to the end of the pultrusion [m]
 
-consts.turb.A = consts.rotor.outer_radius * consts.blade.span; % Rotor frontal area [m^2]
+consts.turb.A = 2* consts.rotor.outer_radius * consts.blade.span; % Rotor frontal area [m^2]
+consts.turb.J = 1.7692e+04; % Rotor moment of inertia [kg-m] % calculated from inertia_7_28_2023_plain_extensions
+% consts.turb.J = 1.5939e+04; % Rotor moment of inertia [kg-m] % calculated from low_wind_inertia_5_17_23
 
 %% Guy wire foundations
 % In nacelle-tower interfance coordiante system [m]
@@ -69,5 +74,13 @@ consts.foundation.N_GW__SE_bolt = [290.5,-10.5]*consts.units.inch_to_m;  % x-y c
 %% Heights
 consts.heights.tower_top = 618*consts.units.inch_to_m; 
 consts.hub_height = 707.25*consts.units.inch_to_m;
+
+%% Met tower
+consts.met.primary_anemometer_height = 17.81; % Hub height anemomerter height [m]
+consts.met.secondary_aneometer_height = 12.54; % Lower anemomerter height [m]
+consts.met.mettowerdist = 50.3; % Met tower distance from rotor [m]
+consts.met.metTowerDir = 155; % Met tower-wind turbine vector compass direction [deg]
+consts.met.R = 287.05; % specific gas constant for dry air [J/kg-K]
+
 end
 

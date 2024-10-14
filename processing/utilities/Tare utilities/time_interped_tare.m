@@ -1,4 +1,4 @@
-function [in,results] = time_interped_tare(in,tare,results)
+function in = time_interped_tare(in,tare)
 
 
 %% Time interp tare
@@ -12,13 +12,13 @@ tare_time_ind = find(strcmp(tare.chanNames,'time'));
 
 for data_ind = 1:length(in.chanNames)
     if data_ind == data_time_ind
-        results.tare_applied(data_ind) = 0;
+        in.tare_applied(data_ind) = 0;
     else
         tare_ind = find(strcmp(in.chanNames{data_ind},tare.chanNames));
         if isempty(tare_ind)
-            results.tare_applied(data_ind) = 0;
+            in.tare_applied(data_ind) = 0;
         else
-            results.tare_applied(data_ind) = 1;
+            in.tare_applied(data_ind) = 1;
             if size(tare.data,1) == 1
                 in.data(:,data_ind) = in.data(:,data_ind) - tare.data(tare_ind);
             else
