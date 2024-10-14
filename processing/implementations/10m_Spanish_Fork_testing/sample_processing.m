@@ -50,5 +50,3 @@ legend('Calculated from Arm Root Moments', ...
     'Calculated from Torque Arms')
 grid on
 box on
-
-
