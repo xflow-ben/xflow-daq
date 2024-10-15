@@ -134,10 +134,14 @@ classdef taskDef < sharedFunctions
             sampleModeInt = obj.getConstInputVal('sampleMode',obj.acquisitionType,{'finite','continuous'},[obj.DAQmx.Val_FiniteSamps,obj.DAQmx.Val_ContSamps]);
             if strcmp(obj.acquisitionType,'finite')
                 err = calllib(obj.lib, 'DAQmxCfgSampClkTiming', obj.taskHandle, sampleClockTerminal, obj.rate, obj.DAQmx.Val_Rising, sampleModeInt, uint64(sampsPerFile));
+                obj.handleDAQmxError(obj.lib, err);
             else
                  err = calllib(obj.lib, 'DAQmxCfgSampClkTiming', obj.taskHandle, sampleClockTerminal, obj.rate, obj.DAQmx.Val_Rising, sampleModeInt, uint64(obj.bufferSize));
+                 obj.handleDAQmxError(obj.lib, err);
+                 err = calllib(obj.lib,'DAQmxCfgInputBuffer',obj.taskHandle,uint32(obj.bufferSize));
+                 obj.handleDAQmxError(obj.lib, err);
             end
-            obj.handleDAQmxError(obj.lib, err);
+            
             
             obj.setTaskState('verify');
             obj.setTaskState('reserve');
@@ -264,19 +268,20 @@ classdef taskDef < sharedFunctions
             % end
             % Start the task
             obj.startTime.t(1) = datetime("now");
-            [err,~] = calllib(obj.lib, 'DAQmxStartTask', obj.taskHandle);
+            [err,~] = calllib(obj.lib, 'DAQmxStartTask', obj.taskHandle)
+            obj.handleDAQmxError(obj.lib, err);
             obj.startTime.t(1) = datetime("now");
             obj.startTime.hasStartTime = 1;
-            obj.handleDAQmxError(obj.lib, err);
+
             fprintf('Task "%s" started successfully.\n', obj.taskType);
 
 
-            if ismember(obj.logging.mode,{'log','log and read'})
-                obj.fileTimer.StartDelay = obj.durationSeconds;              % Set the delay before execution
-                obj.fileTimer.TimerFcn = @(src,event)obj.insertMetaData(src,event);        % Set the function to be executed
-                obj.fileTimer.ExecutionMode = 'singleShot'; % Execute the function only once
-                start(obj.fileTimer)
-            end
+%             if ismember(obj.logging.mode,{'log','log and read'})
+%                 obj.fileTimer.StartDelay = obj.durationSeconds;              % Set the delay before execution
+%                 obj.fileTimer.TimerFcn = @(src,event)obj.insertMetaData(src,event);        % Set the function to be executed
+%                 obj.fileTimer.ExecutionMode = 'singleShot'; % Execute the function only once
+%                 start(obj.fileTimer)
+%             end
         end
 
         function stopTask(obj)
@@ -290,7 +295,14 @@ classdef taskDef < sharedFunctions
             isTaskDonePtr = libpointer('uint32Ptr', 0);
             err = calllib(obj.lib, 'DAQmxIsTaskDone', obj.taskHandle, isTaskDonePtr);
             obj.handleDAQmxError(obj.lib,err);
-            doneFlag = isTaskDonePtr.Value;
+            doneFlag = isTaskDonePtr.value;
+        end
+
+        function nSamps = getNSampsAcquired(obj)
+            nSampsPtr = libpointer('uint64Ptr',0);
+            err = calllib(obj.lib, 'DAQmxGetReadTotalSampPerChanAcquired', obj.taskHandle, nSampsPtr);
+            obj.handleDAQmxError(obj.lib,err);
+            nSamps = nSampsPtr.value;
         end
 
         function data = readData(obj, numSampsPerChan,timeout)
@@ -445,7 +457,11 @@ classdef taskDef < sharedFunctions
             % buffer size = 10x file write size
             % file write size = 1 second
            % determine file name
-           obj.logFileNamePath = obj.makeNextFileNum(directoryPath,fileNamePrefix,obj.taskName);
+           if strcmp(obj.acquisitionType,"finite")
+               obj.logFileNamePath = obj.makeNextFileNum(directoryPath,fileNamePrefix,obj.taskName);
+           else
+              obj.logFileNamePath = fullfile(directoryPath,strcat(fileNamePrefix,'_',obj.taskName));
+           end
            if ismember(loggingMode,{'log','log and read'})
                % if obj.rate > 512 && mod(log2(obj.rate),1) ~= 0
                %     error('For file logging faster than 512 samp/s, rate must be a power of 2')
@@ -470,8 +486,8 @@ classdef taskDef < sharedFunctions
             err = calllib(obj.lib,'DAQmxSetLoggingSampsPerFile',obj.taskHandle, uint64(sampsPerFile));
             obj.handleDAQmxError(obj.lib, err);
 
-            err = calllib(obj.lib,'DAQmxSetLoggingFileWriteSize',obj.taskHandle, uint32(fileWriteSize));
-            obj.handleDAQmxError(obj.lib, err);
+             err = calllib(obj.lib,'DAQmxSetLoggingFileWriteSize',obj.taskHandle, uint32(fileWriteSize));
+             obj.handleDAQmxError(obj.lib, err);
 
             %     err = calllib(obj.lib,'DAQmxSetLoggingFilePreallocationSize',obj.taskHandle, uint64(filePreallocationSize));
             %     obj.handleDAQmxError(obj.lib, err);

@@ -1,6 +1,6 @@
 function d = setupDAQs(duration,tempSaveDir)
 
-finiteContinuous = 'finite';
+finiteContinuous = 'continuous';
 filenamePrefix = 'data';
 directory = tempSaveDir;
 % Togetherness notes

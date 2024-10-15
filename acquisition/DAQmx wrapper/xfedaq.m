@@ -371,6 +371,16 @@ classdef xfedaq < sharedFunctions
             end
         end
 
+        function out = areTasksRunning(obj)
+            out = true;
+            for i = 1:length(obj.task)
+                test = isTaskDone(obj.task);
+                if test == 1
+                    out = false;
+                end
+            end
+        end
+
         function configureLogging(obj,fileNamePrefix,directoryPath,mode)
             % Note: If the Logging.LoggingMode attribute/property is set to
             % Log Only, Logging.SampsPerFile must be divisible by the
@@ -421,14 +431,17 @@ classdef xfedaq < sharedFunctions
             % if ~obj.isFinalized
             %     error('call obj.finalizeSetup before starting')
             % end
+            % t_now = datetime("now");
+            % obj.logging.fileNamePrefix = 'data_test';%= sprintf('data_%02d%02d%02d%02d%02d',month(t_now),day(t_now),hour(t_now),minute(t_now),round(second(t_now)));
+            % obj.configureLogging;
 
-            if ismember(obj.logging.mode,{'log','log and read'})
-                % then we need to deal with file / meta data
-                setUpTDMSLibrary; % need this to edit the file
-            end
+%             if ismember(obj.logging.mode,{'log','log and read'})
+%                 % then we need to deal with file / meta data
+%                 setUpTDMSLibrary; % need this to edit the file
+%             end
 
 
-
+            
             % check if any tasks are running
             for i = 1:length(obj.task)
                 if ~obj.task(i).isTaskDone()
@@ -455,12 +468,23 @@ classdef xfedaq < sharedFunctions
         function applyConfigs(obj)
 
             obj.unreserveHardware;
+            obj.configureLogging;
             for i = 1:length(obj.task)
                 obj.task(i).configSampleClock();
             end
-            obj.configureLogging;
             obj.unreserveHardware;
             obj.reserveHardware;
+        end
+
+        function nSampsVec = getNSampsAcq(obj)
+            for i = 1:length(obj.task)
+                try
+                    nSampsVec(i) = double(obj.task(i).getNSampsAcquired);
+                catch
+                    nSampsVec(i) = -1;
+                end
+
+            end
         end
 
 

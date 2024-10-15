@@ -11,7 +11,7 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
   
     dateFormatSpec = '%04d, %02d, %02d, %02d, %02d, %.6f\n';
 
-    timerPeriod = 0.25;       % Timer period in seconds (e.g., 0.1s = 100ms)
+    timerPeriod = 0.4;       % Timer period in seconds (e.g., 0.1s = 100ms)
 
     %% Create the MATLAB Timer
     t = timer;
@@ -27,6 +27,7 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
     t.UserData.comsDown = false;
     t.UserData.fileDurationSeconds = fileDurationSeconds;
     t.UserData.formatSpecStored = '';
+    t.UserData.fname_prefix = '';
     [t.UserData.socket, t.UserData.packet] = createUDPSocket;
     start(t);
 
@@ -41,10 +42,14 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
             if src.UserData.save
                 warning("BBB saving already running")
             else
-                saveFilePath = makeNextFileNum(saveDirectory);
-                src.UserData.saveFileID = fopen(saveFilePath,'w');
                 fileStartTime = datetime("now");
                 src.UserData.fileStartTime = fileStartTime;
+                src.UserData.fname_prefix = sprintf('data_%02d%02d%02d%02d%02d_controller',month(fileStartTime),day(fileStartTime),hour(fileStartTime),minute(fileStartTime),round(second(fileStartTime)));
+
+                saveFilePath = makeNextFileNum(saveDirectory,src.UserData.fname_prefix);
+                src.UserData.saveFileID = fopen(saveFilePath,'w');
+
+
                 fprintf(src.UserData.saveFileID,dateFormatSpec,year(fileStartTime),month(fileStartTime),day(fileStartTime),hour(fileStartTime),minute(fileStartTime),second(fileStartTime));
                 src.UserData.save = true;
                 if strcmp(src.UserData.mode,"finite")
@@ -128,7 +133,7 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
            
             if strcmp(src.UserData.mode,"continuous")
                 fclose(src.UserData.saveFileID);
-                src.UserData.saveFileID = fopen(makeNextFileNum(saveDirectory),'w');
+                src.UserData.saveFileID = fopen(makeNextFileNum(saveDirectory,src.UserData.fname_prefix),'w');
                 fileStartTime = datetime("now");
                 t.UserData.fileStartTime = fileStartTime;
                 fprintf(src.UserData.saveFileID,dateFormatSpec,year(fileStartTime),month(fileStartTime),day(fileStartTime),hour(fileStartTime),minute(fileStartTime),second(fileStartTime));
@@ -170,22 +175,28 @@ function t = streamBBBdata(saveDirectory,fileDurationSeconds)
     end
 
 
-    function fullFilePathOut = makeNextFileNum(directoryPath)
+    function fullFilePathOut = makeNextFileNum(directoryPath,fname_prefix)
 
-        TemplogFileNamePath = fullfile(directoryPath,['data_controller_','*.csv']);
+        TemplogFileNamePath = fullfile(directoryPath,[fname_prefix,'*.csv']);
         files = dir(TemplogFileNamePath);
         if isempty(files)
+            nextFileNum = -1;
+        elseif length(files) == 1
             nextFileNum = 0;
         else
             for i = 1:length(files)
                 fileNums(i) = str2double(files(i).name(end-7:end-4));
             end
-            if any(isnan(fileNums))
+            if sum(isnan(fileNums)) > 1
                 error('error retreiving file numbers')
             end
             nextFileNum = max(fileNums) + 1;
         end
-        fullFilePathOut = fullfile(directoryPath,['data_controller_',sprintf('%04.0f',nextFileNum),'.csv']);
+        if nextFileNum == -1
+            fullFilePathOut = fullfile(directoryPath,[fname_prefix,'.csv']);
+        else
+            fullFilePathOut = fullfile(directoryPath,[fname_prefix,'_',sprintf('%04.0f',nextFileNum),'.csv']);
+        end
     end
 
 
