@@ -39,14 +39,14 @@ if sum(strcmp(consts.data.save_types, 'sd'))
 
                 % Compute the average for each field in the struct
                 for LL = 1:numel(fields)
-                    if ~strcmp(fields{LL}, 'Time')
+                    % if ~strcmp(fields{LL}, 'Time')
                         % Extract the chunk data statistics
                         chunk_data = results.td.(fields{LL})(indices);
                         results.sd.(fields{LL}).mean(count) = mean(chunk_data);
                         results.sd.(fields{LL}).std(count) = std(chunk_data);
                         results.sd.(fields{LL}).min(count) = min(chunk_data);
                         results.sd.(fields{LL}).max(count) = max(chunk_data);
-                    end
+                    % end
                 end
             end
         end
