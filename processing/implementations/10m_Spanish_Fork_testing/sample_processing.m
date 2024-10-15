@@ -4,7 +4,7 @@ clc
 
 %% Assign data folder
 files.absolute_data_dir = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\';
-files.relative_experiment_dir = 'sample_data';
+files.relative_experiment_dir = 'operating_uncompressed';
 files.relative_tare_dir = 'operating\10_10_24\tare';
 %% Load calibration struct
 load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_11_10_24.mat')
@@ -27,8 +27,8 @@ end
 % filter = results.td.acc_sensor < .03;
 figure
 hold on
-plot(results.td.TSR,-results.td.Cp_gen,'.')
-plot(results.td.TSR,-results.td.Cp_aero_all_segments,'.')
+plot(results.sd.TSR.mean,-results.sd.Cp_gen.mean,'.')
+plot(results.sd.TSR.mean,-results.sd.Cp_aero_all_segments.mean,'.')
 
 figure
 hold on
@@ -50,3 +50,14 @@ legend('Calculated from Arm Root Moments', ...
     'Calculated from Torque Arms')
 grid on
 box on
+
+
+figure
+hold on
+plot(results.td.U,-results.td.power_gen,'.')
+
+plot(results.sd.U.mean,-results.sd.power_gen.mean,'.')
+axis([0 18 0 20000])
+
+
+plot(results.sd.U.mean,-results.sd.Cp_gen.mean,'.')

@@ -51,7 +51,11 @@ end
 
 % Find file names that start with the specified naming convensions
 for II = 1:length(consts.data.file_name_conventions)
-    dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,consts.data.file_name_conventions{II}));
+    if isfield(files,'filename_timestamp')
+        dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',files.filename_timestamp,consts.data.file_name_conventions{II})));
+    else
+        dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,consts.data.file_name_conventions{II}));
+    end
     if isempty(dataFiles)
         raw_multi_file(II).rate = NaN;
     else
@@ -59,9 +63,9 @@ for II = 1:length(consts.data.file_name_conventions)
             % Load data
             tdms = readTDMS(dataFiles(JJ).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
             if JJ == 1
-                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms);
+                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms,consts.data.default_rates(II));
             else % pass previous start and end times
-                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms,start_time, end_time);
+                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms,consts.data.default_rates(II),start_time, end_time);
             end
 
             % Apply the tare(s)
@@ -82,7 +86,6 @@ for II = 1:length(consts.data.file_name_conventions)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
             % Combine data from similar files
             if JJ == 1
