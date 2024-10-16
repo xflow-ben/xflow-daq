@@ -5,7 +5,7 @@ clc
 %% Assign data folder
 files.absolute_data_dir = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\';
 files.relative_experiment_dir = 'operating_uncompressed';
-files.relative_tare_dir = 'operating\10_10_24\tare';
+files.relative_tare_dir = files.relative_experiment_dir;
 files.relative_results_save_dir = 'operating_uncompressed\processed';
 
 %% Load calibration struct
@@ -38,6 +38,27 @@ end
 % Get the set of unique filename timestamp values
 unique_filename_timestamps = unique(extractedValues);
 
+%% Determine if any of these filenames correspond to tares
+tare_count = 0;
+for II = 1:length(unique_filename_timestamps)
+    dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',unique_filename_timestamps(II),consts.data.file_name_conventions{1})));
+    if length(dataFiles) == 2
+        % Load data
+        tdms = readTDMS(dataFiles(1).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
+        [raw, ~, ~] = convertTDMStoXFlowFormat(tdms,consts.data.default_rates(1));
+        if size(raw.data,1) == 98304
+            tare_count = tare_count + 1;
+            tareList{tare_count} = sprintf('data_%d_nacelle_strain_0000.tdms',unique_filename_timestamps(II));
+            tare_count = tare_count + 1;
+            tareList{tare_count} = sprintf('data_%d_nacelle_strain_0001.tdms',unique_filename_timestamps(II));
+            tare_count = tare_count + 1;
+            tareList{tare_count} = sprintf('data_%d_rotor_strain_0000.tdms',unique_filename_timestamps(II));
+            tare_count = tare_count + 1;
+            tareList{tare_count} = sprintf('data_%d_rotor_strain_0001.tdms',unique_filename_timestamps(II));
+        end
+    end
+end
+save(fullfile(files.absolute_data_dir,files.relative_tare_dir,'tareList.mat'),'tareList')
 
 %% Process data with the same filename timestamps
 for II = 1:length(unique_filename_timestamps)

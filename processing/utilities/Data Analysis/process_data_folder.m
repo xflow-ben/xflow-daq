@@ -33,7 +33,7 @@ for II = 1:length(consts.data.file_name_conventions)
         if ~isempty(regexp(tareList{JJ},pattern,'once'))
             count = count + 1;
             tare_TDMS = readTDMS(tareList{JJ},fullfile(files.absolute_data_dir,files.relative_tare_dir));
-            tare_td = convertTDMStoXFlowFormat(tare_TDMS);
+            tare_td = convertTDMStoXFlowFormat(tare_TDMS,consts.data.default_rates(II));
             tare(II).data(count,:) = median(tare_td.data,1);
             if count == 1
                 tare(II).data_name_conventions = consts.data.file_name_conventions{II};
@@ -44,7 +44,7 @@ for II = 1:length(consts.data.file_name_conventions)
 end
 
 if isempty(fieldnames(tare))
-    % error('No tares were loaded')
+    error('No tares were loaded')
 end
 
 %% Loop through all the data files, apply their tares, and then combine data of the same filetype

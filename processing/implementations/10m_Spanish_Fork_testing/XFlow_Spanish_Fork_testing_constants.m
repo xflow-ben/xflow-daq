@@ -41,7 +41,7 @@ consts.data.save_types = {'sd'};
 consts.data.N = 60; % sd averaging time [s], if is NaN, the entire file will be averaged
 
 %% Tare function
-consts.tare_func = @time_interped_tare;
+consts.tare_func = @average_tare;
 
 %% Calibration
 consts.cali.arm_moment_distance = 32*consts.units.inch_to_m;
