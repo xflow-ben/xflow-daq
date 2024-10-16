@@ -36,7 +36,7 @@ tc = t(dx > 0);
 xc = (1:length(tc)) * k;
 
 % Step 5: Interpolate the new scaled counter signal (y) to match the original time vector
-y = interp1(tc, xc, t);
+y = interp1(tc(~isnan(tc)), xc(~isnan(tc)), t);
 
 % Step 6: Use a polynomial fitting function to compute derivatives
 % The function `multipolydiff` performs a moving window polynomial fit and computes

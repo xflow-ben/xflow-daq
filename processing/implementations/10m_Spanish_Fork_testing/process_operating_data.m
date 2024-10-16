@@ -1,5 +1,5 @@
 clear all
-close all
+% close all
 clc
 
 %% Assign data folder
@@ -9,7 +9,7 @@ files.relative_tare_dir = 'operating\10_10_24\tare';
 files.relative_results_save_dir = 'operating_uncompressed\processed';
 
 %% Load calibration struct
-load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_11_10_24.mat')
+load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_16_10_24.mat')
 
 %% Load constants
 consts = XFlow_Spanish_Fork_testing_constants();
@@ -41,6 +41,7 @@ unique_filename_timestamps = unique(extractedValues);
 
 %% Process data with the same filename timestamps
 for II = 1:length(unique_filename_timestamps)
+    II/length(unique_filename_timestamps)
     save_dir = fullfile(files.absolute_data_dir,files.relative_results_save_dir);
     save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',unique_filename_timestamps(II)));
     if ~exist(save_name,'file')
@@ -58,7 +59,9 @@ for II = 1:length(unique_filename_timestamps)
         if II == 1 && ~exist(save_dir,'dir')
             mkdir(save_dir)
         end
-        save(save_name,'results')
+        save(save_name,'results', '-v7.3')
+        pause(5)
+        clear results
     end
 end
 

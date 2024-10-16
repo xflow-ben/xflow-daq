@@ -37,8 +37,8 @@ consts.data.default_rates = [...
     NaN,...
     2000]; %NaNs are for file name conventions which should have their rates in ther tdms files
 
-consts.data.save_types = {'td','sd'};
-consts.data.N = 120; % sd averaging time [s], if is NaN, the entire file will be averaged
+consts.data.save_types = {'sd'};
+consts.data.N = 60; % sd averaging time [s], if is NaN, the entire file will be averaged
 
 %% Tare function
 consts.tare_func = @time_interped_tare;

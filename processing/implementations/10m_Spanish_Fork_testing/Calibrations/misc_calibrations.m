@@ -63,7 +63,12 @@ cal(count).input_channels = {'Power Transducer Filt'};
 cal(count).output_names = {'electric_power_filtered'};
 cal(count).output_units = {'W'}; %Electrical power at point of grid connection [W]
 
-
+count = count + 1;
+cal(count).type = 'linear_k';
+cal(count).data.k = 3.715170279;
+cal(count).input_channels = {'Battery Voltage'};
+cal(count).output_names = {'Hub_Battery_Voltage'};
+cal(count).output_units = {'VDC'}; % Hub DAQ battery voltage
 
 %% Save
 save(fullfile(savePath,saveName),'cal')

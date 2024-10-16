@@ -6,7 +6,7 @@ N = consts.data.N; % Get sd averaging time [s]
 if sum(strcmp(consts.data.save_types, 'sd'))
     % Create sd (statistical data): do N-second averaging here (e.g. 10 second).
     % Split data up into chunks, do the averaging
-    sd = struct();
+    results.sd = struct();
 
     count = 0;
     fields = fieldnames(results.td);

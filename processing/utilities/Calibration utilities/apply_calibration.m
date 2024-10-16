@@ -107,6 +107,7 @@ elseif strcmp(cal.type,'rpm_voltage_signal')
     x = data(:,ind);
     t = data(:,ind_time);
     rate = 1/mean(diff(t),'omitnan');
+    
     [y, dydt, ddyddt] = process_counter_voltage_signal(t, x, ceil(cal.data.windowSize*rate), cal.data.threshold, rate, cal.data.slope);
 
     % create out.(field_names), where filed names are from cal.output_names

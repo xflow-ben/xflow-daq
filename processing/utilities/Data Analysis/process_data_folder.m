@@ -51,15 +51,18 @@ end
 
 % Find file names that start with the specified naming convensions
 for II = 1:length(consts.data.file_name_conventions)
+    II/length(consts.data.file_name_conventions)
     if isfield(files,'filename_timestamp')
         dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',files.filename_timestamp,consts.data.file_name_conventions{II})));
     else
         dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,consts.data.file_name_conventions{II}));
     end
+   
     if isempty(dataFiles)
         raw_multi_file(II).rate = NaN;
     else
         for JJ = 1:length(dataFiles)
+             dataFiles(JJ).name
             % Load data
             tdms = readTDMS(dataFiles(JJ).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
             if JJ == 1
