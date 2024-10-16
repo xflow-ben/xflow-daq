@@ -9,17 +9,17 @@ function plot_normal_operation_capture_matrix(U, TI, U_bin_edges, TI_bin_edges)
             if j == length(TI_bin_edges)-1
                 % Special case for the top bin (29%-100%)
                 indices = U >= U_bin_edges(i) & U < U_bin_edges(i+1) & ...
-                          TI >= TI_bin_edges(j);
+                    TI >= TI_bin_edges(j);
             else
                 indices = U >= U_bin_edges(i) & U < U_bin_edges(i+1) & ...
-                          TI >= TI_bin_edges(j) & TI < TI_bin_edges(j+1);
+                    TI >= TI_bin_edges(j) & TI < TI_bin_edges(j+1);
             end
             capture_matrix(j, i) = sum(indices);
         end
     end
 
-    % Calculate the number of TI bins with > 6 entries for each wind speed bin
-    num_ti_bins_over_6 = sum(capture_matrix > 6, 1);
+    % Calculate the max number of entries per TI bin for a given wind speed bin
+    max_entire_per_ti_bin = max(capture_matrix);
 
     % Calculate the total number of entries for each wind speed bin
     total_entries_per_ws_bin = sum(capture_matrix, 1);
@@ -28,64 +28,20 @@ function plot_normal_operation_capture_matrix(U, TI, U_bin_edges, TI_bin_edges)
     [W, T] = meshgrid(U_bin_edges, TI_bin_edges);
 
     % Create a figure with the specified layout
-    figure;
-
-    % Define a custom colormap from white to red
-    n_colors = 256; % Number of colors in the colormap
-    custom_colormap = [linspace(1, 1, n_colors)', linspace(1, 0, n_colors)', linspace(1, 0, n_colors)'];
-
-    %% Number of TI bins with > 6 entries
-    subplot(6, 1, 5);
-    imagesc(U_bin_edges(1:end-1) + 0.5, 1, num_ti_bins_over_6); % Using imagesc for a heatmap
-    colormap(custom_colormap);
-    caxis([0 max(capture_matrix(:))]); % Consistent colormap scale
-    set(gca, 'YDir', 'normal');
-    xlabel('Wind Speed (m/s)');
-    ylabel('with 6 TS','Rotation',0);
-    title('Number of TI Bins with > 6 Entries');
-    set(gca, 'XTick', U_bin_edges(1:end-1) + 0.5, 'XTickLabel', arrayfun(@(x, y) sprintf('%d-%d', x, y), U_bin_edges(1:end-1), U_bin_edges(2:end), 'UniformOutput', false));
-    set(gca, 'YTick', []);
-    axis tight;
-    hold on;
-
-    % Add grid lines and text labels for the heatmap
-    for i = 1:length(U_bin_edges)
-        xline(U_bin_edges(i), 'Color', 'k', 'LineWidth', 0.5);
-    end
-    for i = 1:length(U_bin_edges)-1
-        text(U_bin_edges(i) + 0.5, 1, num2str(num_ti_bins_over_6(i)), ...
-            'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'FontSize', 8, 'Color', 'k');
-    end
-    hold off;
-
-    %% Total number of entries per wind speed bin
-    subplot(6, 1, 6);
-    imagesc(U_bin_edges(1:end-1) + 0.5, 1, total_entries_per_ws_bin); % Using imagesc for a heatmap
-    colormap(custom_colormap);
-    caxis([0 max(capture_matrix(:))]); % Consistent colormap scale
-    set(gca, 'YDir', 'normal');
-    xlabel('Wind Speed (m/s)');
-    ylabel('in WS bin','Rotation',0);
-    title('Total Entries in Wind Speed Bin');
-    set(gca, 'XTick', U_bin_edges(1:end-1) + 0.5, 'XTickLabel', arrayfun(@(x, y) sprintf('%d-%d', x, y), U_bin_edges(1:end-1), U_bin_edges(2:end), 'UniformOutput', false));
-    set(gca, 'YTick', []);
-    axis tight;
-    hold on;
-
-    % Add grid lines and text labels for the heatmap
-    for i = 1:length(U_bin_edges)
-        xline(U_bin_edges(i), 'Color', 'k', 'LineWidth', 0.5);
-    end
-    for i = 1:length(U_bin_edges)-1
-        text(U_bin_edges(i) + 0.5, 1, num2str(total_entries_per_ws_bin(i)), ...
-            'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'FontSize', 8, 'Color', 'k');
-    end
-    hold off;
 
     %% 2D capture matrix
+    figure;
+
+    % Define a blue colormap for the 2D heatmap
+% Define a custom colormap that transitions from white to a dull blue
+n_colors = 256; % Number of colors in the colormap
+custom_colormap = [linspace(1, 0.2, n_colors)', ... % Red channel (from white to duller)
+                   linspace(1, 0.5, n_colors)', ... % Green channel (from white to a dull blue)
+                   linspace(1, 0.8, n_colors)'];   % Blue channel (from white to a deeper blue)
+
     subplot(6, 1, 1:4);
     h = pcolor(W, T, [capture_matrix zeros(size(capture_matrix, 1), 1); zeros(1, size(capture_matrix, 2) + 1)]);
-    colormap(custom_colormap);
+    colormap(gca, custom_colormap);
     caxis([0 max(capture_matrix(:))]); % Scale colorbar to match data range
     xlabel('Wind Speed (m/s)');
     ylabel('Turbulence Intensity (%)');
@@ -102,7 +58,7 @@ function plot_normal_operation_capture_matrix(U, TI, U_bin_edges, TI_bin_edges)
     ti_labels = [arrayfun(@(x, y) sprintf('%d-%d', x, y), TI_bin_edges(1:end-2), TI_bin_edges(2:end-1), 'UniformOutput', false), {'29-100%'}];
 
     set(gca, 'XTick', wind_speed_ticks, 'XTickLabel', wind_speed_labels, ...
-             'YTick', ti_ticks, 'YTickLabel', ti_labels);
+        'YTick', ti_ticks, 'YTickLabel', ti_labels);
 
     % Add grid lines to delineate the boundaries of the bins
     hold on;
@@ -123,20 +79,37 @@ function plot_normal_operation_capture_matrix(U, TI, U_bin_edges, TI_bin_edges)
             end
         end
     end
-    hold off;
 
-    %% Adjust the positions of the subplots to ensure spacing
-    subplot(6, 1, 1:4);
-    pos = get(gca, 'Position');
-    set(gca, 'Position', [pos(1), pos(2) + 0.1, pos(3), pos(4) - 0.1]);
-
-    subplot(6, 1, 5);
-    pos = get(gca, 'Position');
-    set(gca, 'Position', [pos(1), pos(2) + 0.05, pos(3), pos(4) - 0.05]);
-
+    %% Passing bins
     subplot(6, 1, 6);
-    pos = get(gca, 'Position');
-    set(gca, 'Position', [pos(1), pos(2), pos(3), pos(4) - 0.05]);
+    passing_criteria = max_entire_per_ti_bin > 60 | total_entries_per_ws_bin > 200;
+    imagesc(U_bin_edges(1:end-1) + 0.5, 1, passing_criteria); % Binary map: 1 if entries > 0, 0 otherwise
+    colormap(gca, [0.8 0.4 0.4; 0.6 1.0 0.6]); % Light red for 0, soft green for >0
+    set(gca, 'YDir', 'normal');
+    xlabel('Wind Speed (m/s)');
+    title({
+        '\fontsize{14}Passing Bins', ...
+        '\fontsize{10}At Least one TI Bin with > 60 Entries OR At Least 200 Entries Across all TI Bins'
+        }, 'Interpreter', 'tex');
+    set(gca, 'XTick', U_bin_edges(1:end-1) + 0.5, 'XTickLabel', arrayfun(@(x, y) sprintf('%d-%d', x, y), U_bin_edges(1:end-1), U_bin_edges(2:end), 'UniformOutput', false));
+    set(gca, 'YTick', []);
+    axis tight;
+    hold on;
 
-    set(gcf,'Position',[892 531 668 707])
+    % Add grid lines and text labels for the heatmap
+    for i = 1:length(U_bin_edges)
+        xline(U_bin_edges(i), 'Color', 'k', 'LineWidth', 0.5);
+    end
+
+    % Add text labels 'Y' for passing bins and 'N' for non-passing bins
+    for i = 1:length(U_bin_edges)-1
+        label = 'Fail';
+        if passing_criteria(i)
+            label = 'Pass';
+        end
+        text(U_bin_edges(i) + 0.5, 1, label, ...
+            'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'FontSize', 8, 'Color', 'k');
+    end
+
+    set(gcf, 'Position', [892 531 668 707])
 end

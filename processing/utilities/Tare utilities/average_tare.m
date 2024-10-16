@@ -3,7 +3,6 @@ function in = average_tare(in,tare)
 
 % Tare is average of all the tare files
 
-in.data = in.data - mean(tare.data);
 data_time_ind = find(strcmp(in.chanNames,'time'));
 
 for data_ind = 1:length(in.chanNames)
