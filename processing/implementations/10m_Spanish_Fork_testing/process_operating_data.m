@@ -36,50 +36,62 @@ for i = 1:length(fileList)
 end
 
 % Get the set of unique filename timestamp values
-unique_filename_timestamps = unique(extractedValues);
+all_filename_timestamps = unique(extractedValues);
 
 %% Determine if any of these filenames correspond to tares
 tare_count = 0;
-for II = 1:length(unique_filename_timestamps)
-    dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',unique_filename_timestamps(II),consts.data.file_name_conventions{1})));
+data_files_count = 0;
+for II = 1:length(all_filename_timestamps)
+    dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',all_filename_timestamps(II),consts.data.file_name_conventions{1})));
     if length(dataFiles) == 2
         % Load data
         tdms = readTDMS(dataFiles(1).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
         [raw, ~, ~] = convertTDMStoXFlowFormat(tdms,consts.data.default_rates(1));
         if size(raw.data,1) == 98304
             tare_count = tare_count + 1;
-            tareList{tare_count} = sprintf('data_%d_nacelle_strain_0000.tdms',unique_filename_timestamps(II));
+            tareList{tare_count} = sprintf('data_%d_nacelle_strain_0000.tdms',all_filename_timestamps(II));
             tare_count = tare_count + 1;
-            tareList{tare_count} = sprintf('data_%d_nacelle_strain_0001.tdms',unique_filename_timestamps(II));
+            tareList{tare_count} = sprintf('data_%d_nacelle_strain_0001.tdms',all_filename_timestamps(II));
             tare_count = tare_count + 1;
-            tareList{tare_count} = sprintf('data_%d_rotor_strain_0000.tdms',unique_filename_timestamps(II));
+            tareList{tare_count} = sprintf('data_%d_rotor_strain_0000.tdms',all_filename_timestamps(II));
             tare_count = tare_count + 1;
-            tareList{tare_count} = sprintf('data_%d_rotor_strain_0001.tdms',unique_filename_timestamps(II));
+            tareList{tare_count} = sprintf('data_%d_rotor_strain_0001.tdms',all_filename_timestamps(II));
+        else
+            data_files_count = data_files_count + 1;
+            data_filename_timestamps(data_files_count) = all_filename_timestamps(II);
         end
+    else
+        data_files_count = data_files_count + 1;
+        data_filename_timestamps(data_files_count) = all_filename_timestamps(II);
     end
 end
 save(fullfile(files.absolute_data_dir,files.relative_tare_dir,'tareList.mat'),'tareList')
 
 %% Process data with the same filename timestamps
-for II = 1:length(unique_filename_timestamps)
-    II/length(unique_filename_timestamps)
+for II = 1:length(data_filename_timestamps)
+    II/length(data_filename_timestamps)
     save_dir = fullfile(files.absolute_data_dir,files.relative_results_save_dir);
-    save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',unique_filename_timestamps(II)));
+    save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',data_filename_timestamps(II)));
     if ~exist(save_name,'file')
-        files.filename_timestamp = unique_filename_timestamps(II);
+        files.filename_timestamp = data_filename_timestamps(II);
         results = process_data_folder(files,cal,consts);
         results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,consts);
         results = calculate_sd(results,consts);
 
-        %% Remove td data if it is not a data type flagged to be saved
-        if strcmp(consts.data.save_types, 'td') == 0
-            results = rmfield(results,'td');
-        end
+
 
         %% Save results
         if II == 1 && ~exist(save_dir,'dir')
             mkdir(save_dir)
         end
+        save_name_td = fullfile(save_dir,sprintf('operating_results_td_%d.mat',data_filename_timestamps(II)));
+
+        save(save_name_td,'results', '-v7.3')
+        % Remove td data if it is not a data type flagged to be saved
+        if strcmp(consts.data.save_types, 'td') == 0
+            results = rmfield(results,'td');
+        end
+
         save(save_name,'results', '-v7.3')
         pause(5)
         clear results

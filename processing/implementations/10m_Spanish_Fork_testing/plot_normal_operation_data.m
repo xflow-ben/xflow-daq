@@ -5,7 +5,7 @@ clc
 %% Assign data folder
 data_dir = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\processed';
 
-fileList = dir(fullfile(data_dir,'operating_results*'));
+fileList = dir(fullfile(data_dir,'operating_results_1*'));
 
 sd_all = struct();
 for II = 1:length(fileList)
