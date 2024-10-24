@@ -27,6 +27,7 @@ for II = 1:length(cal)
     % Apply calibration if data is avalible for ALL relevant input channels
     % (flag = 1)
     if flag
+        cal(II)
         temp = apply_calibration(in.data,in.chanNames,cal(II));
         fields = fieldnames(temp);
         for JJ = 1:length(fields) % make sure this works properly

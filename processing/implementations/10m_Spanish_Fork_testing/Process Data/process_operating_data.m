@@ -43,6 +43,7 @@ tare_count = 0;
 data_files_count = 0;
 for II = 1:length(all_filename_timestamps)
     dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',all_filename_timestamps(II),consts.data.file_name_conventions{1})));
+    length(dataFiles)
     if length(dataFiles) == 2
         % Load data
         tdms = readTDMS(dataFiles(1).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
