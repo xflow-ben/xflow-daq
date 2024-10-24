@@ -1,3 +1,4 @@
+function BBB = load_BBB_data(filename)
 %% Import data from text file
 % Script for importing data from the following text file:
 %
@@ -21,7 +22,7 @@ opts.ExtraColumnsRule = "ignore";
 opts.EmptyLineRule = "read";
 
 % Import the data
-tbl = readtable("X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\data_1016172541_controller.csv", opts);
+tbl = readtable(filename, opts);
 
 % Index 62-97: DATA_TS_PERIOD_TIME_START - TS Period time data
 % Index 99-123: DATA_INV_MOD_OUT_0_X - invData_mod_out[0] values at various indices
