@@ -22,7 +22,6 @@ cal(count).data.slope = 0.04638;
 cal(count).data.offset = 0.21212;
 cal(count).data.threshold = 5; % Voltage threshold for detecting transitions
 cal(count).data.windowSize = 1; % Size of the time window for averaging (in seconds)
-
 cal(count).data.SN = '7101906'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
