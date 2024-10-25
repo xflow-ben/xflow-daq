@@ -15,29 +15,38 @@ cal(count).input_channels = {'time'};
 cal(count).output_names = {'Time'};
 cal(count).output_units = {'s'};
 
-count = count + 1;
-cal(count).type = 'linear_k';
-cal(count).data.k = 2*pi/2.5;
-cal(count).input_channels = {'Anno 1'};
-cal(count).output_names = {'Tower_Windspeed_1'};
-cal(count).output_units = {'m/s'};
-
-count = count + 1;
-cal(count).type = 'linear_k';
-cal(count).data.k = 2*pi/2.5;
-cal(count).input_channels = {'Anno 2'};
-cal(count).output_names = {'Tower_Windspeed_2'};
-cal(count).output_units = {'m/s'};
+% count = count + 1;
+% cal(count).type = 'counter_voltage_signal';
+% cal(count).data.slope = 2*pi/2.5;
+% cal(count).data.offset = 0;
+% cal(count).data.threshold = 1; % Voltage threshold for detecting transitions
+% cal(count).data.windowSize = 1; % Size of the time window for averaging (in seconds)
+% cal(count).input_channels = {'Anno 1'};
+% cal(count).output_names = {'Tower_Windspeed_1'};
+% cal(count).output_units = {'m/s'};
+% cal(count).data.output_derivative_orders = 1;
+% 
+% count = count + 1;
+% cal(count).type = 'counter_voltage_signal';
+% cal(count).data.slope = 2*pi/2.5;
+% cal(count).data.offset = 0;
+% cal(count).data.threshold = 1; % Voltage threshold for detecting transitions
+% cal(count).data.windowSize = 1; % Size of the time window for averaging (in seconds)
+% cal(count).input_channels = {'Anno 2'};
+% cal(count).output_names = {'Tower_Windspeed_2'};
+% cal(count).output_units = {'m/s'};
+% cal(count).data.output_derivative_orders = 1;
 
 count = count + 1;
 cal(count).type = 'rpm_voltage_signal';
 cal(count).data.slope = 2*pi/90;
 cal(count).data.offset = 0;
 cal(count).data.threshold = 1; % Voltage threshold for detecting transitions
-cal(count).data.windowSize = 2; % Size of the time window for averaging (in seconds)
+cal(count).data.windowSize = 1; % Size of the time window for averaging (in seconds)
 cal(count).input_channels = {'RPM Sensor'}; % Names of load channels of intrest
-cal(count).output_names = {'theta_sensor','omega_sensor','acc_sensor'}; % Names of physical loads of intrest which are applied during calibrations
+cal(count).output_names = {'theta_NEEDS_RESET_sensor','omega_sensor','acc_sensor'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).output_units = {'rad','rad/s','rad/s^2'}; % Units of load channels after calibration
+cal(count).data.output_derivative_orders = [1 2 3];
 
 count = count + 1;
 cal(count).type = 'encoder';

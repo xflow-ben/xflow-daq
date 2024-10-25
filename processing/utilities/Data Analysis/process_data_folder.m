@@ -136,18 +136,20 @@ for KK = 1:length(segment_start_ind)
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%% EXCEPTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%% Windspeed data needs to be calibrated and then resampled
-    %%%% This is for the anemometers since resampling a voltage signal of
-    %%%% a counter channel before calibrating dosen't work
-    met_data = calibrate_data(cal,raw_multi_file(13));
-    met_fields = fieldnames(met_data.td);
-    ind_time = strcmp(raw_multi_file(13).chanNames,'time');
+    %%%% EXCEPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%% Counter type channels need to be calibrated before resampling
+    for II = 1:length(consts.data.calibrate_before_resample)
+        if consts.data.calibrate_before_resample(II)
+            calibrated_data = calibrate_data(cal,raw_multi_file(II));
+            calibrated_fields = fieldnames(calibrated_data.td);
+            ind_time = strcmp(raw_multi_file(II).chanNames,'time');
 
-    for II = 1:length(met_fields)
-        if ~ind_time(II)
-            [t_resampled,y_resampled] = resample_w_time(raw_multi_file(13).rate,consts.DAQ.downsampled_rate,met_data.td.Time,met_data.td.(met_fields{II}));
-            results(KK).td.(met_fields{II}) =  interp1(t_resampled,y_resampled,new_time');
+            for JJ = 1:length(calibrated_fields)
+                if ~ind_time(JJ)
+                    [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,calibrated_data.td.Time,calibrated_data.td.(calibrated_fields{JJ}));
+                    results(KK).td.(calibrated_fields{JJ}) =  interp1(t_resampled,y_resampled,new_time');
+                end
+            end
         end
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

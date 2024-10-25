@@ -124,8 +124,25 @@ elseif strcmp(cal.type,'encoder')
     ind = flexibleStrCmp(dataColumns,cal.input_channels);
     ind_time = flexibleStrCmp(dataColumns,'time');
 
-    
-    y = unwrap(data(:,ind)*(2*pi/cal.data.PPR));
+    reset_ind = find(diff(data(:,ind))<-10000); % identify the real resets
+    false_reset_ind = find(diff(data(:,ind))>-10000 & diff(data(:,ind))<-20); % identify false resets
+
+    y = data(:,ind);
+    y(1:reset_ind(1)) = NaN; % dont use data before the first reset
+
+    % Loop through each false reset index to correct the signal
+    for II = 1:length(false_reset_ind)
+
+        % Find next reset (real or false) after this false reset
+        next_reset_ind = min([reset_ind(reset_ind>false_reset_ind(II));...
+            false_reset_ind(false_reset_ind>false_reset_ind(II))]);
+
+        % Adjust the signal from this index onward
+        y(false_reset_ind(II) + 1:next_reset_ind) = y(false_reset_ind(II) + 1:next_reset_ind) + y(false_reset_ind(II));
+    end
+
+
+    y = unwrap(y*(2*pi/cal.data.PPR));
     t = data(:,ind_time);
     rate = 1/mean(diff(t),'omitnan');
 
