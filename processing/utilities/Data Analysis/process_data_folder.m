@@ -146,7 +146,6 @@ for KK = 1:length(segment_start_ind)
 
     for II = 1:length(met_fields)
         if ~ind_time(II)
-            met_fields{II}
             [t_resampled,y_resampled] = resample_w_time(raw_multi_file(13).rate,consts.DAQ.downsampled_rate,met_data.td.Time,met_data.td.(met_fields{II}));
             results(KK).td.(met_fields{II}) =  interp1(t_resampled,y_resampled,new_time');
         end

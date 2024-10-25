@@ -72,7 +72,7 @@ for II = 1:length(data_filename_timestamps)
     II/length(data_filename_timestamps)
     save_dir = fullfile(files.absolute_data_dir,files.relative_results_save_dir);
     save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',data_filename_timestamps(II)));
-    % if ~exist(save_name,'file')
+    if ~exist(save_name,'file')
         files.filename_timestamp = data_filename_timestamps(II);
         results = process_data_folder(files,cal,consts);
         results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,consts);
@@ -93,6 +93,6 @@ for II = 1:length(data_filename_timestamps)
         save(save_name,'results', '-v7.3')
         
         clear results
-    % end
+    end
 end
 

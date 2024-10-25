@@ -45,9 +45,9 @@ if length(tc) > 1
     % dy: first derivative, ddy: second derivative
     [dy, ddy] = multipolydiff(y, win, 2);
 else
-    y = zeros(length(t));
-    dy = zeros(length(t));
-    ddy = zeros(length(t));
+    y = zeros(size(t));
+    dy = zeros(size(t));
+    ddy = zeros(size(t));
 end
 % Step 7: Adjust the derivatives by the sampling rate
 % Velocity (dy) is divided by the sampling rate (rate)

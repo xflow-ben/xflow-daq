@@ -46,6 +46,8 @@ plot(sd_all.U.mean,-sd_all.Cp_aero.mean,'.')
 figure(6)
 hold on
 plot(sd_all.U.mean,sd_all.omega_sensor.mean,'.')
+plot(sd_all.U.mean,sd_all.omega_sensor.min,'.')
+plot(sd_all.U.mean,sd_all.omega_sensor.max,'.')
 
 figure(10)
 hold on
@@ -56,3 +58,11 @@ plot(sd_all.U.mean,-sd_all.power_gen.max,'.')
 
 figure(100)
 plot(sd_all.omega_sensor.mean,sd_all.U.mean,'.')
+
+
+figure(11)
+hold on
+plot(sd_all.U.mean,-sd_all.Center_Blade_Mx.mean,'.')
+plot(sd_all.U.mean,-sd_all.Center_Blade_Mx.min,'.')
+plot(sd_all.U.mean,-sd_all.Center_Blade_Mx.max,'.')
+
