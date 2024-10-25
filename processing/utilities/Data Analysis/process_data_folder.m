@@ -57,12 +57,12 @@ for II = 1:length(consts.data.file_name_conventions)
     else
         dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,consts.data.file_name_conventions{II}));
     end
-   
+
     if isempty(dataFiles)
         raw_multi_file(II).rate = NaN;
     else
         for JJ = 1:length(dataFiles)
-             dataFiles(JJ).name
+            dataFiles(JJ).name
             % Load data
             tdms = readTDMS(dataFiles(JJ).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
             if JJ == 1
@@ -133,6 +133,29 @@ for KK = 1:length(segment_start_ind)
     end
     results(KK) = calibrate_data(cal,raw_combined);
     results(KK).td.Time = new_time';
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%% EXCEPTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%% Windspeed data needs to be calibrated and then resampled
+    %%%% This is for the anemometers since resampling a voltage signal of
+    %%%% a counter channel before calibrating dosen't work
+    met_data = calibrate_data(cal,raw_multi_file(13));
+    met_fields = fieldnames(met_data.td);
+    ind_time = strcmp(raw_multi_file(13).chanNames,'time');
+
+    for II = 1:length(met_fields)
+        if ~ind_time(II)
+            met_fields{II}
+            [t_resampled,y_resampled] = resample_w_time(raw_multi_file(13).rate,consts.DAQ.downsampled_rate,met_data.td.Time,met_data.td.(met_fields{II}));
+            results(KK).td.(met_fields{II}) =  interp1(t_resampled,y_resampled,new_time');
+        end
+    end
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 end
 
 % Loop through each field and concatenate the arrays from all structs

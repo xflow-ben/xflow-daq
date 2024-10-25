@@ -43,7 +43,6 @@ tare_count = 0;
 data_files_count = 0;
 for II = 1:length(all_filename_timestamps)
     dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',all_filename_timestamps(II),consts.data.file_name_conventions{1})));
-    length(dataFiles)
     if length(dataFiles) == 2
         % Load data
         tdms = readTDMS(dataFiles(1).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
@@ -73,7 +72,7 @@ for II = 1:length(data_filename_timestamps)
     II/length(data_filename_timestamps)
     save_dir = fullfile(files.absolute_data_dir,files.relative_results_save_dir);
     save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',data_filename_timestamps(II)));
-    if ~exist(save_name,'file')
+    % if ~exist(save_name,'file')
         files.filename_timestamp = data_filename_timestamps(II);
         results = process_data_folder(files,cal,consts);
         results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,consts);
@@ -84,16 +83,16 @@ for II = 1:length(data_filename_timestamps)
             mkdir(save_dir)
         end
         save_name_td = fullfile(save_dir,sprintf('operating_results_td_%d.mat',data_filename_timestamps(II)));
-
         save(save_name_td,'results', '-v7.3')
+        pause(5)
         % Remove td data if it is not a data type flagged to be saved
         if strcmp(consts.data.save_types, 'td') == 0
             results = rmfield(results,'td');
         end
 
         save(save_name,'results', '-v7.3')
-        pause(5)
+        
         clear results
-    end
+    % end
 end
 

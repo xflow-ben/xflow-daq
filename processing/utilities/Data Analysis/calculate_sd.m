@@ -48,8 +48,8 @@ if sum(strcmp(consts.data.save_types, 'sd'))
                     results.sd.(fields{LL}).max(count) = max(chunk_data);
                     % end
                 end
-                results.sd.td_index.start = indices(1);
-                results.sd.td_index.end = indices(end);
+                results.sd.td_index.start(count) = indices(1);
+                results.sd.td_index.end(count) = indices(end);
             end
         end
     end
