@@ -7,6 +7,11 @@ savePath = fullfile(fileparts(mfilename('fullpath')),'Results');
 saveName = 'acc_calibrations';
 count = 0;
 
+%%%%%%%%%%%%NOTE%%%%%%%%%%%%%
+% Some spec sheets didn't give an offset value, so we decided to set all
+% offsets to 0.
+
+
 %% Nacelle 
 count = count + 1;
 cal(count).type = 'linear_k';
@@ -15,7 +20,7 @@ cal(count).output_names = {'Acc_Nacelle_X_Filt'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 13.60/1000;
-cal(count).data.offset = 10.5/1000;
+cal(count).data.offset = 0;%10.5/1000;
 cal(count).data.SN = 'LW13625'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -25,7 +30,7 @@ cal(count).output_names = {'Acc_Nacelle_X'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 13.60/1000;
-cal(count).data.offset = 10.5/1000;
+cal(count).data.offset = 0;%10.5/1000;
 cal(count).data.SN = 'LW13625'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -35,7 +40,7 @@ cal(count).output_names = {'Acc_Nacelle_Y_Filt'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 13.53/1000;
-cal(count).data.offset = 8.3/1000;
+cal(count).data.offset = 0;%8.3/1000;
 cal(count).data.SN = 'LW13625'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -45,7 +50,7 @@ cal(count).output_names = {'Acc_Nacelle_Y'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 13.53/1000;
-cal(count).data.offset = 8.3/1000;
+cal(count).data.offset = 0;%8.3/1000;
 cal(count).data.SN = 'LW13625'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -55,7 +60,7 @@ cal(count).output_names = {'Acc_Nacelle_Z_Filt'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 13.5/1000;
-cal(count).data.offset = 12.3/1000;
+cal(count).data.offset = 0;%12.3/1000;
 cal(count).data.SN = 'LW13625'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -65,7 +70,7 @@ cal(count).output_names = {'Acc_Nacelle_Z'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 13.5/1000;
-cal(count).data.offset = 12.3/1000;
+cal(count).data.offset = 0;%12.3/1000;
 cal(count).data.SN = 'LW13625'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 %% Upper Arm
@@ -199,7 +204,7 @@ cal(count).output_names = {'Acc_Winglet_X_Filt'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 2.72/1000;
-cal(count).data.offset = 8/1000;
+cal(count).data.offset = 0;%8/1000;
 cal(count).data.SN = 'LW13646'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -209,7 +214,7 @@ cal(count).output_names = {'Acc_Winglet_X'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 2.72/1000;
-cal(count).data.offset = 8/1000;
+cal(count).data.offset = 0;%8/1000;
 cal(count).data.SN = 'LW13646'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -219,7 +224,7 @@ cal(count).output_names = {'Acc_Winglet_Y_Filt'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 2.71/1000;
-cal(count).data.offset = 6.3/1000;
+cal(count).data.offset = 0;%6.3/1000;
 cal(count).data.SN = 'LW13646'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -229,7 +234,7 @@ cal(count).output_names = {'Acc_Winglet_Y'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 2.71/1000;
-cal(count).data.offset = 6.3/1000;
+cal(count).data.offset = 0;%6.3/1000;
 cal(count).data.SN = 'LW13646'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -239,7 +244,7 @@ cal(count).output_names = {'Acc_Winglet_Z_Filt'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 2.71/1000;
-cal(count).data.offset = 10.4/1000;
+cal(count).data.offset = 0;%10.4/1000;
 cal(count).data.SN = 'LW13646'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 count = count + 1;
@@ -249,7 +254,7 @@ cal(count).output_names = {'Acc_Winglet_Z'};
 cal(count).output_units = {'m/s^2'}; 
 cal(count).type = 'slope_offset';
 cal(count).data.slope = 2.71/1000;
-cal(count).data.offset = 10.4/1000;
+cal(count).data.offset = 0;%10.4/1000;
 cal(count).data.SN = 'LW13646'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 %% Save

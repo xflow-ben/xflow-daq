@@ -9,7 +9,7 @@ files.relative_tare_dir = files.relative_experiment_dir;
 files.relative_results_save_dir = 'operating_uncompressed\processed';
 
 %% Load calibration struct
-load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_25_10_24.mat')
+load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_28_10_24.mat')
 
 %% Load constants
 consts = XFlow_Spanish_Fork_testing_constants();
@@ -68,15 +68,16 @@ end
 save(fullfile(files.absolute_data_dir,files.relative_tare_dir,'tareList.mat'),'tareList')
 
 %% Process data with the same filename timestamps
-for II = 1:length(data_filename_timestamps)
+for II = 6%1:length(data_filename_timestamps)
     II/length(data_filename_timestamps)
     save_dir = fullfile(files.absolute_data_dir,files.relative_results_save_dir);
     save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',data_filename_timestamps(II)));
-    % if ~exist(save_name,'file')
+    save_name_td = fullfile(save_dir,sprintf('operating_results_td_%d.mat',data_filename_timestamps(II)));
+    % if ~exist(save_name_td,'file')
         files.filename_timestamp = data_filename_timestamps(II);
         results = process_data_folder(files,cal,consts);
-        results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,consts);
-        results = calculate_sd(results,consts);
+        % results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,consts);
+        % results = calculate_sd(results,consts);
 
         %% Save results
         if II == 1 && ~exist(save_dir,'dir')
@@ -84,15 +85,15 @@ for II = 1:length(data_filename_timestamps)
         end
         save_name_td = fullfile(save_dir,sprintf('operating_results_td_%d.mat',data_filename_timestamps(II)));
         save(save_name_td,'results', '-v7.3')
-        pause(5)
-        % Remove td data if it is not a data type flagged to be saved
-        if strcmp(consts.data.save_types, 'td') == 0
-            results = rmfield(results,'td');
-        end
-
-        save(save_name,'results', '-v7.3')
+        % pause(5)
+        % % Remove td data if it is not a data type flagged to be saved
+        % if strcmp(consts.data.save_types, 'td') == 0
+        %     results = rmfield(results,'td');
+        % end
+        % 
+        % save(save_name,'results', '-v7.3')
         
         clear results
-    end
+    % end
 end
 

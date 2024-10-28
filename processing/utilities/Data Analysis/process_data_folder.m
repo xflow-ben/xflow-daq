@@ -136,18 +136,29 @@ for KK = 1:length(segment_start_ind)
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%% EXCEPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%% EXCEPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%% Counter type channels need to be calibrated before resampling
     for II = 1:length(consts.data.calibrate_before_resample)
-        if consts.data.calibrate_before_resample(II)
+        if consts.data.calibrate_before_resample(II) & ~isempty(raw_multi_file(II).chanNames)
             calibrated_data = calibrate_data(cal,raw_multi_file(II));
             calibrated_fields = fieldnames(calibrated_data.td);
-            ind_time = strcmp(raw_multi_file(II).chanNames,'time');
+            ind_time = strcmp(calibrated_fields,'Time');
 
             for JJ = 1:length(calibrated_fields)
                 if ~ind_time(JJ)
-                    [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,calibrated_data.td.Time,calibrated_data.td.(calibrated_fields{JJ}));
-                    results(KK).td.(calibrated_fields{JJ}) =  interp1(t_resampled,y_resampled,new_time');
+                    if strcmp(calibrated_fields{JJ},'theta_encoder') % digitally resample counter channel
+                        % Pre-fetch the field data and time
+                        time_data = calibrated_data.td.Time;
+                        field_data = calibrated_data.td.(calibrated_fields{JJ});
+                        
+                        % Interpolate to get approximate values at new_time points
+                        downsampled_counter = interp1(time_data, field_data, new_time, 'previous', NaN);
+
+                        results(KK).td.(calibrated_fields{JJ}) =  downsampled_counter;
+                    else
+                        [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,calibrated_data.td.Time,calibrated_data.td.(calibrated_fields{JJ}));
+                        results(KK).td.(calibrated_fields{JJ}) =  interp1(t_resampled,y_resampled,new_time');
+                    end
                 end
             end
         end
