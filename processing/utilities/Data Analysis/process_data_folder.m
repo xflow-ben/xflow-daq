@@ -33,7 +33,7 @@ for II = 1:length(consts.data.file_name_conventions)
         if ~isempty(regexp(tareList{JJ},pattern,'once'))
             count = count + 1;
             tare_TDMS = readTDMS(tareList{JJ},fullfile(files.absolute_data_dir,files.relative_tare_dir));
-            tare_td = convertTDMStoXFlowFormat(tare_TDMS);
+            tare_td = convertTDMStoXFlowFormat(tare_TDMS,consts.data.default_rates(II));
             tare(II).data(count,:) = median(tare_td.data,1);
             if count == 1
                 tare(II).data_name_conventions = consts.data.file_name_conventions{II};
@@ -44,24 +44,31 @@ for II = 1:length(consts.data.file_name_conventions)
 end
 
 if isempty(fieldnames(tare))
-    % error('No tares were loaded')
+    error('No tares were loaded')
 end
 
 %% Loop through all the data files, apply their tares, and then combine data of the same filetype
 
 % Find file names that start with the specified naming convensions
 for II = 1:length(consts.data.file_name_conventions)
-    dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,consts.data.file_name_conventions{II}));
+    II/length(consts.data.file_name_conventions)
+    if isfield(files,'filename_timestamp')
+        dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',files.filename_timestamp,consts.data.file_name_conventions{II})));
+    else
+        dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,consts.data.file_name_conventions{II}));
+    end
+
     if isempty(dataFiles)
         raw_multi_file(II).rate = NaN;
     else
         for JJ = 1:length(dataFiles)
+            dataFiles(JJ).name
             % Load data
             tdms = readTDMS(dataFiles(JJ).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
             if JJ == 1
-                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms);
+                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms,consts.data.default_rates(II));
             else % pass previous start and end times
-                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms,start_time, end_time);
+                [raw, start_time, end_time] = convertTDMStoXFlowFormat(tdms,consts.data.default_rates(II),start_time, end_time);
             end
 
             % Apply the tare(s)
@@ -82,7 +89,6 @@ for II = 1:length(consts.data.file_name_conventions)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
             % Combine data from similar files
             if JJ == 1
@@ -127,6 +133,41 @@ for KK = 1:length(segment_start_ind)
     end
     results(KK) = calibrate_data(cal,raw_combined);
     results(KK).td.Time = new_time';
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%% EXCEPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%% Counter type channels need to be calibrated before resampling
+    for II = 1:length(consts.data.calibrate_before_resample)
+        if consts.data.calibrate_before_resample(II) & ~isempty(raw_multi_file(II).chanNames)
+            calibrated_data = calibrate_data(cal,raw_multi_file(II));
+            calibrated_fields = fieldnames(calibrated_data.td);
+            ind_time = strcmp(calibrated_fields,'Time');
+
+            for JJ = 1:length(calibrated_fields)
+                if ~ind_time(JJ)
+                    if strcmp(calibrated_fields{JJ},'theta_encoder') % digitally resample counter channel
+                        % Pre-fetch the field data and time
+                        time_data = calibrated_data.td.Time;
+                        field_data = calibrated_data.td.(calibrated_fields{JJ});
+                        
+                        % Interpolate to get approximate values at new_time points
+                        downsampled_counter = interp1(time_data, field_data, new_time, 'previous', NaN);
+
+                        results(KK).td.(calibrated_fields{JJ}) =  downsampled_counter;
+                    else
+                        [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,calibrated_data.td.Time,calibrated_data.td.(calibrated_fields{JJ}));
+                        results(KK).td.(calibrated_fields{JJ}) =  interp1(t_resampled,y_resampled,new_time');
+                    end
+                end
+            end
+        end
+    end
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 end
 
 % Loop through each field and concatenate the arrays from all structs

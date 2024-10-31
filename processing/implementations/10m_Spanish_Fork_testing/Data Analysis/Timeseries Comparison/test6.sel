@@ -1,0 +1,3392 @@
+________________________________________________________________________________________________________________________
+	Generated with : QBlade QBlade CE v2.0.7.7_beta windows	Simulation Name : New Turbine Simulation
+	Time : 17:23:01
+	Date : 18.10.2024
+________________________________________________________________________________________________________________________
+	Result file : ./test6.dat
+________________________________________________________________________________________________________________________
+   Scans    Channels    Time [sec]        Format
+     348        1689          3.47        BINARY
+
+	Channel	Variable Description
+
+     1      Time                           s          
+     2      Abs Wind Vel. at bot TRQ       m/s        
+     3      Abs Wind Vel. at mid TRQ       m/s        
+     4      Abs Wind Vel. at top TRQ       m/s        
+     5      Abs Meas. Wind Vel. at bot TRQ m/s        
+     6      Abs Meas. Wind Vel. at mid TRQ m/s        
+     7      Abs Meas. Wind Vel. at top TRQ m/s        
+     8      Aero. LSS Torque               Nm         
+     9      Aero. Power                    W          
+    10      Gen. HSS Torque                Nm         
+    11      Gen. Mech. Power               W          
+    12      Gen. Elec. Power               W          
+    13      Produced Energy                Wh         
+    14      Applied Brake Torque           Nm         
+    15      Brake Modulation               -          
+    16      LSS Rpm                        rpm        
+    17      HSS Rpm                        rpm        
+    18      LSS Azimuthal Pos.             deg        
+    19      HSS Azimuthal Pos.             deg        
+    20      LSS Azimuthal Vel.             deg/s      
+    21      HSS Azimuthal Vel.             deg/s      
+    22      LSS Azimuthal Acc.             deg/s^2    
+    23      HSS Azimuthal Acc.             deg/s^2    
+    24      Azimuthal Angle BLD_1          deg        
+    25      Azimuthal Angle BLD_2          deg        
+    26      Azimuthal Angle BLD_3          deg        
+    27      Measured Pitch Angle BLD 1     deg        
+    28      Measured Pitch Angle BLD 2     deg        
+    29      Measured Pitch Angle BLD 3     deg        
+    30      True Pitch Angle BLD 1         deg        
+    31      True Pitch Angle BLD 2         deg        
+    32      True Pitch Angle BLD 3         deg        
+    33      Pitch Vel. BLD 1               deg/s      
+    34      Pitch Vel. BLD 2               deg/s      
+    35      Pitch Vel. BLD 3               deg/s      
+    36      X_s For. TRQ Const.            N          
+    37      Y_s For. TRQ Const.            N          
+    38      Z_s For. TRQ Const.            N          
+    39      X_s Mom. TRQ Const.            Nm         
+    40      Y_s Mom. TRQ Const.            Nm         
+    41      Z_s Mom. TRQ Const.            Nm         
+    42      X_s Acc. Hub                   m/s^2      
+    43      Y_s Acc. Hub                   m/s^2      
+    44      Z_s Acc. Hub                   m/s^2      
+    45      X_s Rot. Acc. Hub              deg/s^2    
+    46      Y_s Rot. Acc. Hub              deg/s^2    
+    47      Z_s Rot. Acc. Hub              deg/s^2    
+    48      X_h For. TRQ Const.            N          
+    49      Y_h For. TRQ Const.            N          
+    50      Z_h For. TRQ Const.            N          
+    51      X_h Mom. TRQ Const.            Nm         
+    52      Y_h Mom. TRQ Const.            Nm         
+    53      Z_h Mom. TRQ Const.            Nm         
+    54      X_l For. STR_1... BLD_1 z=15.4mN          
+    55      Y_l For. STR_1... BLD_1 z=15.4mN          
+    56      Z_l For. STR_1... BLD_1 z=15.4mN          
+    57      X_l Mom. STR_1... BLD_1 z=15.4mNm         
+    58      Y_l Mom. STR_1... BLD_1 z=15.4mNm         
+    59      Z_l Mom. STR_1... BLD_1 z=15.4mNm         
+    60      X_l For. STR_2... BLD_1 z=20.6mN          
+    61      Y_l For. STR_2... BLD_1 z=20.6mN          
+    62      Z_l For. STR_2... BLD_1 z=20.6mN          
+    63      X_l Mom. STR_2... BLD_1 z=20.6mNm         
+    64      Y_l Mom. STR_2... BLD_1 z=20.6mNm         
+    65      Z_l Mom. STR_2... BLD_1 z=20.6mNm         
+    66      X_l For. STR_2_1 - TRQ z=18.4m N          
+    67      Y_l For. STR_2_1 - TRQ z=18.4m N          
+    68      Z_l For. STR_2_1 - TRQ z=18.4m N          
+    69      X_l Mom. STR_2_1 - TRQ z=18.4m Nm         
+    70      Y_l Mom. STR_2_1 - TRQ z=18.4m Nm         
+    71      Z_l Mom. STR_2_1 - TRQ z=18.4m Nm         
+    72      X_l For. STR_1... BLD_2 z=15.4mN          
+    73      Y_l For. STR_1... BLD_2 z=15.4mN          
+    74      Z_l For. STR_1... BLD_2 z=15.4mN          
+    75      X_l Mom. STR_1... BLD_2 z=15.4mNm         
+    76      Y_l Mom. STR_1... BLD_2 z=15.4mNm         
+    77      Z_l Mom. STR_1... BLD_2 z=15.4mNm         
+    78      X_l For. STR_2... BLD_2 z=20.6mN          
+    79      Y_l For. STR_2... BLD_2 z=20.6mN          
+    80      Z_l For. STR_2... BLD_2 z=20.6mN          
+    81      X_l Mom. STR_2... BLD_2 z=20.6mNm         
+    82      Y_l Mom. STR_2... BLD_2 z=20.6mNm         
+    83      Z_l Mom. STR_2... BLD_2 z=20.6mNm         
+    84      X_l For. STR_2_2 - TRQ z=18.4m N          
+    85      Y_l For. STR_2_2 - TRQ z=18.4m N          
+    86      Z_l For. STR_2_2 - TRQ z=18.4m N          
+    87      X_l Mom. STR_2_2 - TRQ z=18.4m Nm         
+    88      Y_l Mom. STR_2_2 - TRQ z=18.4m Nm         
+    89      Z_l Mom. STR_2_2 - TRQ z=18.4m Nm         
+    90      X_l For. STR_1... BLD_3 z=15.4mN          
+    91      Y_l For. STR_1... BLD_3 z=15.4mN          
+    92      Z_l For. STR_1... BLD_3 z=15.4mN          
+    93      X_l Mom. STR_1... BLD_3 z=15.4mNm         
+    94      Y_l Mom. STR_1... BLD_3 z=15.4mNm         
+    95      Z_l Mom. STR_1... BLD_3 z=15.4mNm         
+    96      X_l For. STR_2... BLD_3 z=20.6mN          
+    97      Y_l For. STR_2... BLD_3 z=20.6mN          
+    98      Z_l For. STR_2... BLD_3 z=20.6mN          
+    99      X_l Mom. STR_2... BLD_3 z=20.6mNm         
+   100      Y_l Mom. STR_2... BLD_3 z=20.6mNm         
+   101      Z_l Mom. STR_2... BLD_3 z=20.6mNm         
+   102      X_l For. STR_2_3 - TRQ z=18.4m N          
+   103      Y_l For. STR_2_3 - TRQ z=18.4m N          
+   104      Z_l For. STR_2_3 - TRQ z=18.4m N          
+   105      X_l Mom. STR_2_3 - TRQ z=18.4m Nm         
+   106      Y_l Mom. STR_2_3 - TRQ z=18.4m Nm         
+   107      Z_l Mom. STR_2_3 - TRQ z=18.4m Nm         
+   108      X_g Prescr. Platform Trans.    m          
+   109      Y_g Prescr. Platform Trans.    m          
+   110      Z_g Prescr. Platform Trans.    m          
+   111      X_g Prescr. Platform Rot.      deg        
+   112      Y_g Prescr. Platform Rot.      deg        
+   113      Z_g Prescr. Platform Rot.      deg        
+   114      X_l For. BLD_1 pos 0.500       N          
+   115      Y_l For. BLD_1 pos 0.500       N          
+   116      Z_l For. BLD_1 pos 0.500       N          
+   117      X_l Mom. BLD_1 pos 0.500       Nm         
+   118      Y_l Mom. BLD_1 pos 0.500       Nm         
+   119      Z_l Mom. BLD_1 pos 0.500       Nm         
+   120      X_l Trl.Def. BLD_1 pos 0.500   m          
+   121      Y_l Trl.Def. BLD_1 pos 0.500   m          
+   122      Z_l Trl.Def. BLD_1 pos 0.500   m          
+   123      X_l Rot.Def. BLD_1 pos 0.500   deg        
+   124      Y_l Rot.Def. BLD_1 pos 0.500   deg        
+   125      Z_l Rot.Def. BLD_1 pos 0.500   deg        
+   126      X_g Pos. BLD_1 pos 0.500       m          
+   127      Y_g Pos. BLD_1 pos 0.500       m          
+   128      Z_g Pos. BLD_1 pos 0.500       m          
+   129      X_g Vel. BLD_1 pos 0.500       m/s        
+   130      Y_g Vel. BLD_1 pos 0.500       m/s        
+   131      Z_g Vel. BLD_1 pos 0.500       m/s        
+   132      X_g Acc. BLD_1 pos 0.500       m/s^2      
+   133      Y_g Acc. BLD_1 pos 0.500       m/s^2      
+   134      Z_g Acc. BLD_1 pos 0.500       m/s^2      
+   135      X_l Vel. BLD_1 pos 0.500       m/s        
+   136      Y_l Vel. BLD_1 pos 0.500       m/s        
+   137      Z_l Vel. BLD_1 pos 0.500       m/s        
+   138      X_l Acc. BLD_1 pos 0.500       m/s^2      
+   139      Y_l Acc. BLD_1 pos 0.500       m/s^2      
+   140      Z_l Acc. BLD_1 pos 0.500       m/s^2      
+   141      X_l For. BLD_2 pos 0.500       N          
+   142      Y_l For. BLD_2 pos 0.500       N          
+   143      Z_l For. BLD_2 pos 0.500       N          
+   144      X_l Mom. BLD_2 pos 0.500       Nm         
+   145      Y_l Mom. BLD_2 pos 0.500       Nm         
+   146      Z_l Mom. BLD_2 pos 0.500       Nm         
+   147      X_l Trl.Def. BLD_2 pos 0.500   m          
+   148      Y_l Trl.Def. BLD_2 pos 0.500   m          
+   149      Z_l Trl.Def. BLD_2 pos 0.500   m          
+   150      X_l Rot.Def. BLD_2 pos 0.500   deg        
+   151      Y_l Rot.Def. BLD_2 pos 0.500   deg        
+   152      Z_l Rot.Def. BLD_2 pos 0.500   deg        
+   153      X_g Pos. BLD_2 pos 0.500       m          
+   154      Y_g Pos. BLD_2 pos 0.500       m          
+   155      Z_g Pos. BLD_2 pos 0.500       m          
+   156      X_g Vel. BLD_2 pos 0.500       m/s        
+   157      Y_g Vel. BLD_2 pos 0.500       m/s        
+   158      Z_g Vel. BLD_2 pos 0.500       m/s        
+   159      X_g Acc. BLD_2 pos 0.500       m/s^2      
+   160      Y_g Acc. BLD_2 pos 0.500       m/s^2      
+   161      Z_g Acc. BLD_2 pos 0.500       m/s^2      
+   162      X_l Vel. BLD_2 pos 0.500       m/s        
+   163      Y_l Vel. BLD_2 pos 0.500       m/s        
+   164      Z_l Vel. BLD_2 pos 0.500       m/s        
+   165      X_l Acc. BLD_2 pos 0.500       m/s^2      
+   166      Y_l Acc. BLD_2 pos 0.500       m/s^2      
+   167      Z_l Acc. BLD_2 pos 0.500       m/s^2      
+   168      X_l For. BLD_3 pos 0.500       N          
+   169      Y_l For. BLD_3 pos 0.500       N          
+   170      Z_l For. BLD_3 pos 0.500       N          
+   171      X_l Mom. BLD_3 pos 0.500       Nm         
+   172      Y_l Mom. BLD_3 pos 0.500       Nm         
+   173      Z_l Mom. BLD_3 pos 0.500       Nm         
+   174      X_l Trl.Def. BLD_3 pos 0.500   m          
+   175      Y_l Trl.Def. BLD_3 pos 0.500   m          
+   176      Z_l Trl.Def. BLD_3 pos 0.500   m          
+   177      X_l Rot.Def. BLD_3 pos 0.500   deg        
+   178      Y_l Rot.Def. BLD_3 pos 0.500   deg        
+   179      Z_l Rot.Def. BLD_3 pos 0.500   deg        
+   180      X_g Pos. BLD_3 pos 0.500       m          
+   181      Y_g Pos. BLD_3 pos 0.500       m          
+   182      Z_g Pos. BLD_3 pos 0.500       m          
+   183      X_g Vel. BLD_3 pos 0.500       m/s        
+   184      Y_g Vel. BLD_3 pos 0.500       m/s        
+   185      Z_g Vel. BLD_3 pos 0.500       m/s        
+   186      X_g Acc. BLD_3 pos 0.500       m/s^2      
+   187      Y_g Acc. BLD_3 pos 0.500       m/s^2      
+   188      Z_g Acc. BLD_3 pos 0.500       m/s^2      
+   189      X_l Vel. BLD_3 pos 0.500       m/s        
+   190      Y_l Vel. BLD_3 pos 0.500       m/s        
+   191      Z_l Vel. BLD_3 pos 0.500       m/s        
+   192      X_l Acc. BLD_3 pos 0.500       m/s^2      
+   193      Y_l Acc. BLD_3 pos 0.500       m/s^2      
+   194      Z_l Acc. BLD_3 pos 0.500       m/s^2      
+   195      Timestep                       s          
+   196      Azimuthal Position Blade 1     deg        
+   197      Azimuthal Position Blade 2     deg        
+   198      Azimuthal Position Blade 3     deg        
+   199      Rotational Speed               rpm        
+   200      Tip Speed Ratio                -          
+   201      Abs Wind Vel. at Hub           m/s        
+   202      X_g Wind Vel. at Hub           m/s        
+   203      Y_g Wind Vel. at Hub           m/s        
+   204      Z_g Wind Vel. at Hub           m/s        
+   205      Abs Wind Acc. at Hub           m/s^2      
+   206      Horizontal Inflow Angle        deg        
+   207      Vertical Inflow Angle          deg        
+   208      Momentary Power Coefficient    -          
+   209      Momentary Torque Coefficient   -          
+   210      Momentary Thrust Coefficient   -          
+   211      Momentary Aerodynamic Power    W          
+   212      Momentary Aerodynamic Torque   Nm         
+   213      Momentary Aerodynamic Thrust   N          
+   214      Momentary Thru... X_g DirectionN          
+   215      Momentary Thru... Y_g DirectionN          
+   216      Momentary Thru... Z_g DirectionN          
+   217      Momentary Mome... X_g DirectionNm         
+   218      Momentary Mome... Y_g DirectionNm         
+   219      Momentary Mome... Z_g DirectionNm         
+   220      Power Coefficient              -          
+   221      Torque Coefficient             -          
+   222      Thrust Coefficient             -          
+   223      Aerodynamic Power              W          
+   224      Aerodynamic Torque             Nm         
+   225      Aerodynamic Thrust             N          
+   226      Total Tangential Load Blade 1  N          
+   227      Total Tangential Load Blade 2  N          
+   228      Total Tangential Load Blade 3  N          
+   229      Total Normal Load Blade 1      N          
+   230      Total Normal Load Blade 2      N          
+   231      Total Normal Load Blade 3      N          
+   232      Pitch Angle Blade 1            deg        
+   233      Pitch Angle Blade 2            deg        
+   234      Pitch Angle Blade 3            deg        
+   235      Prescribed Translation X_g     m          
+   236      Prescribed Translation Y_g     m          
+   237      Prescribed Translation Z_g     m          
+   238      Prescribed Rotation X_g        m          
+   239      Prescribed Rotation Y_g        m          
+   240      Prescribed Rotation Z_g        m          
+   241      Number of Gamma Iterations     -          
+   242      Number of Vortex Particles     -          
+   243      Number of Vortex Filaments     -          
+   244      Number of Filament Nodes       -          
+   245      Total Number of Vortex Elements-          
+   246      Abs Measured Wind Vel. at Hub  m/s        
+   247      X_g Measured Wind Vel. at Hub  m/s        
+   248      Y_g Measured Wind Vel. at Hub  m/s        
+   249      Z_g Measured Wind Vel. at Hub  m/s        
+   250      Lift Coefficient Blade 1 PAN 0 -          
+   251      Lift Coefficient Blade 1 PAN 1 -          
+   252      Lift Coefficient Blade 1 PAN 2 -          
+   253      Lift Coefficient Blade 1 PAN 3 -          
+   254      Lift Coefficient Blade 1 PAN 4 -          
+   255      Lift Coefficient Blade 1 PAN 5 -          
+   256      Lift Coefficient Blade 1 PAN 6 -          
+   257      Lift Coefficient Blade 1 PAN 7 -          
+   258      Lift Coefficient Blade 1 PAN 8 -          
+   259      Lift Coefficient Blade 1 PAN 9 -          
+   260      Lift Coefficient Blade 1 PAN 10-          
+   261      Lift Coefficient Blade 1 PAN 11-          
+   262      Lift Coefficient Blade 1 PAN 12-          
+   263      Lift Coefficient Blade 1 PAN 13-          
+   264      Lift Coefficient Blade 1 PAN 14-          
+   265      Lift Coefficient Blade 1 PAN 15-          
+   266      Lift Coefficient Blade 1 PAN 16-          
+   267      Lift Coefficient Blade 1 PAN 17-          
+   268      Lift Coefficient Blade 1 PAN 18-          
+   269      Lift Coefficient Blade 1 PAN 19-          
+   270      Lift Coefficient Blade 2 PAN 0 -          
+   271      Lift Coefficient Blade 2 PAN 1 -          
+   272      Lift Coefficient Blade 2 PAN 2 -          
+   273      Lift Coefficient Blade 2 PAN 3 -          
+   274      Lift Coefficient Blade 2 PAN 4 -          
+   275      Lift Coefficient Blade 2 PAN 5 -          
+   276      Lift Coefficient Blade 2 PAN 6 -          
+   277      Lift Coefficient Blade 2 PAN 7 -          
+   278      Lift Coefficient Blade 2 PAN 8 -          
+   279      Lift Coefficient Blade 2 PAN 9 -          
+   280      Lift Coefficient Blade 2 PAN 10-          
+   281      Lift Coefficient Blade 2 PAN 11-          
+   282      Lift Coefficient Blade 2 PAN 12-          
+   283      Lift Coefficient Blade 2 PAN 13-          
+   284      Lift Coefficient Blade 2 PAN 14-          
+   285      Lift Coefficient Blade 2 PAN 15-          
+   286      Lift Coefficient Blade 2 PAN 16-          
+   287      Lift Coefficient Blade 2 PAN 17-          
+   288      Lift Coefficient Blade 2 PAN 18-          
+   289      Lift Coefficient Blade 2 PAN 19-          
+   290      Lift Coefficient Blade 3 PAN 0 -          
+   291      Lift Coefficient Blade 3 PAN 1 -          
+   292      Lift Coefficient Blade 3 PAN 2 -          
+   293      Lift Coefficient Blade 3 PAN 3 -          
+   294      Lift Coefficient Blade 3 PAN 4 -          
+   295      Lift Coefficient Blade 3 PAN 5 -          
+   296      Lift Coefficient Blade 3 PAN 6 -          
+   297      Lift Coefficient Blade 3 PAN 7 -          
+   298      Lift Coefficient Blade 3 PAN 8 -          
+   299      Lift Coefficient Blade 3 PAN 9 -          
+   300      Lift Coefficient Blade 3 PAN 10-          
+   301      Lift Coefficient Blade 3 PAN 11-          
+   302      Lift Coefficient Blade 3 PAN 12-          
+   303      Lift Coefficient Blade 3 PAN 13-          
+   304      Lift Coefficient Blade 3 PAN 14-          
+   305      Lift Coefficient Blade 3 PAN 15-          
+   306      Lift Coefficient Blade 3 PAN 16-          
+   307      Lift Coefficient Blade 3 PAN 17-          
+   308      Lift Coefficient Blade 3 PAN 18-          
+   309      Lift Coefficient Blade 3 PAN 19-          
+   310      Drag Coefficient Blade 1 PAN 0 -          
+   311      Drag Coefficient Blade 1 PAN 1 -          
+   312      Drag Coefficient Blade 1 PAN 2 -          
+   313      Drag Coefficient Blade 1 PAN 3 -          
+   314      Drag Coefficient Blade 1 PAN 4 -          
+   315      Drag Coefficient Blade 1 PAN 5 -          
+   316      Drag Coefficient Blade 1 PAN 6 -          
+   317      Drag Coefficient Blade 1 PAN 7 -          
+   318      Drag Coefficient Blade 1 PAN 8 -          
+   319      Drag Coefficient Blade 1 PAN 9 -          
+   320      Drag Coefficient Blade 1 PAN 10-          
+   321      Drag Coefficient Blade 1 PAN 11-          
+   322      Drag Coefficient Blade 1 PAN 12-          
+   323      Drag Coefficient Blade 1 PAN 13-          
+   324      Drag Coefficient Blade 1 PAN 14-          
+   325      Drag Coefficient Blade 1 PAN 15-          
+   326      Drag Coefficient Blade 1 PAN 16-          
+   327      Drag Coefficient Blade 1 PAN 17-          
+   328      Drag Coefficient Blade 1 PAN 18-          
+   329      Drag Coefficient Blade 1 PAN 19-          
+   330      Drag Coefficient Blade 2 PAN 0 -          
+   331      Drag Coefficient Blade 2 PAN 1 -          
+   332      Drag Coefficient Blade 2 PAN 2 -          
+   333      Drag Coefficient Blade 2 PAN 3 -          
+   334      Drag Coefficient Blade 2 PAN 4 -          
+   335      Drag Coefficient Blade 2 PAN 5 -          
+   336      Drag Coefficient Blade 2 PAN 6 -          
+   337      Drag Coefficient Blade 2 PAN 7 -          
+   338      Drag Coefficient Blade 2 PAN 8 -          
+   339      Drag Coefficient Blade 2 PAN 9 -          
+   340      Drag Coefficient Blade 2 PAN 10-          
+   341      Drag Coefficient Blade 2 PAN 11-          
+   342      Drag Coefficient Blade 2 PAN 12-          
+   343      Drag Coefficient Blade 2 PAN 13-          
+   344      Drag Coefficient Blade 2 PAN 14-          
+   345      Drag Coefficient Blade 2 PAN 15-          
+   346      Drag Coefficient Blade 2 PAN 16-          
+   347      Drag Coefficient Blade 2 PAN 17-          
+   348      Drag Coefficient Blade 2 PAN 18-          
+   349      Drag Coefficient Blade 2 PAN 19-          
+   350      Drag Coefficient Blade 3 PAN 0 -          
+   351      Drag Coefficient Blade 3 PAN 1 -          
+   352      Drag Coefficient Blade 3 PAN 2 -          
+   353      Drag Coefficient Blade 3 PAN 3 -          
+   354      Drag Coefficient Blade 3 PAN 4 -          
+   355      Drag Coefficient Blade 3 PAN 5 -          
+   356      Drag Coefficient Blade 3 PAN 6 -          
+   357      Drag Coefficient Blade 3 PAN 7 -          
+   358      Drag Coefficient Blade 3 PAN 8 -          
+   359      Drag Coefficient Blade 3 PAN 9 -          
+   360      Drag Coefficient Blade 3 PAN 10-          
+   361      Drag Coefficient Blade 3 PAN 11-          
+   362      Drag Coefficient Blade 3 PAN 12-          
+   363      Drag Coefficient Blade 3 PAN 13-          
+   364      Drag Coefficient Blade 3 PAN 14-          
+   365      Drag Coefficient Blade 3 PAN 15-          
+   366      Drag Coefficient Blade 3 PAN 16-          
+   367      Drag Coefficient Blade 3 PAN 17-          
+   368      Drag Coefficient Blade 3 PAN 18-          
+   369      Drag Coefficient Blade 3 PAN 19-          
+   370      Moment Coeffic... Blade 1 PAN 0-          
+   371      Moment Coeffic... Blade 1 PAN 1-          
+   372      Moment Coeffic... Blade 1 PAN 2-          
+   373      Moment Coeffic... Blade 1 PAN 3-          
+   374      Moment Coeffic... Blade 1 PAN 4-          
+   375      Moment Coeffic... Blade 1 PAN 5-          
+   376      Moment Coeffic... Blade 1 PAN 6-          
+   377      Moment Coeffic... Blade 1 PAN 7-          
+   378      Moment Coeffic... Blade 1 PAN 8-          
+   379      Moment Coeffic... Blade 1 PAN 9-          
+   380      Moment Coeffic...Blade 1 PAN 10-          
+   381      Moment Coeffic...Blade 1 PAN 11-          
+   382      Moment Coeffic...Blade 1 PAN 12-          
+   383      Moment Coeffic...Blade 1 PAN 13-          
+   384      Moment Coeffic...Blade 1 PAN 14-          
+   385      Moment Coeffic...Blade 1 PAN 15-          
+   386      Moment Coeffic...Blade 1 PAN 16-          
+   387      Moment Coeffic...Blade 1 PAN 17-          
+   388      Moment Coeffic...Blade 1 PAN 18-          
+   389      Moment Coeffic...Blade 1 PAN 19-          
+   390      Moment Coeffic... Blade 2 PAN 0-          
+   391      Moment Coeffic... Blade 2 PAN 1-          
+   392      Moment Coeffic... Blade 2 PAN 2-          
+   393      Moment Coeffic... Blade 2 PAN 3-          
+   394      Moment Coeffic... Blade 2 PAN 4-          
+   395      Moment Coeffic... Blade 2 PAN 5-          
+   396      Moment Coeffic... Blade 2 PAN 6-          
+   397      Moment Coeffic... Blade 2 PAN 7-          
+   398      Moment Coeffic... Blade 2 PAN 8-          
+   399      Moment Coeffic... Blade 2 PAN 9-          
+   400      Moment Coeffic...Blade 2 PAN 10-          
+   401      Moment Coeffic...Blade 2 PAN 11-          
+   402      Moment Coeffic...Blade 2 PAN 12-          
+   403      Moment Coeffic...Blade 2 PAN 13-          
+   404      Moment Coeffic...Blade 2 PAN 14-          
+   405      Moment Coeffic...Blade 2 PAN 15-          
+   406      Moment Coeffic...Blade 2 PAN 16-          
+   407      Moment Coeffic...Blade 2 PAN 17-          
+   408      Moment Coeffic...Blade 2 PAN 18-          
+   409      Moment Coeffic...Blade 2 PAN 19-          
+   410      Moment Coeffic... Blade 3 PAN 0-          
+   411      Moment Coeffic... Blade 3 PAN 1-          
+   412      Moment Coeffic... Blade 3 PAN 2-          
+   413      Moment Coeffic... Blade 3 PAN 3-          
+   414      Moment Coeffic... Blade 3 PAN 4-          
+   415      Moment Coeffic... Blade 3 PAN 5-          
+   416      Moment Coeffic... Blade 3 PAN 6-          
+   417      Moment Coeffic... Blade 3 PAN 7-          
+   418      Moment Coeffic... Blade 3 PAN 8-          
+   419      Moment Coeffic... Blade 3 PAN 9-          
+   420      Moment Coeffic...Blade 3 PAN 10-          
+   421      Moment Coeffic...Blade 3 PAN 11-          
+   422      Moment Coeffic...Blade 3 PAN 12-          
+   423      Moment Coeffic...Blade 3 PAN 13-          
+   424      Moment Coeffic...Blade 3 PAN 14-          
+   425      Moment Coeffic...Blade 3 PAN 15-          
+   426      Moment Coeffic...Blade 3 PAN 16-          
+   427      Moment Coeffic...Blade 3 PAN 17-          
+   428      Moment Coeffic...Blade 3 PAN 18-          
+   429      Moment Coeffic...Blade 3 PAN 19-          
+   430      Moment Coeffic... Blade 1 PAN 0-          
+   431      Moment Coeffic... Blade 1 PAN 1-          
+   432      Moment Coeffic... Blade 1 PAN 2-          
+   433      Moment Coeffic... Blade 1 PAN 3-          
+   434      Moment Coeffic... Blade 1 PAN 4-          
+   435      Moment Coeffic... Blade 1 PAN 5-          
+   436      Moment Coeffic... Blade 1 PAN 6-          
+   437      Moment Coeffic... Blade 1 PAN 7-          
+   438      Moment Coeffic... Blade 1 PAN 8-          
+   439      Moment Coeffic... Blade 1 PAN 9-          
+   440      Moment Coeffic...Blade 1 PAN 10-          
+   441      Moment Coeffic...Blade 1 PAN 11-          
+   442      Moment Coeffic...Blade 1 PAN 12-          
+   443      Moment Coeffic...Blade 1 PAN 13-          
+   444      Moment Coeffic...Blade 1 PAN 14-          
+   445      Moment Coeffic...Blade 1 PAN 15-          
+   446      Moment Coeffic...Blade 1 PAN 16-          
+   447      Moment Coeffic...Blade 1 PAN 17-          
+   448      Moment Coeffic...Blade 1 PAN 18-          
+   449      Moment Coeffic...Blade 1 PAN 19-          
+   450      Moment Coeffic... Blade 2 PAN 0-          
+   451      Moment Coeffic... Blade 2 PAN 1-          
+   452      Moment Coeffic... Blade 2 PAN 2-          
+   453      Moment Coeffic... Blade 2 PAN 3-          
+   454      Moment Coeffic... Blade 2 PAN 4-          
+   455      Moment Coeffic... Blade 2 PAN 5-          
+   456      Moment Coeffic... Blade 2 PAN 6-          
+   457      Moment Coeffic... Blade 2 PAN 7-          
+   458      Moment Coeffic... Blade 2 PAN 8-          
+   459      Moment Coeffic... Blade 2 PAN 9-          
+   460      Moment Coeffic...Blade 2 PAN 10-          
+   461      Moment Coeffic...Blade 2 PAN 11-          
+   462      Moment Coeffic...Blade 2 PAN 12-          
+   463      Moment Coeffic...Blade 2 PAN 13-          
+   464      Moment Coeffic...Blade 2 PAN 14-          
+   465      Moment Coeffic...Blade 2 PAN 15-          
+   466      Moment Coeffic...Blade 2 PAN 16-          
+   467      Moment Coeffic...Blade 2 PAN 17-          
+   468      Moment Coeffic...Blade 2 PAN 18-          
+   469      Moment Coeffic...Blade 2 PAN 19-          
+   470      Moment Coeffic... Blade 3 PAN 0-          
+   471      Moment Coeffic... Blade 3 PAN 1-          
+   472      Moment Coeffic... Blade 3 PAN 2-          
+   473      Moment Coeffic... Blade 3 PAN 3-          
+   474      Moment Coeffic... Blade 3 PAN 4-          
+   475      Moment Coeffic... Blade 3 PAN 5-          
+   476      Moment Coeffic... Blade 3 PAN 6-          
+   477      Moment Coeffic... Blade 3 PAN 7-          
+   478      Moment Coeffic... Blade 3 PAN 8-          
+   479      Moment Coeffic... Blade 3 PAN 9-          
+   480      Moment Coeffic...Blade 3 PAN 10-          
+   481      Moment Coeffic...Blade 3 PAN 11-          
+   482      Moment Coeffic...Blade 3 PAN 12-          
+   483      Moment Coeffic...Blade 3 PAN 13-          
+   484      Moment Coeffic...Blade 3 PAN 14-          
+   485      Moment Coeffic...Blade 3 PAN 15-          
+   486      Moment Coeffic...Blade 3 PAN 16-          
+   487      Moment Coeffic...Blade 3 PAN 17-          
+   488      Moment Coeffic...Blade 3 PAN 18-          
+   489      Moment Coeffic...Blade 3 PAN 19-          
+   490      Lift to Drag R... Blade 1 PAN 0-          
+   491      Lift to Drag R... Blade 1 PAN 1-          
+   492      Lift to Drag R... Blade 1 PAN 2-          
+   493      Lift to Drag R... Blade 1 PAN 3-          
+   494      Lift to Drag R... Blade 1 PAN 4-          
+   495      Lift to Drag R... Blade 1 PAN 5-          
+   496      Lift to Drag R... Blade 1 PAN 6-          
+   497      Lift to Drag R... Blade 1 PAN 7-          
+   498      Lift to Drag R... Blade 1 PAN 8-          
+   499      Lift to Drag R... Blade 1 PAN 9-          
+   500      Lift to Drag R...Blade 1 PAN 10-          
+   501      Lift to Drag R...Blade 1 PAN 11-          
+   502      Lift to Drag R...Blade 1 PAN 12-          
+   503      Lift to Drag R...Blade 1 PAN 13-          
+   504      Lift to Drag R...Blade 1 PAN 14-          
+   505      Lift to Drag R...Blade 1 PAN 15-          
+   506      Lift to Drag R...Blade 1 PAN 16-          
+   507      Lift to Drag R...Blade 1 PAN 17-          
+   508      Lift to Drag R...Blade 1 PAN 18-          
+   509      Lift to Drag R...Blade 1 PAN 19-          
+   510      Lift to Drag R... Blade 2 PAN 0-          
+   511      Lift to Drag R... Blade 2 PAN 1-          
+   512      Lift to Drag R... Blade 2 PAN 2-          
+   513      Lift to Drag R... Blade 2 PAN 3-          
+   514      Lift to Drag R... Blade 2 PAN 4-          
+   515      Lift to Drag R... Blade 2 PAN 5-          
+   516      Lift to Drag R... Blade 2 PAN 6-          
+   517      Lift to Drag R... Blade 2 PAN 7-          
+   518      Lift to Drag R... Blade 2 PAN 8-          
+   519      Lift to Drag R... Blade 2 PAN 9-          
+   520      Lift to Drag R...Blade 2 PAN 10-          
+   521      Lift to Drag R...Blade 2 PAN 11-          
+   522      Lift to Drag R...Blade 2 PAN 12-          
+   523      Lift to Drag R...Blade 2 PAN 13-          
+   524      Lift to Drag R...Blade 2 PAN 14-          
+   525      Lift to Drag R...Blade 2 PAN 15-          
+   526      Lift to Drag R...Blade 2 PAN 16-          
+   527      Lift to Drag R...Blade 2 PAN 17-          
+   528      Lift to Drag R...Blade 2 PAN 18-          
+   529      Lift to Drag R...Blade 2 PAN 19-          
+   530      Lift to Drag R... Blade 3 PAN 0-          
+   531      Lift to Drag R... Blade 3 PAN 1-          
+   532      Lift to Drag R... Blade 3 PAN 2-          
+   533      Lift to Drag R... Blade 3 PAN 3-          
+   534      Lift to Drag R... Blade 3 PAN 4-          
+   535      Lift to Drag R... Blade 3 PAN 5-          
+   536      Lift to Drag R... Blade 3 PAN 6-          
+   537      Lift to Drag R... Blade 3 PAN 7-          
+   538      Lift to Drag R... Blade 3 PAN 8-          
+   539      Lift to Drag R... Blade 3 PAN 9-          
+   540      Lift to Drag R...Blade 3 PAN 10-          
+   541      Lift to Drag R...Blade 3 PAN 11-          
+   542      Lift to Drag R...Blade 3 PAN 12-          
+   543      Lift to Drag R...Blade 3 PAN 13-          
+   544      Lift to Drag R...Blade 3 PAN 14-          
+   545      Lift to Drag R...Blade 3 PAN 15-          
+   546      Lift to Drag R...Blade 3 PAN 16-          
+   547      Lift to Drag R...Blade 3 PAN 17-          
+   548      Lift to Drag R...Blade 3 PAN 18-          
+   549      Lift to Drag R...Blade 3 PAN 19-          
+   550      Circulation Blade 1 PAN 0      m^2/s      
+   551      Circulation Blade 1 PAN 1      m^2/s      
+   552      Circulation Blade 1 PAN 2      m^2/s      
+   553      Circulation Blade 1 PAN 3      m^2/s      
+   554      Circulation Blade 1 PAN 4      m^2/s      
+   555      Circulation Blade 1 PAN 5      m^2/s      
+   556      Circulation Blade 1 PAN 6      m^2/s      
+   557      Circulation Blade 1 PAN 7      m^2/s      
+   558      Circulation Blade 1 PAN 8      m^2/s      
+   559      Circulation Blade 1 PAN 9      m^2/s      
+   560      Circulation Blade 1 PAN 10     m^2/s      
+   561      Circulation Blade 1 PAN 11     m^2/s      
+   562      Circulation Blade 1 PAN 12     m^2/s      
+   563      Circulation Blade 1 PAN 13     m^2/s      
+   564      Circulation Blade 1 PAN 14     m^2/s      
+   565      Circulation Blade 1 PAN 15     m^2/s      
+   566      Circulation Blade 1 PAN 16     m^2/s      
+   567      Circulation Blade 1 PAN 17     m^2/s      
+   568      Circulation Blade 1 PAN 18     m^2/s      
+   569      Circulation Blade 1 PAN 19     m^2/s      
+   570      Circulation Blade 2 PAN 0      m^2/s      
+   571      Circulation Blade 2 PAN 1      m^2/s      
+   572      Circulation Blade 2 PAN 2      m^2/s      
+   573      Circulation Blade 2 PAN 3      m^2/s      
+   574      Circulation Blade 2 PAN 4      m^2/s      
+   575      Circulation Blade 2 PAN 5      m^2/s      
+   576      Circulation Blade 2 PAN 6      m^2/s      
+   577      Circulation Blade 2 PAN 7      m^2/s      
+   578      Circulation Blade 2 PAN 8      m^2/s      
+   579      Circulation Blade 2 PAN 9      m^2/s      
+   580      Circulation Blade 2 PAN 10     m^2/s      
+   581      Circulation Blade 2 PAN 11     m^2/s      
+   582      Circulation Blade 2 PAN 12     m^2/s      
+   583      Circulation Blade 2 PAN 13     m^2/s      
+   584      Circulation Blade 2 PAN 14     m^2/s      
+   585      Circulation Blade 2 PAN 15     m^2/s      
+   586      Circulation Blade 2 PAN 16     m^2/s      
+   587      Circulation Blade 2 PAN 17     m^2/s      
+   588      Circulation Blade 2 PAN 18     m^2/s      
+   589      Circulation Blade 2 PAN 19     m^2/s      
+   590      Circulation Blade 3 PAN 0      m^2/s      
+   591      Circulation Blade 3 PAN 1      m^2/s      
+   592      Circulation Blade 3 PAN 2      m^2/s      
+   593      Circulation Blade 3 PAN 3      m^2/s      
+   594      Circulation Blade 3 PAN 4      m^2/s      
+   595      Circulation Blade 3 PAN 5      m^2/s      
+   596      Circulation Blade 3 PAN 6      m^2/s      
+   597      Circulation Blade 3 PAN 7      m^2/s      
+   598      Circulation Blade 3 PAN 8      m^2/s      
+   599      Circulation Blade 3 PAN 9      m^2/s      
+   600      Circulation Blade 3 PAN 10     m^2/s      
+   601      Circulation Blade 3 PAN 11     m^2/s      
+   602      Circulation Blade 3 PAN 12     m^2/s      
+   603      Circulation Blade 3 PAN 13     m^2/s      
+   604      Circulation Blade 3 PAN 14     m^2/s      
+   605      Circulation Blade 3 PAN 15     m^2/s      
+   606      Circulation Blade 3 PAN 16     m^2/s      
+   607      Circulation Blade 3 PAN 17     m^2/s      
+   608      Circulation Blade 3 PAN 18     m^2/s      
+   609      Circulation Blade 3 PAN 19     m^2/s      
+   610      Angle of Attac... Blade 1 PAN 0deg        
+   611      Angle of Attac... Blade 1 PAN 1deg        
+   612      Angle of Attac... Blade 1 PAN 2deg        
+   613      Angle of Attac... Blade 1 PAN 3deg        
+   614      Angle of Attac... Blade 1 PAN 4deg        
+   615      Angle of Attac... Blade 1 PAN 5deg        
+   616      Angle of Attac... Blade 1 PAN 6deg        
+   617      Angle of Attac... Blade 1 PAN 7deg        
+   618      Angle of Attac... Blade 1 PAN 8deg        
+   619      Angle of Attac... Blade 1 PAN 9deg        
+   620      Angle of Attac...Blade 1 PAN 10deg        
+   621      Angle of Attac...Blade 1 PAN 11deg        
+   622      Angle of Attac...Blade 1 PAN 12deg        
+   623      Angle of Attac...Blade 1 PAN 13deg        
+   624      Angle of Attac...Blade 1 PAN 14deg        
+   625      Angle of Attac...Blade 1 PAN 15deg        
+   626      Angle of Attac...Blade 1 PAN 16deg        
+   627      Angle of Attac...Blade 1 PAN 17deg        
+   628      Angle of Attac...Blade 1 PAN 18deg        
+   629      Angle of Attac...Blade 1 PAN 19deg        
+   630      Angle of Attac... Blade 2 PAN 0deg        
+   631      Angle of Attac... Blade 2 PAN 1deg        
+   632      Angle of Attac... Blade 2 PAN 2deg        
+   633      Angle of Attac... Blade 2 PAN 3deg        
+   634      Angle of Attac... Blade 2 PAN 4deg        
+   635      Angle of Attac... Blade 2 PAN 5deg        
+   636      Angle of Attac... Blade 2 PAN 6deg        
+   637      Angle of Attac... Blade 2 PAN 7deg        
+   638      Angle of Attac... Blade 2 PAN 8deg        
+   639      Angle of Attac... Blade 2 PAN 9deg        
+   640      Angle of Attac...Blade 2 PAN 10deg        
+   641      Angle of Attac...Blade 2 PAN 11deg        
+   642      Angle of Attac...Blade 2 PAN 12deg        
+   643      Angle of Attac...Blade 2 PAN 13deg        
+   644      Angle of Attac...Blade 2 PAN 14deg        
+   645      Angle of Attac...Blade 2 PAN 15deg        
+   646      Angle of Attac...Blade 2 PAN 16deg        
+   647      Angle of Attac...Blade 2 PAN 17deg        
+   648      Angle of Attac...Blade 2 PAN 18deg        
+   649      Angle of Attac...Blade 2 PAN 19deg        
+   650      Angle of Attac... Blade 3 PAN 0deg        
+   651      Angle of Attac... Blade 3 PAN 1deg        
+   652      Angle of Attac... Blade 3 PAN 2deg        
+   653      Angle of Attac... Blade 3 PAN 3deg        
+   654      Angle of Attac... Blade 3 PAN 4deg        
+   655      Angle of Attac... Blade 3 PAN 5deg        
+   656      Angle of Attac... Blade 3 PAN 6deg        
+   657      Angle of Attac... Blade 3 PAN 7deg        
+   658      Angle of Attac... Blade 3 PAN 8deg        
+   659      Angle of Attac... Blade 3 PAN 9deg        
+   660      Angle of Attac...Blade 3 PAN 10deg        
+   661      Angle of Attac...Blade 3 PAN 11deg        
+   662      Angle of Attac...Blade 3 PAN 12deg        
+   663      Angle of Attac...Blade 3 PAN 13deg        
+   664      Angle of Attac...Blade 3 PAN 14deg        
+   665      Angle of Attac...Blade 3 PAN 15deg        
+   666      Angle of Attac...Blade 3 PAN 16deg        
+   667      Angle of Attac...Blade 3 PAN 17deg        
+   668      Angle of Attac...Blade 3 PAN 18deg        
+   669      Angle of Attac...Blade 3 PAN 19deg        
+   670      Angle of Attac... Blade 1 PAN 0deg        
+   671      Angle of Attac... Blade 1 PAN 1deg        
+   672      Angle of Attac... Blade 1 PAN 2deg        
+   673      Angle of Attac... Blade 1 PAN 3deg        
+   674      Angle of Attac... Blade 1 PAN 4deg        
+   675      Angle of Attac... Blade 1 PAN 5deg        
+   676      Angle of Attac... Blade 1 PAN 6deg        
+   677      Angle of Attac... Blade 1 PAN 7deg        
+   678      Angle of Attac... Blade 1 PAN 8deg        
+   679      Angle of Attac... Blade 1 PAN 9deg        
+   680      Angle of Attac...Blade 1 PAN 10deg        
+   681      Angle of Attac...Blade 1 PAN 11deg        
+   682      Angle of Attac...Blade 1 PAN 12deg        
+   683      Angle of Attac...Blade 1 PAN 13deg        
+   684      Angle of Attac...Blade 1 PAN 14deg        
+   685      Angle of Attac...Blade 1 PAN 15deg        
+   686      Angle of Attac...Blade 1 PAN 16deg        
+   687      Angle of Attac...Blade 1 PAN 17deg        
+   688      Angle of Attac...Blade 1 PAN 18deg        
+   689      Angle of Attac...Blade 1 PAN 19deg        
+   690      Angle of Attac... Blade 2 PAN 0deg        
+   691      Angle of Attac... Blade 2 PAN 1deg        
+   692      Angle of Attac... Blade 2 PAN 2deg        
+   693      Angle of Attac... Blade 2 PAN 3deg        
+   694      Angle of Attac... Blade 2 PAN 4deg        
+   695      Angle of Attac... Blade 2 PAN 5deg        
+   696      Angle of Attac... Blade 2 PAN 6deg        
+   697      Angle of Attac... Blade 2 PAN 7deg        
+   698      Angle of Attac... Blade 2 PAN 8deg        
+   699      Angle of Attac... Blade 2 PAN 9deg        
+   700      Angle of Attac...Blade 2 PAN 10deg        
+   701      Angle of Attac...Blade 2 PAN 11deg        
+   702      Angle of Attac...Blade 2 PAN 12deg        
+   703      Angle of Attac...Blade 2 PAN 13deg        
+   704      Angle of Attac...Blade 2 PAN 14deg        
+   705      Angle of Attac...Blade 2 PAN 15deg        
+   706      Angle of Attac...Blade 2 PAN 16deg        
+   707      Angle of Attac...Blade 2 PAN 17deg        
+   708      Angle of Attac...Blade 2 PAN 18deg        
+   709      Angle of Attac...Blade 2 PAN 19deg        
+   710      Angle of Attac... Blade 3 PAN 0deg        
+   711      Angle of Attac... Blade 3 PAN 1deg        
+   712      Angle of Attac... Blade 3 PAN 2deg        
+   713      Angle of Attac... Blade 3 PAN 3deg        
+   714      Angle of Attac... Blade 3 PAN 4deg        
+   715      Angle of Attac... Blade 3 PAN 5deg        
+   716      Angle of Attac... Blade 3 PAN 6deg        
+   717      Angle of Attac... Blade 3 PAN 7deg        
+   718      Angle of Attac... Blade 3 PAN 8deg        
+   719      Angle of Attac... Blade 3 PAN 9deg        
+   720      Angle of Attac...Blade 3 PAN 10deg        
+   721      Angle of Attac...Blade 3 PAN 11deg        
+   722      Angle of Attac...Blade 3 PAN 12deg        
+   723      Angle of Attac...Blade 3 PAN 13deg        
+   724      Angle of Attac...Blade 3 PAN 14deg        
+   725      Angle of Attac...Blade 3 PAN 15deg        
+   726      Angle of Attac...Blade 3 PAN 16deg        
+   727      Angle of Attac...Blade 3 PAN 17deg        
+   728      Angle of Attac...Blade 3 PAN 18deg        
+   729      Angle of Attac...Blade 3 PAN 19deg        
+   730      Height Blade 1 PAN 0           m          
+   731      Height Blade 1 PAN 1           m          
+   732      Height Blade 1 PAN 2           m          
+   733      Height Blade 1 PAN 3           m          
+   734      Height Blade 1 PAN 4           m          
+   735      Height Blade 1 PAN 5           m          
+   736      Height Blade 1 PAN 6           m          
+   737      Height Blade 1 PAN 7           m          
+   738      Height Blade 1 PAN 8           m          
+   739      Height Blade 1 PAN 9           m          
+   740      Height Blade 1 PAN 10          m          
+   741      Height Blade 1 PAN 11          m          
+   742      Height Blade 1 PAN 12          m          
+   743      Height Blade 1 PAN 13          m          
+   744      Height Blade 1 PAN 14          m          
+   745      Height Blade 1 PAN 15          m          
+   746      Height Blade 1 PAN 16          m          
+   747      Height Blade 1 PAN 17          m          
+   748      Height Blade 1 PAN 18          m          
+   749      Height Blade 1 PAN 19          m          
+   750      Height Blade 2 PAN 0           m          
+   751      Height Blade 2 PAN 1           m          
+   752      Height Blade 2 PAN 2           m          
+   753      Height Blade 2 PAN 3           m          
+   754      Height Blade 2 PAN 4           m          
+   755      Height Blade 2 PAN 5           m          
+   756      Height Blade 2 PAN 6           m          
+   757      Height Blade 2 PAN 7           m          
+   758      Height Blade 2 PAN 8           m          
+   759      Height Blade 2 PAN 9           m          
+   760      Height Blade 2 PAN 10          m          
+   761      Height Blade 2 PAN 11          m          
+   762      Height Blade 2 PAN 12          m          
+   763      Height Blade 2 PAN 13          m          
+   764      Height Blade 2 PAN 14          m          
+   765      Height Blade 2 PAN 15          m          
+   766      Height Blade 2 PAN 16          m          
+   767      Height Blade 2 PAN 17          m          
+   768      Height Blade 2 PAN 18          m          
+   769      Height Blade 2 PAN 19          m          
+   770      Height Blade 3 PAN 0           m          
+   771      Height Blade 3 PAN 1           m          
+   772      Height Blade 3 PAN 2           m          
+   773      Height Blade 3 PAN 3           m          
+   774      Height Blade 3 PAN 4           m          
+   775      Height Blade 3 PAN 5           m          
+   776      Height Blade 3 PAN 6           m          
+   777      Height Blade 3 PAN 7           m          
+   778      Height Blade 3 PAN 8           m          
+   779      Height Blade 3 PAN 9           m          
+   780      Height Blade 3 PAN 10          m          
+   781      Height Blade 3 PAN 11          m          
+   782      Height Blade 3 PAN 12          m          
+   783      Height Blade 3 PAN 13          m          
+   784      Height Blade 3 PAN 14          m          
+   785      Height Blade 3 PAN 15          m          
+   786      Height Blade 3 PAN 16          m          
+   787      Height Blade 3 PAN 17          m          
+   788      Height Blade 3 PAN 18          m          
+   789      Height Blade 3 PAN 19          m          
+   790      Normalized Cur... Blade 1 PAN 0-          
+   791      Normalized Cur... Blade 1 PAN 1-          
+   792      Normalized Cur... Blade 1 PAN 2-          
+   793      Normalized Cur... Blade 1 PAN 3-          
+   794      Normalized Cur... Blade 1 PAN 4-          
+   795      Normalized Cur... Blade 1 PAN 5-          
+   796      Normalized Cur... Blade 1 PAN 6-          
+   797      Normalized Cur... Blade 1 PAN 7-          
+   798      Normalized Cur... Blade 1 PAN 8-          
+   799      Normalized Cur... Blade 1 PAN 9-          
+   800      Normalized Cur...Blade 1 PAN 10-          
+   801      Normalized Cur...Blade 1 PAN 11-          
+   802      Normalized Cur...Blade 1 PAN 12-          
+   803      Normalized Cur...Blade 1 PAN 13-          
+   804      Normalized Cur...Blade 1 PAN 14-          
+   805      Normalized Cur...Blade 1 PAN 15-          
+   806      Normalized Cur...Blade 1 PAN 16-          
+   807      Normalized Cur...Blade 1 PAN 17-          
+   808      Normalized Cur...Blade 1 PAN 18-          
+   809      Normalized Cur...Blade 1 PAN 19-          
+   810      Normalized Cur... Blade 2 PAN 0-          
+   811      Normalized Cur... Blade 2 PAN 1-          
+   812      Normalized Cur... Blade 2 PAN 2-          
+   813      Normalized Cur... Blade 2 PAN 3-          
+   814      Normalized Cur... Blade 2 PAN 4-          
+   815      Normalized Cur... Blade 2 PAN 5-          
+   816      Normalized Cur... Blade 2 PAN 6-          
+   817      Normalized Cur... Blade 2 PAN 7-          
+   818      Normalized Cur... Blade 2 PAN 8-          
+   819      Normalized Cur... Blade 2 PAN 9-          
+   820      Normalized Cur...Blade 2 PAN 10-          
+   821      Normalized Cur...Blade 2 PAN 11-          
+   822      Normalized Cur...Blade 2 PAN 12-          
+   823      Normalized Cur...Blade 2 PAN 13-          
+   824      Normalized Cur...Blade 2 PAN 14-          
+   825      Normalized Cur...Blade 2 PAN 15-          
+   826      Normalized Cur...Blade 2 PAN 16-          
+   827      Normalized Cur...Blade 2 PAN 17-          
+   828      Normalized Cur...Blade 2 PAN 18-          
+   829      Normalized Cur...Blade 2 PAN 19-          
+   830      Normalized Cur... Blade 3 PAN 0-          
+   831      Normalized Cur... Blade 3 PAN 1-          
+   832      Normalized Cur... Blade 3 PAN 2-          
+   833      Normalized Cur... Blade 3 PAN 3-          
+   834      Normalized Cur... Blade 3 PAN 4-          
+   835      Normalized Cur... Blade 3 PAN 5-          
+   836      Normalized Cur... Blade 3 PAN 6-          
+   837      Normalized Cur... Blade 3 PAN 7-          
+   838      Normalized Cur... Blade 3 PAN 8-          
+   839      Normalized Cur... Blade 3 PAN 9-          
+   840      Normalized Cur...Blade 3 PAN 10-          
+   841      Normalized Cur...Blade 3 PAN 11-          
+   842      Normalized Cur...Blade 3 PAN 12-          
+   843      Normalized Cur...Blade 3 PAN 13-          
+   844      Normalized Cur...Blade 3 PAN 14-          
+   845      Normalized Cur...Blade 3 PAN 15-          
+   846      Normalized Cur...Blade 3 PAN 16-          
+   847      Normalized Cur...Blade 3 PAN 17-          
+   848      Normalized Cur...Blade 3 PAN 18-          
+   849      Normalized Cur...Blade 3 PAN 19-          
+   850      Structural Pit... Blade 1 PAN 0deg/s      
+   851      Structural Pit... Blade 1 PAN 1deg/s      
+   852      Structural Pit... Blade 1 PAN 2deg/s      
+   853      Structural Pit... Blade 1 PAN 3deg/s      
+   854      Structural Pit... Blade 1 PAN 4deg/s      
+   855      Structural Pit... Blade 1 PAN 5deg/s      
+   856      Structural Pit... Blade 1 PAN 6deg/s      
+   857      Structural Pit... Blade 1 PAN 7deg/s      
+   858      Structural Pit... Blade 1 PAN 8deg/s      
+   859      Structural Pit... Blade 1 PAN 9deg/s      
+   860      Structural Pit...Blade 1 PAN 10deg/s      
+   861      Structural Pit...Blade 1 PAN 11deg/s      
+   862      Structural Pit...Blade 1 PAN 12deg/s      
+   863      Structural Pit...Blade 1 PAN 13deg/s      
+   864      Structural Pit...Blade 1 PAN 14deg/s      
+   865      Structural Pit...Blade 1 PAN 15deg/s      
+   866      Structural Pit...Blade 1 PAN 16deg/s      
+   867      Structural Pit...Blade 1 PAN 17deg/s      
+   868      Structural Pit...Blade 1 PAN 18deg/s      
+   869      Structural Pit...Blade 1 PAN 19deg/s      
+   870      Structural Pit... Blade 2 PAN 0deg/s      
+   871      Structural Pit... Blade 2 PAN 1deg/s      
+   872      Structural Pit... Blade 2 PAN 2deg/s      
+   873      Structural Pit... Blade 2 PAN 3deg/s      
+   874      Structural Pit... Blade 2 PAN 4deg/s      
+   875      Structural Pit... Blade 2 PAN 5deg/s      
+   876      Structural Pit... Blade 2 PAN 6deg/s      
+   877      Structural Pit... Blade 2 PAN 7deg/s      
+   878      Structural Pit... Blade 2 PAN 8deg/s      
+   879      Structural Pit... Blade 2 PAN 9deg/s      
+   880      Structural Pit...Blade 2 PAN 10deg/s      
+   881      Structural Pit...Blade 2 PAN 11deg/s      
+   882      Structural Pit...Blade 2 PAN 12deg/s      
+   883      Structural Pit...Blade 2 PAN 13deg/s      
+   884      Structural Pit...Blade 2 PAN 14deg/s      
+   885      Structural Pit...Blade 2 PAN 15deg/s      
+   886      Structural Pit...Blade 2 PAN 16deg/s      
+   887      Structural Pit...Blade 2 PAN 17deg/s      
+   888      Structural Pit...Blade 2 PAN 18deg/s      
+   889      Structural Pit...Blade 2 PAN 19deg/s      
+   890      Structural Pit... Blade 3 PAN 0deg/s      
+   891      Structural Pit... Blade 3 PAN 1deg/s      
+   892      Structural Pit... Blade 3 PAN 2deg/s      
+   893      Structural Pit... Blade 3 PAN 3deg/s      
+   894      Structural Pit... Blade 3 PAN 4deg/s      
+   895      Structural Pit... Blade 3 PAN 5deg/s      
+   896      Structural Pit... Blade 3 PAN 6deg/s      
+   897      Structural Pit... Blade 3 PAN 7deg/s      
+   898      Structural Pit... Blade 3 PAN 8deg/s      
+   899      Structural Pit... Blade 3 PAN 9deg/s      
+   900      Structural Pit...Blade 3 PAN 10deg/s      
+   901      Structural Pit...Blade 3 PAN 11deg/s      
+   902      Structural Pit...Blade 3 PAN 12deg/s      
+   903      Structural Pit...Blade 3 PAN 13deg/s      
+   904      Structural Pit...Blade 3 PAN 14deg/s      
+   905      Structural Pit...Blade 3 PAN 15deg/s      
+   906      Structural Pit...Blade 3 PAN 16deg/s      
+   907      Structural Pit...Blade 3 PAN 17deg/s      
+   908      Structural Pit...Blade 3 PAN 18deg/s      
+   909      Structural Pit...Blade 3 PAN 19deg/s      
+   910      Normal Force C... Blade 1 PAN 0-          
+   911      Normal Force C... Blade 1 PAN 1-          
+   912      Normal Force C... Blade 1 PAN 2-          
+   913      Normal Force C... Blade 1 PAN 3-          
+   914      Normal Force C... Blade 1 PAN 4-          
+   915      Normal Force C... Blade 1 PAN 5-          
+   916      Normal Force C... Blade 1 PAN 6-          
+   917      Normal Force C... Blade 1 PAN 7-          
+   918      Normal Force C... Blade 1 PAN 8-          
+   919      Normal Force C... Blade 1 PAN 9-          
+   920      Normal Force C...Blade 1 PAN 10-          
+   921      Normal Force C...Blade 1 PAN 11-          
+   922      Normal Force C...Blade 1 PAN 12-          
+   923      Normal Force C...Blade 1 PAN 13-          
+   924      Normal Force C...Blade 1 PAN 14-          
+   925      Normal Force C...Blade 1 PAN 15-          
+   926      Normal Force C...Blade 1 PAN 16-          
+   927      Normal Force C...Blade 1 PAN 17-          
+   928      Normal Force C...Blade 1 PAN 18-          
+   929      Normal Force C...Blade 1 PAN 19-          
+   930      Normal Force C... Blade 2 PAN 0-          
+   931      Normal Force C... Blade 2 PAN 1-          
+   932      Normal Force C... Blade 2 PAN 2-          
+   933      Normal Force C... Blade 2 PAN 3-          
+   934      Normal Force C... Blade 2 PAN 4-          
+   935      Normal Force C... Blade 2 PAN 5-          
+   936      Normal Force C... Blade 2 PAN 6-          
+   937      Normal Force C... Blade 2 PAN 7-          
+   938      Normal Force C... Blade 2 PAN 8-          
+   939      Normal Force C... Blade 2 PAN 9-          
+   940      Normal Force C...Blade 2 PAN 10-          
+   941      Normal Force C...Blade 2 PAN 11-          
+   942      Normal Force C...Blade 2 PAN 12-          
+   943      Normal Force C...Blade 2 PAN 13-          
+   944      Normal Force C...Blade 2 PAN 14-          
+   945      Normal Force C...Blade 2 PAN 15-          
+   946      Normal Force C...Blade 2 PAN 16-          
+   947      Normal Force C...Blade 2 PAN 17-          
+   948      Normal Force C...Blade 2 PAN 18-          
+   949      Normal Force C...Blade 2 PAN 19-          
+   950      Normal Force C... Blade 3 PAN 0-          
+   951      Normal Force C... Blade 3 PAN 1-          
+   952      Normal Force C... Blade 3 PAN 2-          
+   953      Normal Force C... Blade 3 PAN 3-          
+   954      Normal Force C... Blade 3 PAN 4-          
+   955      Normal Force C... Blade 3 PAN 5-          
+   956      Normal Force C... Blade 3 PAN 6-          
+   957      Normal Force C... Blade 3 PAN 7-          
+   958      Normal Force C... Blade 3 PAN 8-          
+   959      Normal Force C... Blade 3 PAN 9-          
+   960      Normal Force C...Blade 3 PAN 10-          
+   961      Normal Force C...Blade 3 PAN 11-          
+   962      Normal Force C...Blade 3 PAN 12-          
+   963      Normal Force C...Blade 3 PAN 13-          
+   964      Normal Force C...Blade 3 PAN 14-          
+   965      Normal Force C...Blade 3 PAN 15-          
+   966      Normal Force C...Blade 3 PAN 16-          
+   967      Normal Force C...Blade 3 PAN 17-          
+   968      Normal Force C...Blade 3 PAN 18-          
+   969      Normal Force C...Blade 3 PAN 19-          
+   970      Tangential For... Blade 1 PAN 0-          
+   971      Tangential For... Blade 1 PAN 1-          
+   972      Tangential For... Blade 1 PAN 2-          
+   973      Tangential For... Blade 1 PAN 3-          
+   974      Tangential For... Blade 1 PAN 4-          
+   975      Tangential For... Blade 1 PAN 5-          
+   976      Tangential For... Blade 1 PAN 6-          
+   977      Tangential For... Blade 1 PAN 7-          
+   978      Tangential For... Blade 1 PAN 8-          
+   979      Tangential For... Blade 1 PAN 9-          
+   980      Tangential For...Blade 1 PAN 10-          
+   981      Tangential For...Blade 1 PAN 11-          
+   982      Tangential For...Blade 1 PAN 12-          
+   983      Tangential For...Blade 1 PAN 13-          
+   984      Tangential For...Blade 1 PAN 14-          
+   985      Tangential For...Blade 1 PAN 15-          
+   986      Tangential For...Blade 1 PAN 16-          
+   987      Tangential For...Blade 1 PAN 17-          
+   988      Tangential For...Blade 1 PAN 18-          
+   989      Tangential For...Blade 1 PAN 19-          
+   990      Tangential For... Blade 2 PAN 0-          
+   991      Tangential For... Blade 2 PAN 1-          
+   992      Tangential For... Blade 2 PAN 2-          
+   993      Tangential For... Blade 2 PAN 3-          
+   994      Tangential For... Blade 2 PAN 4-          
+   995      Tangential For... Blade 2 PAN 5-          
+   996      Tangential For... Blade 2 PAN 6-          
+   997      Tangential For... Blade 2 PAN 7-          
+   998      Tangential For... Blade 2 PAN 8-          
+   999      Tangential For... Blade 2 PAN 9-          
+  1000      Tangential For...Blade 2 PAN 10-          
+  1001      Tangential For...Blade 2 PAN 11-          
+  1002      Tangential For...Blade 2 PAN 12-          
+  1003      Tangential For...Blade 2 PAN 13-          
+  1004      Tangential For...Blade 2 PAN 14-          
+  1005      Tangential For...Blade 2 PAN 15-          
+  1006      Tangential For...Blade 2 PAN 16-          
+  1007      Tangential For...Blade 2 PAN 17-          
+  1008      Tangential For...Blade 2 PAN 18-          
+  1009      Tangential For...Blade 2 PAN 19-          
+  1010      Tangential For... Blade 3 PAN 0-          
+  1011      Tangential For... Blade 3 PAN 1-          
+  1012      Tangential For... Blade 3 PAN 2-          
+  1013      Tangential For... Blade 3 PAN 3-          
+  1014      Tangential For... Blade 3 PAN 4-          
+  1015      Tangential For... Blade 3 PAN 5-          
+  1016      Tangential For... Blade 3 PAN 6-          
+  1017      Tangential For... Blade 3 PAN 7-          
+  1018      Tangential For... Blade 3 PAN 8-          
+  1019      Tangential For... Blade 3 PAN 9-          
+  1020      Tangential For...Blade 3 PAN 10-          
+  1021      Tangential For...Blade 3 PAN 11-          
+  1022      Tangential For...Blade 3 PAN 12-          
+  1023      Tangential For...Blade 3 PAN 13-          
+  1024      Tangential For...Blade 3 PAN 14-          
+  1025      Tangential For...Blade 3 PAN 15-          
+  1026      Tangential For...Blade 3 PAN 16-          
+  1027      Tangential For...Blade 3 PAN 17-          
+  1028      Tangential For...Blade 3 PAN 18-          
+  1029      Tangential For...Blade 3 PAN 19-          
+  1030      Normal Force Blade 1 PAN 0     N/m        
+  1031      Normal Force Blade 1 PAN 1     N/m        
+  1032      Normal Force Blade 1 PAN 2     N/m        
+  1033      Normal Force Blade 1 PAN 3     N/m        
+  1034      Normal Force Blade 1 PAN 4     N/m        
+  1035      Normal Force Blade 1 PAN 5     N/m        
+  1036      Normal Force Blade 1 PAN 6     N/m        
+  1037      Normal Force Blade 1 PAN 7     N/m        
+  1038      Normal Force Blade 1 PAN 8     N/m        
+  1039      Normal Force Blade 1 PAN 9     N/m        
+  1040      Normal Force Blade 1 PAN 10    N/m        
+  1041      Normal Force Blade 1 PAN 11    N/m        
+  1042      Normal Force Blade 1 PAN 12    N/m        
+  1043      Normal Force Blade 1 PAN 13    N/m        
+  1044      Normal Force Blade 1 PAN 14    N/m        
+  1045      Normal Force Blade 1 PAN 15    N/m        
+  1046      Normal Force Blade 1 PAN 16    N/m        
+  1047      Normal Force Blade 1 PAN 17    N/m        
+  1048      Normal Force Blade 1 PAN 18    N/m        
+  1049      Normal Force Blade 1 PAN 19    N/m        
+  1050      Normal Force Blade 2 PAN 0     N/m        
+  1051      Normal Force Blade 2 PAN 1     N/m        
+  1052      Normal Force Blade 2 PAN 2     N/m        
+  1053      Normal Force Blade 2 PAN 3     N/m        
+  1054      Normal Force Blade 2 PAN 4     N/m        
+  1055      Normal Force Blade 2 PAN 5     N/m        
+  1056      Normal Force Blade 2 PAN 6     N/m        
+  1057      Normal Force Blade 2 PAN 7     N/m        
+  1058      Normal Force Blade 2 PAN 8     N/m        
+  1059      Normal Force Blade 2 PAN 9     N/m        
+  1060      Normal Force Blade 2 PAN 10    N/m        
+  1061      Normal Force Blade 2 PAN 11    N/m        
+  1062      Normal Force Blade 2 PAN 12    N/m        
+  1063      Normal Force Blade 2 PAN 13    N/m        
+  1064      Normal Force Blade 2 PAN 14    N/m        
+  1065      Normal Force Blade 2 PAN 15    N/m        
+  1066      Normal Force Blade 2 PAN 16    N/m        
+  1067      Normal Force Blade 2 PAN 17    N/m        
+  1068      Normal Force Blade 2 PAN 18    N/m        
+  1069      Normal Force Blade 2 PAN 19    N/m        
+  1070      Normal Force Blade 3 PAN 0     N/m        
+  1071      Normal Force Blade 3 PAN 1     N/m        
+  1072      Normal Force Blade 3 PAN 2     N/m        
+  1073      Normal Force Blade 3 PAN 3     N/m        
+  1074      Normal Force Blade 3 PAN 4     N/m        
+  1075      Normal Force Blade 3 PAN 5     N/m        
+  1076      Normal Force Blade 3 PAN 6     N/m        
+  1077      Normal Force Blade 3 PAN 7     N/m        
+  1078      Normal Force Blade 3 PAN 8     N/m        
+  1079      Normal Force Blade 3 PAN 9     N/m        
+  1080      Normal Force Blade 3 PAN 10    N/m        
+  1081      Normal Force Blade 3 PAN 11    N/m        
+  1082      Normal Force Blade 3 PAN 12    N/m        
+  1083      Normal Force Blade 3 PAN 13    N/m        
+  1084      Normal Force Blade 3 PAN 14    N/m        
+  1085      Normal Force Blade 3 PAN 15    N/m        
+  1086      Normal Force Blade 3 PAN 16    N/m        
+  1087      Normal Force Blade 3 PAN 17    N/m        
+  1088      Normal Force Blade 3 PAN 18    N/m        
+  1089      Normal Force Blade 3 PAN 19    N/m        
+  1090      Tangential Force Blade 1 PAN 0 N/m        
+  1091      Tangential Force Blade 1 PAN 1 N/m        
+  1092      Tangential Force Blade 1 PAN 2 N/m        
+  1093      Tangential Force Blade 1 PAN 3 N/m        
+  1094      Tangential Force Blade 1 PAN 4 N/m        
+  1095      Tangential Force Blade 1 PAN 5 N/m        
+  1096      Tangential Force Blade 1 PAN 6 N/m        
+  1097      Tangential Force Blade 1 PAN 7 N/m        
+  1098      Tangential Force Blade 1 PAN 8 N/m        
+  1099      Tangential Force Blade 1 PAN 9 N/m        
+  1100      Tangential Force Blade 1 PAN 10N/m        
+  1101      Tangential Force Blade 1 PAN 11N/m        
+  1102      Tangential Force Blade 1 PAN 12N/m        
+  1103      Tangential Force Blade 1 PAN 13N/m        
+  1104      Tangential Force Blade 1 PAN 14N/m        
+  1105      Tangential Force Blade 1 PAN 15N/m        
+  1106      Tangential Force Blade 1 PAN 16N/m        
+  1107      Tangential Force Blade 1 PAN 17N/m        
+  1108      Tangential Force Blade 1 PAN 18N/m        
+  1109      Tangential Force Blade 1 PAN 19N/m        
+  1110      Tangential Force Blade 2 PAN 0 N/m        
+  1111      Tangential Force Blade 2 PAN 1 N/m        
+  1112      Tangential Force Blade 2 PAN 2 N/m        
+  1113      Tangential Force Blade 2 PAN 3 N/m        
+  1114      Tangential Force Blade 2 PAN 4 N/m        
+  1115      Tangential Force Blade 2 PAN 5 N/m        
+  1116      Tangential Force Blade 2 PAN 6 N/m        
+  1117      Tangential Force Blade 2 PAN 7 N/m        
+  1118      Tangential Force Blade 2 PAN 8 N/m        
+  1119      Tangential Force Blade 2 PAN 9 N/m        
+  1120      Tangential Force Blade 2 PAN 10N/m        
+  1121      Tangential Force Blade 2 PAN 11N/m        
+  1122      Tangential Force Blade 2 PAN 12N/m        
+  1123      Tangential Force Blade 2 PAN 13N/m        
+  1124      Tangential Force Blade 2 PAN 14N/m        
+  1125      Tangential Force Blade 2 PAN 15N/m        
+  1126      Tangential Force Blade 2 PAN 16N/m        
+  1127      Tangential Force Blade 2 PAN 17N/m        
+  1128      Tangential Force Blade 2 PAN 18N/m        
+  1129      Tangential Force Blade 2 PAN 19N/m        
+  1130      Tangential Force Blade 3 PAN 0 N/m        
+  1131      Tangential Force Blade 3 PAN 1 N/m        
+  1132      Tangential Force Blade 3 PAN 2 N/m        
+  1133      Tangential Force Blade 3 PAN 3 N/m        
+  1134      Tangential Force Blade 3 PAN 4 N/m        
+  1135      Tangential Force Blade 3 PAN 5 N/m        
+  1136      Tangential Force Blade 3 PAN 6 N/m        
+  1137      Tangential Force Blade 3 PAN 7 N/m        
+  1138      Tangential Force Blade 3 PAN 8 N/m        
+  1139      Tangential Force Blade 3 PAN 9 N/m        
+  1140      Tangential Force Blade 3 PAN 10N/m        
+  1141      Tangential Force Blade 3 PAN 11N/m        
+  1142      Tangential Force Blade 3 PAN 12N/m        
+  1143      Tangential Force Blade 3 PAN 13N/m        
+  1144      Tangential Force Blade 3 PAN 14N/m        
+  1145      Tangential Force Blade 3 PAN 15N/m        
+  1146      Tangential Force Blade 3 PAN 16N/m        
+  1147      Tangential Force Blade 3 PAN 17N/m        
+  1148      Tangential Force Blade 3 PAN 18N/m        
+  1149      Tangential Force Blade 3 PAN 19N/m        
+  1150      Pitching Moment Blade 1 PAN 0  Nm/m       
+  1151      Pitching Moment Blade 1 PAN 1  Nm/m       
+  1152      Pitching Moment Blade 1 PAN 2  Nm/m       
+  1153      Pitching Moment Blade 1 PAN 3  Nm/m       
+  1154      Pitching Moment Blade 1 PAN 4  Nm/m       
+  1155      Pitching Moment Blade 1 PAN 5  Nm/m       
+  1156      Pitching Moment Blade 1 PAN 6  Nm/m       
+  1157      Pitching Moment Blade 1 PAN 7  Nm/m       
+  1158      Pitching Moment Blade 1 PAN 8  Nm/m       
+  1159      Pitching Moment Blade 1 PAN 9  Nm/m       
+  1160      Pitching Moment Blade 1 PAN 10 Nm/m       
+  1161      Pitching Moment Blade 1 PAN 11 Nm/m       
+  1162      Pitching Moment Blade 1 PAN 12 Nm/m       
+  1163      Pitching Moment Blade 1 PAN 13 Nm/m       
+  1164      Pitching Moment Blade 1 PAN 14 Nm/m       
+  1165      Pitching Moment Blade 1 PAN 15 Nm/m       
+  1166      Pitching Moment Blade 1 PAN 16 Nm/m       
+  1167      Pitching Moment Blade 1 PAN 17 Nm/m       
+  1168      Pitching Moment Blade 1 PAN 18 Nm/m       
+  1169      Pitching Moment Blade 1 PAN 19 Nm/m       
+  1170      Pitching Moment Blade 2 PAN 0  Nm/m       
+  1171      Pitching Moment Blade 2 PAN 1  Nm/m       
+  1172      Pitching Moment Blade 2 PAN 2  Nm/m       
+  1173      Pitching Moment Blade 2 PAN 3  Nm/m       
+  1174      Pitching Moment Blade 2 PAN 4  Nm/m       
+  1175      Pitching Moment Blade 2 PAN 5  Nm/m       
+  1176      Pitching Moment Blade 2 PAN 6  Nm/m       
+  1177      Pitching Moment Blade 2 PAN 7  Nm/m       
+  1178      Pitching Moment Blade 2 PAN 8  Nm/m       
+  1179      Pitching Moment Blade 2 PAN 9  Nm/m       
+  1180      Pitching Moment Blade 2 PAN 10 Nm/m       
+  1181      Pitching Moment Blade 2 PAN 11 Nm/m       
+  1182      Pitching Moment Blade 2 PAN 12 Nm/m       
+  1183      Pitching Moment Blade 2 PAN 13 Nm/m       
+  1184      Pitching Moment Blade 2 PAN 14 Nm/m       
+  1185      Pitching Moment Blade 2 PAN 15 Nm/m       
+  1186      Pitching Moment Blade 2 PAN 16 Nm/m       
+  1187      Pitching Moment Blade 2 PAN 17 Nm/m       
+  1188      Pitching Moment Blade 2 PAN 18 Nm/m       
+  1189      Pitching Moment Blade 2 PAN 19 Nm/m       
+  1190      Pitching Moment Blade 3 PAN 0  Nm/m       
+  1191      Pitching Moment Blade 3 PAN 1  Nm/m       
+  1192      Pitching Moment Blade 3 PAN 2  Nm/m       
+  1193      Pitching Moment Blade 3 PAN 3  Nm/m       
+  1194      Pitching Moment Blade 3 PAN 4  Nm/m       
+  1195      Pitching Moment Blade 3 PAN 5  Nm/m       
+  1196      Pitching Moment Blade 3 PAN 6  Nm/m       
+  1197      Pitching Moment Blade 3 PAN 7  Nm/m       
+  1198      Pitching Moment Blade 3 PAN 8  Nm/m       
+  1199      Pitching Moment Blade 3 PAN 9  Nm/m       
+  1200      Pitching Moment Blade 3 PAN 10 Nm/m       
+  1201      Pitching Moment Blade 3 PAN 11 Nm/m       
+  1202      Pitching Moment Blade 3 PAN 12 Nm/m       
+  1203      Pitching Moment Blade 3 PAN 13 Nm/m       
+  1204      Pitching Moment Blade 3 PAN 14 Nm/m       
+  1205      Pitching Moment Blade 3 PAN 15 Nm/m       
+  1206      Pitching Moment Blade 3 PAN 16 Nm/m       
+  1207      Pitching Moment Blade 3 PAN 17 Nm/m       
+  1208      Pitching Moment Blade 3 PAN 18 Nm/m       
+  1209      Pitching Moment Blade 3 PAN 19 Nm/m       
+  1210      Total Velocity Blade 1 PAN 0   m/s        
+  1211      Total Velocity Blade 1 PAN 1   m/s        
+  1212      Total Velocity Blade 1 PAN 2   m/s        
+  1213      Total Velocity Blade 1 PAN 3   m/s        
+  1214      Total Velocity Blade 1 PAN 4   m/s        
+  1215      Total Velocity Blade 1 PAN 5   m/s        
+  1216      Total Velocity Blade 1 PAN 6   m/s        
+  1217      Total Velocity Blade 1 PAN 7   m/s        
+  1218      Total Velocity Blade 1 PAN 8   m/s        
+  1219      Total Velocity Blade 1 PAN 9   m/s        
+  1220      Total Velocity Blade 1 PAN 10  m/s        
+  1221      Total Velocity Blade 1 PAN 11  m/s        
+  1222      Total Velocity Blade 1 PAN 12  m/s        
+  1223      Total Velocity Blade 1 PAN 13  m/s        
+  1224      Total Velocity Blade 1 PAN 14  m/s        
+  1225      Total Velocity Blade 1 PAN 15  m/s        
+  1226      Total Velocity Blade 1 PAN 16  m/s        
+  1227      Total Velocity Blade 1 PAN 17  m/s        
+  1228      Total Velocity Blade 1 PAN 18  m/s        
+  1229      Total Velocity Blade 1 PAN 19  m/s        
+  1230      Total Velocity Blade 2 PAN 0   m/s        
+  1231      Total Velocity Blade 2 PAN 1   m/s        
+  1232      Total Velocity Blade 2 PAN 2   m/s        
+  1233      Total Velocity Blade 2 PAN 3   m/s        
+  1234      Total Velocity Blade 2 PAN 4   m/s        
+  1235      Total Velocity Blade 2 PAN 5   m/s        
+  1236      Total Velocity Blade 2 PAN 6   m/s        
+  1237      Total Velocity Blade 2 PAN 7   m/s        
+  1238      Total Velocity Blade 2 PAN 8   m/s        
+  1239      Total Velocity Blade 2 PAN 9   m/s        
+  1240      Total Velocity Blade 2 PAN 10  m/s        
+  1241      Total Velocity Blade 2 PAN 11  m/s        
+  1242      Total Velocity Blade 2 PAN 12  m/s        
+  1243      Total Velocity Blade 2 PAN 13  m/s        
+  1244      Total Velocity Blade 2 PAN 14  m/s        
+  1245      Total Velocity Blade 2 PAN 15  m/s        
+  1246      Total Velocity Blade 2 PAN 16  m/s        
+  1247      Total Velocity Blade 2 PAN 17  m/s        
+  1248      Total Velocity Blade 2 PAN 18  m/s        
+  1249      Total Velocity Blade 2 PAN 19  m/s        
+  1250      Total Velocity Blade 3 PAN 0   m/s        
+  1251      Total Velocity Blade 3 PAN 1   m/s        
+  1252      Total Velocity Blade 3 PAN 2   m/s        
+  1253      Total Velocity Blade 3 PAN 3   m/s        
+  1254      Total Velocity Blade 3 PAN 4   m/s        
+  1255      Total Velocity Blade 3 PAN 5   m/s        
+  1256      Total Velocity Blade 3 PAN 6   m/s        
+  1257      Total Velocity Blade 3 PAN 7   m/s        
+  1258      Total Velocity Blade 3 PAN 8   m/s        
+  1259      Total Velocity Blade 3 PAN 9   m/s        
+  1260      Total Velocity Blade 3 PAN 10  m/s        
+  1261      Total Velocity Blade 3 PAN 11  m/s        
+  1262      Total Velocity Blade 3 PAN 12  m/s        
+  1263      Total Velocity Blade 3 PAN 13  m/s        
+  1264      Total Velocity Blade 3 PAN 14  m/s        
+  1265      Total Velocity Blade 3 PAN 15  m/s        
+  1266      Total Velocity Blade 3 PAN 16  m/s        
+  1267      Total Velocity Blade 3 PAN 17  m/s        
+  1268      Total Velocity Blade 3 PAN 18  m/s        
+  1269      Total Velocity Blade 3 PAN 19  m/s        
+  1270      Total Velocity... Blade 1 PAN 0m/s        
+  1271      Total Velocity... Blade 1 PAN 1m/s        
+  1272      Total Velocity... Blade 1 PAN 2m/s        
+  1273      Total Velocity... Blade 1 PAN 3m/s        
+  1274      Total Velocity... Blade 1 PAN 4m/s        
+  1275      Total Velocity... Blade 1 PAN 5m/s        
+  1276      Total Velocity... Blade 1 PAN 6m/s        
+  1277      Total Velocity... Blade 1 PAN 7m/s        
+  1278      Total Velocity... Blade 1 PAN 8m/s        
+  1279      Total Velocity... Blade 1 PAN 9m/s        
+  1280      Total Velocity...Blade 1 PAN 10m/s        
+  1281      Total Velocity...Blade 1 PAN 11m/s        
+  1282      Total Velocity...Blade 1 PAN 12m/s        
+  1283      Total Velocity...Blade 1 PAN 13m/s        
+  1284      Total Velocity...Blade 1 PAN 14m/s        
+  1285      Total Velocity...Blade 1 PAN 15m/s        
+  1286      Total Velocity...Blade 1 PAN 16m/s        
+  1287      Total Velocity...Blade 1 PAN 17m/s        
+  1288      Total Velocity...Blade 1 PAN 18m/s        
+  1289      Total Velocity...Blade 1 PAN 19m/s        
+  1290      Total Velocity... Blade 2 PAN 0m/s        
+  1291      Total Velocity... Blade 2 PAN 1m/s        
+  1292      Total Velocity... Blade 2 PAN 2m/s        
+  1293      Total Velocity... Blade 2 PAN 3m/s        
+  1294      Total Velocity... Blade 2 PAN 4m/s        
+  1295      Total Velocity... Blade 2 PAN 5m/s        
+  1296      Total Velocity... Blade 2 PAN 6m/s        
+  1297      Total Velocity... Blade 2 PAN 7m/s        
+  1298      Total Velocity... Blade 2 PAN 8m/s        
+  1299      Total Velocity... Blade 2 PAN 9m/s        
+  1300      Total Velocity...Blade 2 PAN 10m/s        
+  1301      Total Velocity...Blade 2 PAN 11m/s        
+  1302      Total Velocity...Blade 2 PAN 12m/s        
+  1303      Total Velocity...Blade 2 PAN 13m/s        
+  1304      Total Velocity...Blade 2 PAN 14m/s        
+  1305      Total Velocity...Blade 2 PAN 15m/s        
+  1306      Total Velocity...Blade 2 PAN 16m/s        
+  1307      Total Velocity...Blade 2 PAN 17m/s        
+  1308      Total Velocity...Blade 2 PAN 18m/s        
+  1309      Total Velocity...Blade 2 PAN 19m/s        
+  1310      Total Velocity... Blade 3 PAN 0m/s        
+  1311      Total Velocity... Blade 3 PAN 1m/s        
+  1312      Total Velocity... Blade 3 PAN 2m/s        
+  1313      Total Velocity... Blade 3 PAN 3m/s        
+  1314      Total Velocity... Blade 3 PAN 4m/s        
+  1315      Total Velocity... Blade 3 PAN 5m/s        
+  1316      Total Velocity... Blade 3 PAN 6m/s        
+  1317      Total Velocity... Blade 3 PAN 7m/s        
+  1318      Total Velocity... Blade 3 PAN 8m/s        
+  1319      Total Velocity... Blade 3 PAN 9m/s        
+  1320      Total Velocity...Blade 3 PAN 10m/s        
+  1321      Total Velocity...Blade 3 PAN 11m/s        
+  1322      Total Velocity...Blade 3 PAN 12m/s        
+  1323      Total Velocity...Blade 3 PAN 13m/s        
+  1324      Total Velocity...Blade 3 PAN 14m/s        
+  1325      Total Velocity...Blade 3 PAN 15m/s        
+  1326      Total Velocity...Blade 3 PAN 16m/s        
+  1327      Total Velocity...Blade 3 PAN 17m/s        
+  1328      Total Velocity...Blade 3 PAN 18m/s        
+  1329      Total Velocity...Blade 3 PAN 19m/s        
+  1330      Inflow Velocit... Blade 1 PAN 0m/s        
+  1331      Inflow Velocit... Blade 1 PAN 1m/s        
+  1332      Inflow Velocit... Blade 1 PAN 2m/s        
+  1333      Inflow Velocit... Blade 1 PAN 3m/s        
+  1334      Inflow Velocit... Blade 1 PAN 4m/s        
+  1335      Inflow Velocit... Blade 1 PAN 5m/s        
+  1336      Inflow Velocit... Blade 1 PAN 6m/s        
+  1337      Inflow Velocit... Blade 1 PAN 7m/s        
+  1338      Inflow Velocit... Blade 1 PAN 8m/s        
+  1339      Inflow Velocit... Blade 1 PAN 9m/s        
+  1340      Inflow Velocit...Blade 1 PAN 10m/s        
+  1341      Inflow Velocit...Blade 1 PAN 11m/s        
+  1342      Inflow Velocit...Blade 1 PAN 12m/s        
+  1343      Inflow Velocit...Blade 1 PAN 13m/s        
+  1344      Inflow Velocit...Blade 1 PAN 14m/s        
+  1345      Inflow Velocit...Blade 1 PAN 15m/s        
+  1346      Inflow Velocit...Blade 1 PAN 16m/s        
+  1347      Inflow Velocit...Blade 1 PAN 17m/s        
+  1348      Inflow Velocit...Blade 1 PAN 18m/s        
+  1349      Inflow Velocit...Blade 1 PAN 19m/s        
+  1350      Inflow Velocit... Blade 2 PAN 0m/s        
+  1351      Inflow Velocit... Blade 2 PAN 1m/s        
+  1352      Inflow Velocit... Blade 2 PAN 2m/s        
+  1353      Inflow Velocit... Blade 2 PAN 3m/s        
+  1354      Inflow Velocit... Blade 2 PAN 4m/s        
+  1355      Inflow Velocit... Blade 2 PAN 5m/s        
+  1356      Inflow Velocit... Blade 2 PAN 6m/s        
+  1357      Inflow Velocit... Blade 2 PAN 7m/s        
+  1358      Inflow Velocit... Blade 2 PAN 8m/s        
+  1359      Inflow Velocit... Blade 2 PAN 9m/s        
+  1360      Inflow Velocit...Blade 2 PAN 10m/s        
+  1361      Inflow Velocit...Blade 2 PAN 11m/s        
+  1362      Inflow Velocit...Blade 2 PAN 12m/s        
+  1363      Inflow Velocit...Blade 2 PAN 13m/s        
+  1364      Inflow Velocit...Blade 2 PAN 14m/s        
+  1365      Inflow Velocit...Blade 2 PAN 15m/s        
+  1366      Inflow Velocit...Blade 2 PAN 16m/s        
+  1367      Inflow Velocit...Blade 2 PAN 17m/s        
+  1368      Inflow Velocit...Blade 2 PAN 18m/s        
+  1369      Inflow Velocit...Blade 2 PAN 19m/s        
+  1370      Inflow Velocit... Blade 3 PAN 0m/s        
+  1371      Inflow Velocit... Blade 3 PAN 1m/s        
+  1372      Inflow Velocit... Blade 3 PAN 2m/s        
+  1373      Inflow Velocit... Blade 3 PAN 3m/s        
+  1374      Inflow Velocit... Blade 3 PAN 4m/s        
+  1375      Inflow Velocit... Blade 3 PAN 5m/s        
+  1376      Inflow Velocit... Blade 3 PAN 6m/s        
+  1377      Inflow Velocit... Blade 3 PAN 7m/s        
+  1378      Inflow Velocit... Blade 3 PAN 8m/s        
+  1379      Inflow Velocit... Blade 3 PAN 9m/s        
+  1380      Inflow Velocit...Blade 3 PAN 10m/s        
+  1381      Inflow Velocit...Blade 3 PAN 11m/s        
+  1382      Inflow Velocit...Blade 3 PAN 12m/s        
+  1383      Inflow Velocit...Blade 3 PAN 13m/s        
+  1384      Inflow Velocit...Blade 3 PAN 14m/s        
+  1385      Inflow Velocit...Blade 3 PAN 15m/s        
+  1386      Inflow Velocit...Blade 3 PAN 16m/s        
+  1387      Inflow Velocit...Blade 3 PAN 17m/s        
+  1388      Inflow Velocit...Blade 3 PAN 18m/s        
+  1389      Inflow Velocit...Blade 3 PAN 19m/s        
+  1390      Relative Veloc... Blade 1 PAN 0m/s        
+  1391      Relative Veloc... Blade 1 PAN 1m/s        
+  1392      Relative Veloc... Blade 1 PAN 2m/s        
+  1393      Relative Veloc... Blade 1 PAN 3m/s        
+  1394      Relative Veloc... Blade 1 PAN 4m/s        
+  1395      Relative Veloc... Blade 1 PAN 5m/s        
+  1396      Relative Veloc... Blade 1 PAN 6m/s        
+  1397      Relative Veloc... Blade 1 PAN 7m/s        
+  1398      Relative Veloc... Blade 1 PAN 8m/s        
+  1399      Relative Veloc... Blade 1 PAN 9m/s        
+  1400      Relative Veloc...Blade 1 PAN 10m/s        
+  1401      Relative Veloc...Blade 1 PAN 11m/s        
+  1402      Relative Veloc...Blade 1 PAN 12m/s        
+  1403      Relative Veloc...Blade 1 PAN 13m/s        
+  1404      Relative Veloc...Blade 1 PAN 14m/s        
+  1405      Relative Veloc...Blade 1 PAN 15m/s        
+  1406      Relative Veloc...Blade 1 PAN 16m/s        
+  1407      Relative Veloc...Blade 1 PAN 17m/s        
+  1408      Relative Veloc...Blade 1 PAN 18m/s        
+  1409      Relative Veloc...Blade 1 PAN 19m/s        
+  1410      Relative Veloc... Blade 2 PAN 0m/s        
+  1411      Relative Veloc... Blade 2 PAN 1m/s        
+  1412      Relative Veloc... Blade 2 PAN 2m/s        
+  1413      Relative Veloc... Blade 2 PAN 3m/s        
+  1414      Relative Veloc... Blade 2 PAN 4m/s        
+  1415      Relative Veloc... Blade 2 PAN 5m/s        
+  1416      Relative Veloc... Blade 2 PAN 6m/s        
+  1417      Relative Veloc... Blade 2 PAN 7m/s        
+  1418      Relative Veloc... Blade 2 PAN 8m/s        
+  1419      Relative Veloc... Blade 2 PAN 9m/s        
+  1420      Relative Veloc...Blade 2 PAN 10m/s        
+  1421      Relative Veloc...Blade 2 PAN 11m/s        
+  1422      Relative Veloc...Blade 2 PAN 12m/s        
+  1423      Relative Veloc...Blade 2 PAN 13m/s        
+  1424      Relative Veloc...Blade 2 PAN 14m/s        
+  1425      Relative Veloc...Blade 2 PAN 15m/s        
+  1426      Relative Veloc...Blade 2 PAN 16m/s        
+  1427      Relative Veloc...Blade 2 PAN 17m/s        
+  1428      Relative Veloc...Blade 2 PAN 18m/s        
+  1429      Relative Veloc...Blade 2 PAN 19m/s        
+  1430      Relative Veloc... Blade 3 PAN 0m/s        
+  1431      Relative Veloc... Blade 3 PAN 1m/s        
+  1432      Relative Veloc... Blade 3 PAN 2m/s        
+  1433      Relative Veloc... Blade 3 PAN 3m/s        
+  1434      Relative Veloc... Blade 3 PAN 4m/s        
+  1435      Relative Veloc... Blade 3 PAN 5m/s        
+  1436      Relative Veloc... Blade 3 PAN 6m/s        
+  1437      Relative Veloc... Blade 3 PAN 7m/s        
+  1438      Relative Veloc... Blade 3 PAN 8m/s        
+  1439      Relative Veloc... Blade 3 PAN 9m/s        
+  1440      Relative Veloc...Blade 3 PAN 10m/s        
+  1441      Relative Veloc...Blade 3 PAN 11m/s        
+  1442      Relative Veloc...Blade 3 PAN 12m/s        
+  1443      Relative Veloc...Blade 3 PAN 13m/s        
+  1444      Relative Veloc...Blade 3 PAN 14m/s        
+  1445      Relative Veloc...Blade 3 PAN 15m/s        
+  1446      Relative Veloc...Blade 3 PAN 16m/s        
+  1447      Relative Veloc...Blade 3 PAN 17m/s        
+  1448      Relative Veloc...Blade 3 PAN 18m/s        
+  1449      Relative Veloc...Blade 3 PAN 19m/s        
+  1450      Velocity induc... Blade 1 PAN 0m/s        
+  1451      Velocity induc... Blade 1 PAN 1m/s        
+  1452      Velocity induc... Blade 1 PAN 2m/s        
+  1453      Velocity induc... Blade 1 PAN 3m/s        
+  1454      Velocity induc... Blade 1 PAN 4m/s        
+  1455      Velocity induc... Blade 1 PAN 5m/s        
+  1456      Velocity induc... Blade 1 PAN 6m/s        
+  1457      Velocity induc... Blade 1 PAN 7m/s        
+  1458      Velocity induc... Blade 1 PAN 8m/s        
+  1459      Velocity induc... Blade 1 PAN 9m/s        
+  1460      Velocity induc...Blade 1 PAN 10m/s        
+  1461      Velocity induc...Blade 1 PAN 11m/s        
+  1462      Velocity induc...Blade 1 PAN 12m/s        
+  1463      Velocity induc...Blade 1 PAN 13m/s        
+  1464      Velocity induc...Blade 1 PAN 14m/s        
+  1465      Velocity induc...Blade 1 PAN 15m/s        
+  1466      Velocity induc...Blade 1 PAN 16m/s        
+  1467      Velocity induc...Blade 1 PAN 17m/s        
+  1468      Velocity induc...Blade 1 PAN 18m/s        
+  1469      Velocity induc...Blade 1 PAN 19m/s        
+  1470      Velocity induc... Blade 2 PAN 0m/s        
+  1471      Velocity induc... Blade 2 PAN 1m/s        
+  1472      Velocity induc... Blade 2 PAN 2m/s        
+  1473      Velocity induc... Blade 2 PAN 3m/s        
+  1474      Velocity induc... Blade 2 PAN 4m/s        
+  1475      Velocity induc... Blade 2 PAN 5m/s        
+  1476      Velocity induc... Blade 2 PAN 6m/s        
+  1477      Velocity induc... Blade 2 PAN 7m/s        
+  1478      Velocity induc... Blade 2 PAN 8m/s        
+  1479      Velocity induc... Blade 2 PAN 9m/s        
+  1480      Velocity induc...Blade 2 PAN 10m/s        
+  1481      Velocity induc...Blade 2 PAN 11m/s        
+  1482      Velocity induc...Blade 2 PAN 12m/s        
+  1483      Velocity induc...Blade 2 PAN 13m/s        
+  1484      Velocity induc...Blade 2 PAN 14m/s        
+  1485      Velocity induc...Blade 2 PAN 15m/s        
+  1486      Velocity induc...Blade 2 PAN 16m/s        
+  1487      Velocity induc...Blade 2 PAN 17m/s        
+  1488      Velocity induc...Blade 2 PAN 18m/s        
+  1489      Velocity induc...Blade 2 PAN 19m/s        
+  1490      Velocity induc... Blade 3 PAN 0m/s        
+  1491      Velocity induc... Blade 3 PAN 1m/s        
+  1492      Velocity induc... Blade 3 PAN 2m/s        
+  1493      Velocity induc... Blade 3 PAN 3m/s        
+  1494      Velocity induc... Blade 3 PAN 4m/s        
+  1495      Velocity induc... Blade 3 PAN 5m/s        
+  1496      Velocity induc... Blade 3 PAN 6m/s        
+  1497      Velocity induc... Blade 3 PAN 7m/s        
+  1498      Velocity induc... Blade 3 PAN 8m/s        
+  1499      Velocity induc... Blade 3 PAN 9m/s        
+  1500      Velocity induc...Blade 3 PAN 10m/s        
+  1501      Velocity induc...Blade 3 PAN 11m/s        
+  1502      Velocity induc...Blade 3 PAN 12m/s        
+  1503      Velocity induc...Blade 3 PAN 13m/s        
+  1504      Velocity induc...Blade 3 PAN 14m/s        
+  1505      Velocity induc...Blade 3 PAN 15m/s        
+  1506      Velocity induc...Blade 3 PAN 16m/s        
+  1507      Velocity induc...Blade 3 PAN 17m/s        
+  1508      Velocity induc...Blade 3 PAN 18m/s        
+  1509      Velocity induc...Blade 3 PAN 19m/s        
+  1510      Velocity induc... Blade 1 PAN 0m/s        
+  1511      Velocity induc... Blade 1 PAN 1m/s        
+  1512      Velocity induc... Blade 1 PAN 2m/s        
+  1513      Velocity induc... Blade 1 PAN 3m/s        
+  1514      Velocity induc... Blade 1 PAN 4m/s        
+  1515      Velocity induc... Blade 1 PAN 5m/s        
+  1516      Velocity induc... Blade 1 PAN 6m/s        
+  1517      Velocity induc... Blade 1 PAN 7m/s        
+  1518      Velocity induc... Blade 1 PAN 8m/s        
+  1519      Velocity induc... Blade 1 PAN 9m/s        
+  1520      Velocity induc...Blade 1 PAN 10m/s        
+  1521      Velocity induc...Blade 1 PAN 11m/s        
+  1522      Velocity induc...Blade 1 PAN 12m/s        
+  1523      Velocity induc...Blade 1 PAN 13m/s        
+  1524      Velocity induc...Blade 1 PAN 14m/s        
+  1525      Velocity induc...Blade 1 PAN 15m/s        
+  1526      Velocity induc...Blade 1 PAN 16m/s        
+  1527      Velocity induc...Blade 1 PAN 17m/s        
+  1528      Velocity induc...Blade 1 PAN 18m/s        
+  1529      Velocity induc...Blade 1 PAN 19m/s        
+  1530      Velocity induc... Blade 2 PAN 0m/s        
+  1531      Velocity induc... Blade 2 PAN 1m/s        
+  1532      Velocity induc... Blade 2 PAN 2m/s        
+  1533      Velocity induc... Blade 2 PAN 3m/s        
+  1534      Velocity induc... Blade 2 PAN 4m/s        
+  1535      Velocity induc... Blade 2 PAN 5m/s        
+  1536      Velocity induc... Blade 2 PAN 6m/s        
+  1537      Velocity induc... Blade 2 PAN 7m/s        
+  1538      Velocity induc... Blade 2 PAN 8m/s        
+  1539      Velocity induc... Blade 2 PAN 9m/s        
+  1540      Velocity induc...Blade 2 PAN 10m/s        
+  1541      Velocity induc...Blade 2 PAN 11m/s        
+  1542      Velocity induc...Blade 2 PAN 12m/s        
+  1543      Velocity induc...Blade 2 PAN 13m/s        
+  1544      Velocity induc...Blade 2 PAN 14m/s        
+  1545      Velocity induc...Blade 2 PAN 15m/s        
+  1546      Velocity induc...Blade 2 PAN 16m/s        
+  1547      Velocity induc...Blade 2 PAN 17m/s        
+  1548      Velocity induc...Blade 2 PAN 18m/s        
+  1549      Velocity induc...Blade 2 PAN 19m/s        
+  1550      Velocity induc... Blade 3 PAN 0m/s        
+  1551      Velocity induc... Blade 3 PAN 1m/s        
+  1552      Velocity induc... Blade 3 PAN 2m/s        
+  1553      Velocity induc... Blade 3 PAN 3m/s        
+  1554      Velocity induc... Blade 3 PAN 4m/s        
+  1555      Velocity induc... Blade 3 PAN 5m/s        
+  1556      Velocity induc... Blade 3 PAN 6m/s        
+  1557      Velocity induc... Blade 3 PAN 7m/s        
+  1558      Velocity induc... Blade 3 PAN 8m/s        
+  1559      Velocity induc... Blade 3 PAN 9m/s        
+  1560      Velocity induc...Blade 3 PAN 10m/s        
+  1561      Velocity induc...Blade 3 PAN 11m/s        
+  1562      Velocity induc...Blade 3 PAN 12m/s        
+  1563      Velocity induc...Blade 3 PAN 13m/s        
+  1564      Velocity induc...Blade 3 PAN 14m/s        
+  1565      Velocity induc...Blade 3 PAN 15m/s        
+  1566      Velocity induc...Blade 3 PAN 16m/s        
+  1567      Velocity induc...Blade 3 PAN 17m/s        
+  1568      Velocity induc...Blade 3 PAN 18m/s        
+  1569      Velocity induc...Blade 3 PAN 19m/s        
+  1570      Induction Factor Blade 1 PAN 0 -          
+  1571      Induction Factor Blade 1 PAN 1 -          
+  1572      Induction Factor Blade 1 PAN 2 -          
+  1573      Induction Factor Blade 1 PAN 3 -          
+  1574      Induction Factor Blade 1 PAN 4 -          
+  1575      Induction Factor Blade 1 PAN 5 -          
+  1576      Induction Factor Blade 1 PAN 6 -          
+  1577      Induction Factor Blade 1 PAN 7 -          
+  1578      Induction Factor Blade 1 PAN 8 -          
+  1579      Induction Factor Blade 1 PAN 9 -          
+  1580      Induction Factor Blade 1 PAN 10-          
+  1581      Induction Factor Blade 1 PAN 11-          
+  1582      Induction Factor Blade 1 PAN 12-          
+  1583      Induction Factor Blade 1 PAN 13-          
+  1584      Induction Factor Blade 1 PAN 14-          
+  1585      Induction Factor Blade 1 PAN 15-          
+  1586      Induction Factor Blade 1 PAN 16-          
+  1587      Induction Factor Blade 1 PAN 17-          
+  1588      Induction Factor Blade 1 PAN 18-          
+  1589      Induction Factor Blade 1 PAN 19-          
+  1590      Induction Factor Blade 2 PAN 0 -          
+  1591      Induction Factor Blade 2 PAN 1 -          
+  1592      Induction Factor Blade 2 PAN 2 -          
+  1593      Induction Factor Blade 2 PAN 3 -          
+  1594      Induction Factor Blade 2 PAN 4 -          
+  1595      Induction Factor Blade 2 PAN 5 -          
+  1596      Induction Factor Blade 2 PAN 6 -          
+  1597      Induction Factor Blade 2 PAN 7 -          
+  1598      Induction Factor Blade 2 PAN 8 -          
+  1599      Induction Factor Blade 2 PAN 9 -          
+  1600      Induction Factor Blade 2 PAN 10-          
+  1601      Induction Factor Blade 2 PAN 11-          
+  1602      Induction Factor Blade 2 PAN 12-          
+  1603      Induction Factor Blade 2 PAN 13-          
+  1604      Induction Factor Blade 2 PAN 14-          
+  1605      Induction Factor Blade 2 PAN 15-          
+  1606      Induction Factor Blade 2 PAN 16-          
+  1607      Induction Factor Blade 2 PAN 17-          
+  1608      Induction Factor Blade 2 PAN 18-          
+  1609      Induction Factor Blade 2 PAN 19-          
+  1610      Induction Factor Blade 3 PAN 0 -          
+  1611      Induction Factor Blade 3 PAN 1 -          
+  1612      Induction Factor Blade 3 PAN 2 -          
+  1613      Induction Factor Blade 3 PAN 3 -          
+  1614      Induction Factor Blade 3 PAN 4 -          
+  1615      Induction Factor Blade 3 PAN 5 -          
+  1616      Induction Factor Blade 3 PAN 6 -          
+  1617      Induction Factor Blade 3 PAN 7 -          
+  1618      Induction Factor Blade 3 PAN 8 -          
+  1619      Induction Factor Blade 3 PAN 9 -          
+  1620      Induction Factor Blade 3 PAN 10-          
+  1621      Induction Factor Blade 3 PAN 11-          
+  1622      Induction Factor Blade 3 PAN 12-          
+  1623      Induction Factor Blade 3 PAN 13-          
+  1624      Induction Factor Blade 3 PAN 14-          
+  1625      Induction Factor Blade 3 PAN 15-          
+  1626      Induction Factor Blade 3 PAN 16-          
+  1627      Induction Factor Blade 3 PAN 17-          
+  1628      Induction Factor Blade 3 PAN 18-          
+  1629      Induction Factor Blade 3 PAN 19-          
+  1630      Reynolds Number Blade 1 PAN 0  -          
+  1631      Reynolds Number Blade 1 PAN 1  -          
+  1632      Reynolds Number Blade 1 PAN 2  -          
+  1633      Reynolds Number Blade 1 PAN 3  -          
+  1634      Reynolds Number Blade 1 PAN 4  -          
+  1635      Reynolds Number Blade 1 PAN 5  -          
+  1636      Reynolds Number Blade 1 PAN 6  -          
+  1637      Reynolds Number Blade 1 PAN 7  -          
+  1638      Reynolds Number Blade 1 PAN 8  -          
+  1639      Reynolds Number Blade 1 PAN 9  -          
+  1640      Reynolds Number Blade 1 PAN 10 -          
+  1641      Reynolds Number Blade 1 PAN 11 -          
+  1642      Reynolds Number Blade 1 PAN 12 -          
+  1643      Reynolds Number Blade 1 PAN 13 -          
+  1644      Reynolds Number Blade 1 PAN 14 -          
+  1645      Reynolds Number Blade 1 PAN 15 -          
+  1646      Reynolds Number Blade 1 PAN 16 -          
+  1647      Reynolds Number Blade 1 PAN 17 -          
+  1648      Reynolds Number Blade 1 PAN 18 -          
+  1649      Reynolds Number Blade 1 PAN 19 -          
+  1650      Reynolds Number Blade 2 PAN 0  -          
+  1651      Reynolds Number Blade 2 PAN 1  -          
+  1652      Reynolds Number Blade 2 PAN 2  -          
+  1653      Reynolds Number Blade 2 PAN 3  -          
+  1654      Reynolds Number Blade 2 PAN 4  -          
+  1655      Reynolds Number Blade 2 PAN 5  -          
+  1656      Reynolds Number Blade 2 PAN 6  -          
+  1657      Reynolds Number Blade 2 PAN 7  -          
+  1658      Reynolds Number Blade 2 PAN 8  -          
+  1659      Reynolds Number Blade 2 PAN 9  -          
+  1660      Reynolds Number Blade 2 PAN 10 -          
+  1661      Reynolds Number Blade 2 PAN 11 -          
+  1662      Reynolds Number Blade 2 PAN 12 -          
+  1663      Reynolds Number Blade 2 PAN 13 -          
+  1664      Reynolds Number Blade 2 PAN 14 -          
+  1665      Reynolds Number Blade 2 PAN 15 -          
+  1666      Reynolds Number Blade 2 PAN 16 -          
+  1667      Reynolds Number Blade 2 PAN 17 -          
+  1668      Reynolds Number Blade 2 PAN 18 -          
+  1669      Reynolds Number Blade 2 PAN 19 -          
+  1670      Reynolds Number Blade 3 PAN 0  -          
+  1671      Reynolds Number Blade 3 PAN 1  -          
+  1672      Reynolds Number Blade 3 PAN 2  -          
+  1673      Reynolds Number Blade 3 PAN 3  -          
+  1674      Reynolds Number Blade 3 PAN 4  -          
+  1675      Reynolds Number Blade 3 PAN 5  -          
+  1676      Reynolds Number Blade 3 PAN 6  -          
+  1677      Reynolds Number Blade 3 PAN 7  -          
+  1678      Reynolds Number Blade 3 PAN 8  -          
+  1679      Reynolds Number Blade 3 PAN 9  -          
+  1680      Reynolds Number Blade 3 PAN 10 -          
+  1681      Reynolds Number Blade 3 PAN 11 -          
+  1682      Reynolds Number Blade 3 PAN 12 -          
+  1683      Reynolds Number Blade 3 PAN 13 -          
+  1684      Reynolds Number Blade 3 PAN 14 -          
+  1685      Reynolds Number Blade 3 PAN 15 -          
+  1686      Reynolds Number Blade 3 PAN 16 -          
+  1687      Reynolds Number Blade 3 PAN 17 -          
+  1688      Reynolds Number Blade 3 PAN 18 -          
+  1689      Reynolds Number Blade 3 PAN 19 -          
+________________________________________________________________________________________________________________________
+Scale factors:
+1.08437501E-04
+2.26860374E-04
+2.28751764E-04
+2.30746150E-04
+2.43316799E-04
+2.45184466E-04
+2.46970698E-04
+7.14222500E+01
+5.45318562E+02
+7.18461484E+01
+5.45318562E+02
+5.45318562E+02
+1.91723282E-01
+0.00000000E+00
+0.00000000E+00
+2.26500010E-03
+2.26500010E-03
+1.12373238E-02
+1.12373238E-02
+1.35900002E-02
+1.35900002E-02
+1.15036684E-10
+1.15036684E-10
+1.12371874E-02
+1.12412500E-02
+1.12159376E-02
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+4.26485205E+00
+4.01597729E+00
+1.00097969E+01
+5.18130420E+00
+6.30097168E+00
+9.43526146E-13
+2.79784113E-04
+2.95323074E-04
+1.16130803E-06
+1.74577510E-03
+1.47392654E-03
+1.47507501E-03
+3.62737646E+00
+4.26544141E+00
+1.00097969E+01
+5.08928174E+00
+6.07866064E+00
+9.06155151E-14
+1.20705786E+00
+7.86623840E-01
+7.04374658E+00
+1.30410645E+00
+5.62459370E-06
+1.70745825E+00
+1.73634717E+00
+1.21011462E+00
+1.05498682E+01
+2.22084131E+00
+5.31794503E-06
+3.31012695E+00
+7.58596045E+00
+8.09192236E+00
+9.75087402E+00
+2.00576484E+01
+1.17426475E+01
+9.23021875E+00
+1.35835327E+00
+1.17675513E+00
+7.31843994E+00
+1.45313269E+00
+1.33205950E-05
+2.08514160E+00
+1.73748596E+00
+1.17119934E+00
+1.06899258E+01
+2.18147388E+00
+5.54843666E-06
+2.38947656E+00
+7.23670850E+00
+8.19060498E+00
+9.88152344E+00
+1.98535703E+01
+1.19299297E+01
+9.22967676E+00
+1.33214368E+00
+1.06900403E+00
+6.93774121E+00
+1.40263025E+00
+1.29167456E-05
+1.91548047E+00
+1.76733276E+00
+1.22079053E+00
+1.05883115E+01
+2.55396436E+00
+1.27102323E-05
+3.24313574E+00
+7.05382422E+00
+8.20263184E+00
+9.03237305E+00
+1.88473516E+01
+1.07273896E+01
+9.09727148E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+7.48259338E-01
+1.14200647E+00
+9.55874219E+00
+2.82737402E+00
+3.32947693E-01
+5.01281097E-01
+6.93217665E-05
+7.46749789E-05
+2.46739626E-04
+2.86212778E-03
+3.37638783E-03
+1.19423735E-03
+2.53525764E-04
+2.58390725E-04
+6.73143625E-04
+2.55482244E-03
+2.50647330E-03
+5.83127677E-04
+2.85800476E-02
+2.76597328E-02
+1.08236418E-02
+1.73742580E-03
+2.64099026E-03
+9.10008192E-04
+1.39971075E-02
+1.41282530E-02
+2.86743565E-02
+8.54573730E-01
+1.53062952E+00
+9.80247168E+00
+2.09549780E+00
+2.14498581E-01
+5.65843079E-01
+7.06424713E-05
+7.18012601E-05
+2.46932745E-04
+2.86556149E-03
+3.26007748E-03
+1.16958082E-03
+2.58534431E-04
+2.56977499E-04
+6.64111495E-04
+2.57877707E-03
+2.63766503E-03
+4.25447166E-04
+2.79799347E-02
+3.12656746E-02
+2.31373844E-02
+1.78128433E-03
+2.64500308E-03
+8.73276293E-04
+1.41968079E-02
+2.33640823E-02
+2.91228580E-02
+7.53692505E-01
+1.45674146E+00
+1.00271367E+01
+2.30571069E+00
+2.75402618E-01
+4.62958405E-01
+6.63093030E-05
+7.22372308E-05
+2.48719007E-04
+2.81703496E-03
+3.13203287E-03
+1.04262435E-03
+2.56941885E-04
+2.57049084E-04
+6.42466068E-04
+2.28143764E-03
+2.50758576E-03
+5.61552763E-04
+2.79648972E-02
+2.78886356E-02
+1.76730919E-02
+1.85268068E-03
+2.48632646E-03
+9.08674359E-04
+1.44107676E-02
+2.17080708E-02
+2.81275463E-02
+3.12499993E-07
+1.12373238E-02
+1.12415228E-02
+1.12160234E-02
+2.26500010E-03
+1.79731414E-04
+2.28751764E-04
+2.14294016E-04
+8.25588629E-05
+8.08458775E-06
+1.52302384E-04
+6.63824916E-04
+0.00000000E+00
+1.82367916E-02
+3.33531499E-03
+1.73366451E-03
+4.85817625E+02
+6.40068711E+01
+6.21081152E+00
+2.11600464E+00
+1.57732715E+00
+6.19437695E+00
+4.44728008E+01
+3.46300547E+01
+6.40077109E+01
+1.07473259E-02
+1.96181703E-03
+1.00865102E-03
+2.84674156E+02
+3.75060430E+01
+3.63466211E+00
+5.91523987E-01
+7.60019775E-01
+5.93796814E-01
+4.09072113E-01
+3.45335571E-01
+3.21186127E-01
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+3.12500000E-03
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+2.45184466E-04
+2.31344789E-04
+9.61371660E-05
+8.06926377E-06
+4.92805950E-05
+5.05518802E-05
+5.19960411E-05
+5.35566993E-05
+5.41816838E-05
+5.84972911E-05
+5.19502908E-05
+5.45238294E-05
+5.44776097E-05
+5.00764698E-05
+9.29218009E-05
+5.35350405E-05
+5.34887649E-05
+5.16114458E-05
+7.70794079E-05
+7.46738613E-05
+8.63491669E-05
+5.82991540E-05
+7.06086010E-05
+9.82153714E-05
+4.86973785E-05
+4.97034788E-05
+5.01678549E-05
+4.94924299E-05
+5.40942401E-05
+5.72874211E-05
+5.28084934E-05
+4.92454432E-05
+4.87463921E-05
+4.77359183E-05
+9.72941667E-05
+4.81309593E-05
+7.54211918E-05
+5.49542718E-05
+9.91289541E-05
+5.76052740E-05
+9.53022242E-05
+8.99370462E-05
+6.39641583E-05
+5.97870089E-05
+4.75081243E-05
+5.26424125E-05
+5.10124974E-05
+5.62694445E-05
+5.19668311E-05
+6.07525222E-05
+5.19836247E-05
+5.52885085E-05
+5.06216772E-05
+5.21065630E-05
+5.47888204E-05
+5.37688546E-05
+9.94787738E-05
+1.00475781E-04
+6.51029944E-05
+7.56184459E-05
+1.22348793E-04
+7.42617399E-05
+1.15280561E-04
+6.05563708E-05
+5.63905463E-05
+5.63859977E-05
+5.64155839E-05
+5.63983209E-05
+5.63806705E-05
+5.64028695E-05
+5.63980117E-05
+5.63904904E-05
+5.63798398E-05
+5.64159155E-05
+5.63221052E-05
+5.63944764E-05
+5.63406274E-05
+5.63804433E-05
+5.62936887E-05
+5.64164929E-05
+5.63833527E-05
+5.63532561E-05
+5.63875139E-05
+5.63840382E-05
+5.63736968E-05
+5.63731864E-05
+5.63723892E-05
+5.63709065E-05
+5.63897081E-05
+5.63777983E-05
+5.63950278E-05
+5.63327745E-05
+5.63628115E-05
+5.63907884E-05
+5.63950874E-05
+5.63460402E-05
+5.63974567E-05
+5.63075021E-05
+5.61181121E-05
+5.63824251E-05
+5.62856570E-05
+5.63093536E-05
+5.64037003E-05
+5.62377982E-05
+5.63956350E-05
+5.63909449E-05
+5.63808717E-05
+5.64026870E-05
+5.63896969E-05
+5.64074963E-05
+5.63614368E-05
+5.63903861E-05
+5.61694019E-05
+5.63675612E-05
+5.62400259E-05
+5.63873015E-05
+5.63794114E-05
+5.64152375E-05
+5.64041100E-05
+5.64148091E-05
+5.60973659E-05
+5.63323051E-05
+5.63860983E-05
+5.63380420E-05
+1.56098343E-05
+1.56114399E-05
+1.56102851E-05
+1.56116281E-05
+1.56115051E-05
+1.56110898E-05
+1.56014850E-05
+1.55964401E-05
+1.56025626E-05
+1.56129571E-05
+1.56116616E-05
+1.56162810E-05
+1.56102609E-05
+1.56108066E-05
+1.56077510E-05
+1.56142144E-05
+1.56125901E-05
+1.56135522E-05
+1.56126339E-05
+1.56158730E-05
+1.56039875E-05
+1.56031474E-05
+1.56094357E-05
+1.56072192E-05
+1.56024648E-05
+1.55980894E-05
+1.56101994E-05
+1.56019880E-05
+1.56116374E-05
+1.56114744E-05
+1.56109584E-05
+1.56094041E-05
+1.56096416E-05
+1.56159690E-05
+1.55988084E-05
+1.56142795E-05
+1.56139238E-05
+1.56156784E-05
+1.56139992E-05
+1.56132802E-05
+1.55986808E-05
+1.56010864E-05
+1.56036224E-05
+1.56067526E-05
+1.56001691E-05
+1.56062236E-05
+1.56095270E-05
+1.56079372E-05
+1.56025337E-05
+1.56098763E-05
+1.56107470E-05
+1.56112397E-05
+1.56091619E-05
+1.56114930E-05
+1.56090120E-05
+1.56106632E-05
+1.56098045E-05
+1.55981630E-05
+1.55959819E-05
+1.56154195E-05
+8.70954711E-06
+8.70279968E-06
+8.70679133E-06
+8.71175341E-06
+8.71081743E-06
+1.01722525E-05
+9.17662866E-06
+8.71153735E-06
+8.70950148E-06
+1.00172395E-05
+1.00172423E-05
+8.71172175E-06
+8.71118717E-06
+9.06719454E-06
+9.85135883E-06
+8.68937373E-06
+8.70883558E-06
+8.71778652E-06
+8.71348009E-06
+8.71190242E-06
+8.68666731E-06
+8.71122628E-06
+8.71158019E-06
+8.71145818E-06
+8.70914292E-06
+1.03015108E-05
+9.17152222E-06
+8.71150568E-06
+8.70936550E-06
+1.00128138E-05
+9.98574495E-06
+8.71168729E-06
+8.70846305E-06
+9.17770248E-06
+9.84787196E-06
+8.71749874E-06
+8.71554483E-06
+8.69238004E-06
+8.71576555E-06
+8.70777294E-06
+8.68678745E-06
+8.68785474E-06
+8.68532248E-06
+8.68616998E-06
+8.68252758E-06
+1.03066470E-05
+9.13317129E-06
+8.71154107E-06
+8.71170778E-06
+1.00141792E-05
+1.00171221E-05
+8.71168729E-06
+8.71768594E-06
+8.94879270E-06
+9.88195837E-06
+8.71594157E-06
+8.70794337E-06
+8.70838668E-06
+8.71241000E-06
+8.71552154E-06
+2.61886144E-03
+2.70616364E-03
+2.74353790E-03
+2.78568554E-03
+2.76594687E-03
+2.77554250E-03
+2.50967503E-03
+2.53816533E-03
+2.70498371E-03
+2.61124587E-03
+2.67980003E-03
+2.66735148E-03
+2.53691339E-03
+2.38891506E-03
+2.44638848E-03
+2.27343845E-03
+2.54747772E-03
+2.52730298E-03
+2.44679666E-03
+2.51781964E-03
+2.49991131E-03
+2.53357053E-03
+2.61980510E-03
+2.61280942E-03
+2.77181029E-03
+2.41709876E-03
+2.49855113E-03
+2.45005774E-03
+2.45446301E-03
+2.50098705E-03
+2.45100570E-03
+2.55311227E-03
+2.34273458E-03
+2.31936908E-03
+2.55366516E-03
+2.16921258E-03
+2.40201592E-03
+2.38534546E-03
+2.57931232E-03
+2.18419027E-03
+2.69976187E-03
+2.89002347E-03
+2.85437083E-03
+3.12290287E-03
+2.87586498E-03
+2.73706603E-03
+2.82316399E-03
+2.66778874E-03
+2.80296874E-03
+2.67075849E-03
+2.75983953E-03
+2.82516694E-03
+2.64806294E-03
+2.36025095E-03
+2.44277835E-03
+2.34127212E-03
+2.58528519E-03
+2.63288665E-03
+2.58064079E-03
+2.52403998E-03
+1.31355035E-03
+1.42174208E-03
+1.44618034E-03
+1.45869422E-03
+1.51800179E-03
+1.40100515E-03
+1.45380318E-03
+1.16160929E-03
+1.06076801E-03
+9.81882811E-04
+8.85242164E-04
+7.68019319E-04
+6.94449663E-04
+6.83569789E-04
+5.35682321E-04
+4.48237717E-04
+4.12851214E-04
+4.42889392E-04
+4.32497114E-04
+4.89350855E-04
+1.17844558E-03
+1.49816108E-03
+1.64954770E-03
+1.64262486E-03
+1.50803351E-03
+1.51375401E-03
+1.51441884E-03
+1.26833165E-03
+1.16983223E-03
+1.07095623E-03
+9.64764416E-04
+8.67201746E-04
+7.82150567E-04
+3.15364337E-03
+5.38494170E-04
+4.45599645E-04
+5.12944520E-04
+5.31321824E-04
+6.33345544E-04
+5.73787332E-04
+1.36506939E-03
+1.48946595E-03
+1.60809660E-03
+1.66372395E-03
+1.49301398E-03
+1.60446894E-03
+1.49250102E-03
+1.21815419E-03
+1.13879514E-03
+1.09497213E-03
+1.03191221E-03
+9.28730309E-04
+8.03630769E-04
+5.45167446E-04
+5.17712355E-04
+4.51055378E-04
+4.35186833E-04
+4.39629465E-04
+4.05190080E-04
+4.24113870E-04
+5.39324665E-03
+5.52301693E-03
+5.56244278E-03
+5.56978607E-03
+5.55783224E-03
+5.57932758E-03
+5.61347723E-03
+5.57935619E-03
+5.45691299E-03
+5.49132013E-03
+5.54338694E-03
+4.93214512E-03
+5.37432909E-03
+5.57584715E-03
+5.48690891E-03
+5.60042667E-03
+5.55447340E-03
+4.57839870E-03
+4.02182007E-03
+3.64899516E-03
+4.81152201E-03
+5.59834337E-03
+5.49140358E-03
+5.55908298E-03
+5.62169933E-03
+5.55007124E-03
+5.61803198E-03
+5.27739954E-03
+5.62470961E-03
+5.62295914E-03
+5.42177677E-03
+5.08602428E-03
+4.94499969E-03
+5.62205267E-03
+5.62040138E-03
+5.01921606E-03
+4.67600155E-03
+4.69143534E-03
+4.40232468E-03
+4.55758810E-03
+5.55362511E-03
+5.38260651E-03
+5.55460739E-03
+5.55839777E-03
+5.53350925E-03
+5.55249834E-03
+5.61256981E-03
+5.23525333E-03
+4.87593794E-03
+5.22983074E-03
+5.59637499E-03
+5.60209846E-03
+5.58839989E-03
+4.48285961E-03
+5.48516846E-03
+5.32279491E-03
+5.47274399E-03
+5.46603298E-03
+5.33160305E-03
+5.58658838E-03
+5.22238350E-03
+5.52491522E-03
+5.57427549E-03
+5.60364532E-03
+5.57902431E-03
+5.56039429E-03
+5.60306120E-03
+5.59451342E-03
+5.59848070E-03
+5.29837370E-03
+5.55855083E-03
+4.84227467E-03
+5.36329031E-03
+5.52148628E-03
+5.37658262E-03
+5.62035465E-03
+5.58579111E-03
+4.35554552E-03
+3.88345337E-03
+3.57012177E-03
+4.67860413E-03
+5.59051561E-03
+5.55743074E-03
+5.61833620E-03
+5.62080050E-03
+5.61506271E-03
+5.56473398E-03
+5.61569309E-03
+5.54061508E-03
+5.53500271E-03
+5.41863155E-03
+4.75701284E-03
+4.98867846E-03
+5.61928940E-03
+5.49583817E-03
+4.81886768E-03
+4.48693228E-03
+4.28215981E-03
+4.72942019E-03
+4.29105091E-03
+5.54603577E-03
+5.47490215E-03
+5.61329222E-03
+5.58892965E-03
+5.61667871E-03
+5.61436939E-03
+5.58408022E-03
+5.42715311E-03
+4.95236063E-03
+5.20203304E-03
+5.61982965E-03
+5.59782314E-03
+5.49599218E-03
+5.04252338E-03
+5.60575104E-03
+5.49183273E-03
+5.23384619E-03
+5.19033098E-03
+5.60636759E-03
+5.27276945E-03
+1.83942332E-06
+7.31660333E-06
+1.63091887E-05
+2.86163017E-05
+4.39630188E-05
+6.20065220E-05
+8.23437497E-05
+1.04520403E-04
+1.28041089E-04
+1.52380392E-04
+1.76994607E-04
+2.01333910E-04
+2.24854603E-04
+2.47031257E-04
+2.67368466E-04
+2.85411984E-04
+3.00758690E-04
+3.13065797E-04
+3.22058409E-04
+3.27535570E-04
+1.83942332E-06
+7.31660333E-06
+1.63091887E-05
+2.86163017E-05
+4.39630188E-05
+6.20065220E-05
+8.23437497E-05
+1.04520403E-04
+1.28041089E-04
+1.52380392E-04
+1.76994607E-04
+2.01333910E-04
+2.24854603E-04
+2.47031257E-04
+2.67368466E-04
+2.85411984E-04
+3.00758690E-04
+3.13065797E-04
+3.22058409E-04
+3.27535570E-04
+1.83942332E-06
+7.31660333E-06
+1.63091887E-05
+2.86163017E-05
+4.39630188E-05
+6.20065220E-05
+8.23437497E-05
+1.04520403E-04
+1.28041089E-04
+1.52380392E-04
+1.76994607E-04
+2.01333910E-04
+2.24854603E-04
+2.47031257E-04
+2.67368466E-04
+2.85411984E-04
+3.00758690E-04
+3.13065797E-04
+3.22058409E-04
+3.27535570E-04
+1.74518340E-07
+6.94174902E-07
+1.54736149E-06
+2.71501904E-06
+4.17106459E-06
+5.88297192E-06
+7.81250000E-06
+9.91654675E-06
+1.21481102E-05
+1.44573422E-05
+1.67926569E-05
+1.91018898E-05
+2.13334542E-05
+2.34375000E-05
+2.53670290E-05
+2.70789359E-05
+2.85349805E-05
+2.97026392E-05
+3.05558257E-05
+3.10754813E-05
+1.74518340E-07
+6.94174902E-07
+1.54736149E-06
+2.71501904E-06
+4.17106459E-06
+5.88297192E-06
+7.81250000E-06
+9.91654675E-06
+1.21481102E-05
+1.44573422E-05
+1.67926569E-05
+1.91018898E-05
+2.13334542E-05
+2.34375000E-05
+2.53670290E-05
+2.70789359E-05
+2.85349805E-05
+2.97026392E-05
+3.05558257E-05
+3.10754813E-05
+1.74518340E-07
+6.94174902E-07
+1.54736149E-06
+2.71501904E-06
+4.17106459E-06
+5.88297192E-06
+7.81250000E-06
+9.91654675E-06
+1.21481102E-05
+1.44573422E-05
+1.67926569E-05
+1.91018898E-05
+2.13334542E-05
+2.34375000E-05
+2.53670290E-05
+2.70789359E-05
+2.85349805E-05
+2.97026392E-05
+3.05558257E-05
+3.10754813E-05
+4.68300896E-02
+4.71717529E-02
+2.24161084E+00
+4.75834427E-02
+4.78292847E-02
+4.81716843E-02
+1.65440161E+00
+7.37239258E-01
+3.25334656E-01
+3.27313309E-02
+9.84347763E-02
+2.46311188E-02
+2.07982635E-02
+1.88530388E-02
+1.77030258E-02
+5.74740181E-02
+1.75583344E-02
+1.72209320E-02
+1.73286858E-02
+1.73620796E-02
+4.86553268E-02
+2.05173730E+00
+2.01287158E+00
+1.84177649E+00
+1.50447339E+00
+1.40496838E+00
+1.50574182E+00
+5.87863770E-02
+5.08935814E-02
+4.82017609E-01
+1.72098434E-01
+1.86589394E-02
+1.60102024E-02
+3.18914673E+00
+4.41856415E-01
+1.58360910E-02
+1.60422287E-02
+1.60489120E-02
+1.60311146E-02
+1.60762348E-02
+2.58425098E+00
+5.13431549E-02
+2.36286719E+00
+5.13100014E-02
+5.14178963E-02
+5.02642822E-02
+1.80664465E+00
+4.34310341E-02
+3.70430679E-02
+3.27687721E-02
+4.26200500E-01
+5.80757996E-01
+1.95003021E-01
+2.88603535E-02
+3.23403549E-02
+3.17438736E-02
+3.24346237E-02
+3.26816254E-02
+3.64274963E-01
+1.98557510E-01
+3.15787718E-05
+3.20298932E-05
+3.29497457E-05
+3.42606828E-05
+3.60141695E-05
+3.90202329E-05
+4.24015559E-05
+3.84562090E-05
+3.62262391E-05
+4.36249338E-05
+5.57272881E-05
+4.90800925E-05
+4.80856523E-05
+5.07881939E-05
+5.33548407E-05
+6.13897406E-05
+8.19623619E-05
+5.60009144E-05
+6.18221164E-05
+8.29997510E-05
+3.08381338E-05
+3.14401649E-05
+3.24426703E-05
+3.38817239E-05
+3.60881165E-05
+3.95961516E-05
+4.34387475E-05
+4.72227409E-05
+4.90294024E-05
+5.31074964E-05
+9.05572623E-05
+4.92705777E-05
+6.05091006E-05
+5.18718548E-05
+9.39428583E-05
+5.54343127E-05
+8.86244848E-05
+8.29958320E-05
+5.49599342E-05
+5.57397790E-05
+3.10904644E-05
+3.14259641E-05
+3.25564407E-05
+3.43113244E-05
+3.67324464E-05
+3.99951786E-05
+4.31157574E-05
+4.43787389E-05
+4.40848507E-05
+4.17681895E-05
+4.09105606E-05
+4.52079587E-05
+1.05969183E-04
+9.40250754E-05
+5.80209456E-05
+7.39281699E-05
+7.93435872E-05
+6.56137466E-05
+7.08167180E-05
+5.58862016E-05
+5.28168082E-05
+5.28013408E-05
+5.26843071E-05
+5.24915233E-05
+5.22324443E-05
+5.19055724E-05
+5.17747179E-05
+5.08394837E-05
+5.00070676E-05
+4.88530248E-05
+4.71940637E-05
+4.47437130E-05
+4.06766385E-05
+3.83331776E-05
+3.39164771E-05
+3.24941352E-05
+3.53872664E-05
+3.70480940E-05
+3.80699076E-05
+5.08024208E-05
+5.32332212E-05
+5.31188399E-05
+5.29244319E-05
+5.26591241E-05
+5.26289307E-05
+5.27014583E-05
+5.30955121E-05
+5.07271513E-05
+4.95890602E-05
+4.84664030E-05
+4.70146127E-05
+4.48810980E-05
+4.14287709E-05
+3.39681990E-05
+3.32802758E-05
+3.37984972E-05
+3.62129286E-05
+3.75692472E-05
+3.85565348E-05
+3.90857533E-05
+5.33270948E-05
+5.32071330E-05
+5.30221574E-05
+5.27125970E-05
+5.22883832E-05
+5.17458282E-05
+5.07854149E-05
+5.08491918E-05
+5.01679555E-05
+4.89694066E-05
+4.71741445E-05
+4.48583290E-05
+4.27118056E-05
+4.00347263E-05
+3.49009931E-05
+3.21850143E-05
+3.45203057E-05
+3.63642313E-05
+4.92435172E-05
+3.81530225E-05
+1.03292786E-01
+9.89541321E-02
+1.00955063E-01
+9.97360382E-02
+9.34016647E-02
+7.97125702E-02
+5.55474281E-02
+4.71508560E-02
+4.15025368E-02
+3.65673218E-02
+3.18215714E-02
+2.74649582E-02
+2.37070293E-02
+1.51282473E-02
+1.12756691E-02
+1.23604155E-02
+1.44930592E-02
+1.59163589E-02
+1.58857660E-02
+1.35102034E-02
+8.74116516E-02
+9.12801361E-02
+7.60687485E-02
+7.15121841E-02
+7.06661911E-02
+6.90759583E-02
+4.91035995E-02
+4.35382538E-02
+4.08650475E-02
+3.69775352E-02
+3.23875084E-02
+2.76411343E-02
+2.15340347E-02
+1.33886322E-01
+1.01103382E-02
+1.07691975E-02
+1.11128721E-02
+1.26761284E-02
+1.35085640E-02
+1.81299610E-02
+9.27884369E-02
+7.89933929E-02
+8.37329788E-02
+8.25958710E-02
+7.37875366E-02
+8.55462494E-02
+4.41228981E-02
+3.86795464E-02
+3.32454643E-02
+2.91945381E-02
+2.56658173E-02
+2.17102871E-02
+1.95200825E-02
+1.46213875E-02
+1.08509493E-02
+1.04907656E-02
+1.05078125E-02
+1.01034164E-02
+1.15199862E-02
+1.12264671E-02
+2.34933105E-01
+1.88995865E-01
+1.69705795E-01
+1.54327026E-01
+1.45479019E-01
+1.50199219E-01
+1.16983215E-01
+8.09989471E-02
+6.68309250E-02
+5.79269257E-02
+4.78301468E-02
+3.77636414E-02
+2.68300953E-02
+1.96066971E-02
+1.21187696E-02
+8.60417843E-03
+1.11480436E-02
+1.35153913E-02
+1.53132286E-02
+1.56779985E-02
+1.94103973E-01
+2.11674591E-01
+1.95999008E-01
+1.79402985E-01
+1.52231888E-01
+1.26874664E-01
+1.30782730E-01
+1.09109360E-01
+8.96020203E-02
+7.14740601E-02
+5.46030846E-02
+3.96049232E-02
+2.51215553E-02
+4.45235901E-01
+1.61564903E-02
+9.76668453E-03
+1.41982336E-02
+1.99332180E-02
+1.55626287E-02
+1.65306931E-02
+2.28375610E-01
+1.90779831E-01
+1.73897003E-01
+1.63523956E-01
+1.57951065E-01
+1.77044449E-01
+1.06843025E-01
+9.08435974E-02
+7.64606781E-02
+6.13290024E-02
+4.81099815E-02
+3.70605354E-02
+2.77319412E-02
+1.66564426E-02
+1.12451868E-02
+8.07741833E-03
+7.95462942E-03
+8.44600105E-03
+1.00906868E-02
+1.10324078E-02
+1.99963913E-02
+1.63243065E-02
+1.61760330E-02
+1.58327246E-02
+1.42401447E-02
+2.06631317E-02
+2.75818558E-02
+1.03881922E-02
+8.73424053E-03
+1.07549162E-02
+8.78373718E-03
+4.57980728E-03
+3.65176129E-03
+5.28098726E-03
+3.30432057E-03
+1.67883539E-03
+1.33067000E-03
+1.22297144E-03
+1.59346831E-03
+2.07244492E-03
+1.58645449E-02
+1.92305145E-02
+2.12038479E-02
+2.08124886E-02
+1.83879967E-02
+2.61133060E-02
+2.49898586E-02
+1.25613270E-02
+1.07388916E-02
+1.32807074E-02
+1.08086739E-02
+5.81549025E-03
+4.62904978E-03
+1.44128723E-01
+4.31003809E-03
+1.57585359E-03
+1.56325316E-03
+4.36097908E-03
+3.58069611E-03
+2.98002172E-03
+1.83858757E-02
+1.57634373E-02
+1.72414932E-02
+1.73496437E-02
+1.50124702E-02
+2.90446129E-02
+2.67080765E-02
+1.02284012E-02
+8.59337044E-03
+1.11604843E-02
+9.22751713E-03
+4.63350248E-03
+3.52742934E-03
+3.91678667E-03
+3.89580488E-03
+1.74049354E-03
+1.47033274E-03
+1.29473770E-03
+1.15408707E-03
+1.76075888E-03
+4.46135712E-03
+4.44530916E-03
+4.41864491E-03
+4.42928839E-03
+4.50978422E-03
+5.10171700E-03
+6.71005201E-03
+3.12618399E-03
+2.89862943E-03
+2.65659380E-03
+2.40103531E-03
+2.16700482E-03
+1.95334470E-03
+2.16940689E-03
+1.89403462E-03
+1.46545625E-03
+1.36316836E-03
+1.47989488E-03
+1.56196547E-03
+1.47442448E-03
+4.56704187E-03
+4.55167103E-03
+4.54576731E-03
+4.53878784E-03
+4.50364447E-03
+4.75337172E-03
+5.78269291E-03
+3.46316552E-03
+3.20381260E-03
+2.93146610E-03
+2.65240812E-03
+2.37450218E-03
+2.11081171E-03
+1.07148876E-02
+1.98478639E-03
+1.62248647E-03
+1.74779916E-03
+2.05864286E-03
+1.91047430E-03
+1.85118842E-03
+4.49748993E-03
+4.46159887E-03
+4.40372753E-03
+4.36607170E-03
+4.47928429E-03
+5.35085011E-03
+6.20970774E-03
+3.24547148E-03
+2.99628615E-03
+2.72781086E-03
+2.46228099E-03
+2.24441051E-03
+2.03139043E-03
+1.85626101E-03
+1.82788455E-03
+1.37878072E-03
+1.32975280E-03
+1.42258489E-03
+1.49266541E-03
+1.42622817E-03
+4.40168667E-03
+4.31979656E-03
+4.18591595E-03
+4.00455761E-03
+3.78330469E-03
+3.58249593E-03
+3.37485671E-03
+3.13666821E-03
+2.89763308E-03
+2.65533233E-03
+2.39902663E-03
+2.16799736E-03
+1.94515181E-03
+1.71907091E-03
+1.49764311E-03
+1.32537162E-03
+1.39915884E-03
+1.52909350E-03
+1.63452601E-03
+1.69878733E-03
+4.58329868E-03
+4.51592207E-03
+4.40533257E-03
+4.25408173E-03
+4.08728600E-03
+3.89982939E-03
+3.69515300E-03
+3.46151638E-03
+3.20392489E-03
+2.93109250E-03
+2.65286708E-03
+2.37641215E-03
+2.11211944E-03
+1.87784779E-03
+1.65574455E-03
+1.66498828E-03
+1.80735672E-03
+1.92082477E-03
+2.00434899E-03
+2.07056069E-03
+4.84180880E-03
+4.72811079E-03
+4.54267025E-03
+4.29874229E-03
+4.01464033E-03
+3.71024132E-03
+3.45954943E-03
+3.24399567E-03
+2.99596381E-03
+2.72923708E-03
+2.45977211E-03
+2.23944426E-03
+2.01983666E-03
+1.80750012E-03
+1.61464095E-03
+1.45326281E-03
+1.40007460E-03
+1.51953280E-03
+1.60680044E-03
+1.65973938E-03
+2.30379403E-04
+2.30290189E-04
+2.30147094E-04
+2.29964137E-04
+2.29768559E-04
+2.29562402E-04
+2.29293227E-04
+2.28894830E-04
+2.28489965E-04
+2.28227437E-04
+2.28065982E-04
+2.28118375E-04
+2.28051931E-04
+2.28338659E-04
+2.28498042E-04
+2.28593111E-04
+2.28675574E-04
+2.28751406E-04
+2.28810862E-04
+2.28856906E-04
+2.29749829E-04
+2.29656771E-04
+2.29464486E-04
+2.29129404E-04
+2.28712812E-04
+2.28373110E-04
+2.28256106E-04
+2.28180066E-04
+2.28106603E-04
+2.28029147E-04
+2.27952391E-04
+2.27878943E-04
+2.28104830E-04
+2.27993652E-04
+2.27881998E-04
+2.28045613E-04
+2.28292063E-04
+2.28665993E-04
+2.28933021E-04
+2.29093999E-04
+2.27865815E-04
+2.27866441E-04
+2.27867857E-04
+2.27871552E-04
+2.27877900E-04
+2.27887675E-04
+2.27895722E-04
+2.27916792E-04
+2.27938548E-04
+2.27966398E-04
+2.28003308E-04
+2.28053734E-04
+2.28016123E-04
+2.28162050E-04
+2.28143975E-04
+2.28254050E-04
+2.28268221E-04
+2.28313252E-04
+2.28460863E-04
+2.28551850E-04
+4.61918497E-03
+4.53750610E-03
+4.40399075E-03
+4.22317553E-03
+4.00264692E-03
+3.75330782E-03
+3.48910332E-03
+3.26324534E-03
+3.02236724E-03
+2.76789188E-03
+2.50407553E-03
+2.23773837E-03
+1.97672570E-03
+1.72988605E-03
+1.50265956E-03
+1.36988187E-03
+1.51668966E-03
+1.63420522E-03
+1.72007728E-03
+1.77225542E-03
+4.41304684E-03
+4.34566450E-03
+4.23506117E-03
+4.08379078E-03
+3.90455604E-03
+3.69357586E-03
+3.47069573E-03
+3.25713015E-03
+3.02073336E-03
+2.76675963E-03
+2.51404238E-03
+2.26769233E-03
+2.02509522E-03
+1.78625679E-03
+1.56252921E-03
+1.44281042E-03
+1.58483684E-03
+1.69809687E-03
+1.78574121E-03
+1.85177350E-03
+4.84603596E-03
+4.73197269E-03
+4.54576874E-03
+4.29577875E-03
+3.99658227E-03
+3.66936302E-03
+3.38830161E-03
+3.14384985E-03
+2.89781618E-03
+2.63475680E-03
+2.38716459E-03
+2.15175700E-03
+1.92848694E-03
+1.71159959E-03
+1.50686359E-03
+1.35876739E-03
+1.50791025E-03
+1.62735176E-03
+1.71465957E-03
+1.76771426E-03
+2.07001233E-03
+1.64100385E-03
+1.51685369E-03
+1.68559182E-03
+2.05233955E-03
+2.41402888E-03
+4.29260683E-03
+1.39590830E-04
+2.46960334E-05
+1.83139462E-05
+2.56012660E-05
+3.67701389E-05
+5.47127202E-05
+8.49803448E-04
+9.00583208E-04
+5.10642290E-04
+4.24964517E-04
+4.54270840E-04
+2.69301862E-04
+5.90412736E-04
+1.87870932E-03
+1.33015609E-03
+1.22345281E-03
+1.35325062E-03
+1.77777255E-03
+2.31309056E-03
+2.63481212E-03
+9.02654380E-05
+3.79950814E-05
+2.51303203E-05
+2.23296266E-05
+6.58905730E-05
+3.80459577E-04
+9.30342293E-03
+9.37309384E-04
+5.39263129E-04
+4.19862896E-04
+7.03315973E-04
+3.31318170E-04
+7.22281933E-04
+1.87656331E-03
+1.44968903E-03
+1.23151422E-03
+1.40246892E-03
+1.88750112E-03
+3.05493999E-03
+4.40540457E-03
+1.61137074E-04
+5.79476617E-05
+3.10583413E-05
+2.68172044E-05
+3.09383105E-05
+6.06424250E-05
+9.94324446E-04
+1.07348394E-03
+5.87449908E-04
+4.98726547E-04
+4.87573147E-04
+5.63701451E-04
+6.64985955E-04
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+0.00000000E+00
+1.78576544E-04
+1.30897567E-04
+1.43099844E-04
+1.60900697E-04
+2.10902408E-04
+3.12827408E-04
+5.38269520E-04
+9.48630460E-06
+1.65226113E-06
+1.48058031E-06
+2.56228796E-06
+1.71363773E-06
+2.70884088E-06
+8.91706869E-05
+1.06811635E-04
+5.39613478E-05
+4.77551706E-05
+6.04992583E-05
+2.66396999E-05
+4.72696871E-05
+1.86459586E-04
+1.37436047E-04
+1.51806563E-04
+1.69981644E-04
+2.20748320E-04
+3.12300503E-04
+3.51689279E-04
+5.35630016E-06
+2.31028232E-06
+1.93964038E-06
+2.67654471E-06
+3.34215816E-06
+1.44614540E-05
+9.16380525E-04
+1.13199204E-04
+5.21488525E-05
+4.14874963E-05
+5.14665768E-05
+2.93285884E-05
+5.78861721E-05
+1.92082196E-04
+1.25823110E-04
+1.47474244E-04
+1.67651758E-04
+2.40373045E-04
+3.22919160E-04
+4.09444243E-04
+6.81811757E-06
+1.87243661E-06
+1.10100966E-06
+1.28097541E-06
+3.01378872E-06
+2.57141516E-06
+1.55696347E-04
+1.46320313E-04
+7.79212341E-05
+6.76987171E-05
+5.43634817E-05
+5.39314225E-05
+8.41572955E-05
+1.35438891E+02
+1.34951703E+02
+1.34142219E+02
+1.34465344E+02
+1.36909047E+02
+1.54879078E+02
+2.03705281E+02
+9.49053984E+01
+8.79972500E+01
+8.06494766E+01
+7.28911797E+01
+6.57864297E+01
+5.93000820E+01
+6.58593437E+01
+5.74995352E+01
+4.44886523E+01
+4.13833750E+01
+4.49269844E+01
+4.74185039E+01
+4.47609141E+01
+1.38647297E+02
+1.38180672E+02
+1.38001422E+02
+1.37789547E+02
+1.36722656E+02
+1.44303937E+02
+1.75552312E+02
+1.05135570E+02
+9.72620703E+01
+8.89941094E+01
+8.05224063E+01
+7.20856797E+01
+6.40805000E+01
+3.25285000E+02
+6.02545977E+01
+4.92558125E+01
+5.30600859E+01
+6.24967500E+01
+5.79986133E+01
+5.61987969E+01
+1.36535812E+02
+1.35446234E+02
+1.33689359E+02
+1.32546188E+02
+1.35983125E+02
+1.62442313E+02
+1.88515719E+02
+9.85267656E+01
+9.09619375E+01
+8.28115000E+01
+7.47504844E+01
+6.81363281E+01
+6.16694102E+01
+5.63527930E+01
+5.54913320E+01
+4.18573359E+01
+4.03689375E+01
+4.31871523E+01
+4.53146719E+01
+4.32977617E+01

@@ -107,6 +107,7 @@ elseif strcmp(cal.type,'rpm_voltage_signal')
     x = data(:,ind);
     t = data(:,ind_time);
     rate = 1/mean(diff(t),'omitnan');
+    
     [y, dydt, ddyddt] = process_counter_voltage_signal(t, x, ceil(cal.data.windowSize*rate), cal.data.threshold, rate, cal.data.slope);
 
     % create out.(field_names), where filed names are from cal.output_names
@@ -123,12 +124,34 @@ elseif strcmp(cal.type,'encoder')
     ind = flexibleStrCmp(dataColumns,cal.input_channels);
     ind_time = flexibleStrCmp(dataColumns,'time');
 
-    
-    y = unwrap(data(:,ind)*(2*pi/cal.data.PPR));
+    reset_ind = find(diff(data(:,ind))<-10000); % identify the real resets
+    false_reset_ind = find(diff(data(:,ind))>-10000 & diff(data(:,ind))<-20); % identify false resets
+
+    y = data(:,ind);
+    if ~isempty(reset_ind)
+        y(1:reset_ind(1)) = NaN; % dont use data before the first reset
+
+        if ~isempty(false_reset_ind)
+
+            % Loop through each false reset index to correct the signal
+            for II = 1:length(false_reset_ind)
+
+                % Find next reset (real or false) after this false reset
+                next_reset_ind = min([reset_ind(reset_ind>false_reset_ind(II));...
+                    false_reset_ind(false_reset_ind>false_reset_ind(II))]);
+
+                % Adjust the signal from this index onward
+                y(false_reset_ind(II) + 1:next_reset_ind) = y(false_reset_ind(II) + 1:next_reset_ind) + y(false_reset_ind(II));
+            end
+        end
+    end
+
+    y = y*(2*pi/cal.data.PPR);
+    y_unwrapped = unwrap(y);
     t = data(:,ind_time);
     rate = 1/mean(diff(t),'omitnan');
 
-    [dy, ddy] = multipolydiff(y, ceil(cal.data.windowSize*rate), 2);
+    [dy, ddy] = multipolydiff(y_unwrapped, ceil(cal.data.windowSize*rate), 2);
 
     % create out.(field_names), where filed names are from cal.output_names
     out.(cal.output_names{1}) = y;

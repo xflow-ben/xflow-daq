@@ -1,12 +1,15 @@
-function [td,start_time,end_time] = convertTDMStoXFlowFormat(d,previous_start_time,previous_end_time)
+function [td,start_time,end_time] = convertTDMStoXFlowFormat(d,default_rate,previous_start_time,previous_end_time)
 
 %% Extract timestamps
-td.rate = d.property(strcmp({d.property.name},'rate')).value; % DAQ sample rate [Hz]
-
+if isempty(d.property(strcmp({d.property.name},'rate')))
+    td.rate = default_rate;
+else % this is the approch we took before using continous data aquisition on 10/14/24
+    td.rate = d.property(strcmp({d.property.name},'rate')).value; % DAQ sample rate [Hz]
+end
 % NOTE: I'm assuming the start time is the same for all channels in a file
 start_time = d.group.channel(1).property(strcmp({d.group.channel(1).property.name},'wf_start_time')).value;
 
-if nargin > 1
+if nargin > 2
     % If the start_time is the same between files, keep incrmenting time
     % NOTE: I'm assuming the files are read in the right order for this...
     % will be fixed in the future

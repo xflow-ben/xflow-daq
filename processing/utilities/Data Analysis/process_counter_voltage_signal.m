@@ -1,11 +1,11 @@
 function [y, dydt, ddyddt] = process_counter_voltage_signal(t, x, win, thres, rate, k)
-% process_counter_voltage_signal: Processes an counter voltage signal by 
+% process_counter_voltage_signal: Processes an counter voltage signal by
 % fitting polynomials over a moving window and computes its first and second derivatives.
 %
 % INPUTS:
 %   t     - Time vector (assumed in seconds)
 %   x     - Voltage signal data
-%   win   - Window size for polynomial fitting 
+%   win   - Window size for polynomial fitting
 %   thres - Voltage threshold to detect signal transitions (counts)
 %   rate  - Sampling rate or data rate (in Hz)
 %
@@ -36,14 +36,19 @@ tc = t(dx > 0);
 xc = (1:length(tc)) * k;
 
 % Step 5: Interpolate the new scaled counter signal (y) to match the original time vector
-y = interp1(tc, xc, t);
+if length(tc) > 1
+    y = interp1(tc(~isnan(tc)), xc(~isnan(tc)), t);
 
-% Step 6: Use a polynomial fitting function to compute derivatives
-% The function `multipolydiff` performs a moving window polynomial fit and computes
-% the first and second derivatives (velocity and acceleration).
-% dy: first derivative, ddy: second derivative
-[dy, ddy] = multipolydiff(y, win, 2);
-
+    % Step 6: Use a polynomial fitting function to compute derivatives
+    % The function `multipolydiff` performs a moving window polynomial fit and computes
+    % the first and second derivatives (velocity and acceleration).
+    % dy: first derivative, ddy: second derivative
+    [dy, ddy] = multipolydiff(y, win, 2);
+else
+    y = zeros(size(t));
+    dy = zeros(size(t));
+    ddy = zeros(size(t));
+end
 % Step 7: Adjust the derivatives by the sampling rate
 % Velocity (dy) is divided by the sampling rate (rate)
 % Acceleration (ddy) is divided by rate^2 to account for the time scaling
