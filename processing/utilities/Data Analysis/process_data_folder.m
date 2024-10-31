@@ -113,9 +113,12 @@ for KK = 1:length(segment_start_ind)
     end_time = master_time(segment_end_ind(KK));
 
     new_time = start_time:1/consts.DAQ.downsampled_rate:end_time;
+    % 
+    % Do process before resample cals first
+    % Then resample all
 
     for II = 1:length(raw_multi_file)
-        if ~isnan(raw_multi_file(II).rate)
+        if ~isnan(raw_multi_file(II).rate) && ~consts.data.calibrate_before_resample(II)
             ind_time = strcmp(raw_multi_file(II).chanNames,'time');
             if II == 1
                 raw_combined = raw_multi_file(II);

@@ -68,7 +68,7 @@ end
 save(fullfile(files.absolute_data_dir,files.relative_tare_dir,'tareList.mat'),'tareList')
 
 %% Process data with the same filename timestamps
-for II = 1:length(data_filename_timestamps)
+for II = 6%1:length(data_filename_timestamps)
     II/length(data_filename_timestamps)
     save_dir = fullfile(files.absolute_data_dir,files.relative_results_save_dir);
     save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',data_filename_timestamps(II)));
