@@ -61,7 +61,7 @@ for II = 1:length(consts.data.file_name_conventions)
     if isempty(dataFiles)
         raw_multi_file(II).rate = NaN;
     else
-        for JJ = 1:length(dataFiles)
+        for JJ = 1%:length(dataFiles)
             dataFiles(JJ).name
             % Load data
             tdms = readTDMS(dataFiles(JJ).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));
@@ -113,63 +113,72 @@ for KK = 1:length(segment_start_ind)
     end_time = master_time(segment_end_ind(KK));
 
     new_time = start_time:1/consts.DAQ.downsampled_rate:end_time;
-    % 
-    % Do process before resample cals first
-    % Then resample all
 
+    %% Calibrate each file type individually
+    % if it is the encoder file, it needs the reset commands from the RPM
+    % sensor
     for II = 1:length(raw_multi_file)
-        if ~isnan(raw_multi_file(II).rate) && ~consts.data.calibrate_before_resample(II)
+        if consts.data.calibrate_before_resample(II) & ~isempty(raw_multi_file(II).chanNames)
+            calibrated_data(II) = calibrate_data(cal,raw_multi_file(II));
+            calibrated_fields = fieldnames(calibrated_data(II).td);
+            ind_time = strcmp(calibrated_fields,'Time');
+            for JJ = 1:length(calibrated_fields)
+                if strcmp(calibrated_fields{JJ},'theta_encoder') % digitally resample counter channel
+                %%% BEN: Put your encoder resetting here   
+                % resets are at calibrated_data(8).resetTimes
+                % encoder thetas are at calibrate_data(II).theta_encoder
+                % encoder time is at calibrate_data(II).Time
+                % you should delete the resetTimes since it's going to be
+                % resampled in the next step and become junk... or we can
+                % make an exception so it stays useful information. Your
+                % call.
+                end
+            end
+        end
+    end
+    %% Downsample all the calibrated data together into results struct
+    for II = 1:length(calibrated_data)
+        if ~isempty(calibrated_data(II).td)
+            calibrated_fields = fieldnames(calibrated_data(II).td);
+            for JJ = 1:length(calibrated_fields)
+                if ~strcmp(calibrated_fields{JJ},'Time')
+                    [t_resampled,y_resampled] = resample_w_time(calibrated_data(II).rate,consts.DAQ.downsampled_rate,...
+                        calibrated_data(II).td.Time,calibrated_data(II).td.(calibrated_fields{JJ}));
+                    results(KK).td.(calibrated_fields{JJ}) =  interp1(t_resampled,y_resampled,new_time');
+                end
+            end
+        end
+    end
+    
+    %% Combine remaining channels raw data at downsampled rate then calibrate it
+    flag = 0;
+    for II = 1:length(raw_multi_file)
+        if ~consts.data.calibrate_before_resample(II) & ~isempty(raw_multi_file(II).chanNames) % is there is no data, skip II
             ind_time = strcmp(raw_multi_file(II).chanNames,'time');
-            if II == 1
+            if flag == 0
                 raw_combined = raw_multi_file(II);
                 raw_combined.rate = consts.DAQ.downsampled_rate;
                 [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,raw_multi_file(II).data(:,ind_time),raw_multi_file(II).data);
                 y_resampled(:,ind_time) = t_resampled';
                 raw_combined.data = interp1(t_resampled,y_resampled,new_time);
+                flag = 1;
             else
                 raw_combined.chanNames = [raw_combined.chanNames, raw_multi_file(II).chanNames(~ind_time)];
                 raw_combined.tare_applied = [raw_combined.tare_applied, raw_multi_file(II).tare_applied(~ind_time)];
-                [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,raw_multi_file(II).data(:,ind_time),raw_multi_file(II).data(:,~ind_time));
+                [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,...
+                    raw_multi_file(II).data(:,ind_time),raw_multi_file(II).data(:,~ind_time));
                 raw_combined.data = [raw_combined.data, interp1(t_resampled,y_resampled,new_time')];
             end
+            
         end
     end
-    results(KK) = calibrate_data(cal,raw_combined);
+    temp = calibrate_data(cal,raw_combined);
+    temp_fieldnames = fieldnames(temp.td);
+    for II = 1:length(temp_fieldnames)
+        results(KK).td.(temp_fieldnames{II}) = temp.td.(temp_fieldnames{II});
+    end
+    results(KK).rate = temp.rate;
     results(KK).td.Time = new_time';
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%% EXCEPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%% Counter type channels need to be calibrated before resampling
-    for II = 1:length(consts.data.calibrate_before_resample)
-        if consts.data.calibrate_before_resample(II) & ~isempty(raw_multi_file(II).chanNames)
-            calibrated_data = calibrate_data(cal,raw_multi_file(II));
-            calibrated_fields = fieldnames(calibrated_data.td);
-            ind_time = strcmp(calibrated_fields,'Time');
-
-            for JJ = 1:length(calibrated_fields)
-                if ~ind_time(JJ)
-                    if strcmp(calibrated_fields{JJ},'theta_encoder') % digitally resample counter channel
-                        % Pre-fetch the field data and time
-                        time_data = calibrated_data.td.Time;
-                        field_data = calibrated_data.td.(calibrated_fields{JJ});
-                        
-                        % Interpolate to get approximate values at new_time points
-                        downsampled_counter = interp1(time_data, field_data, new_time, 'previous', NaN);
-
-                        results(KK).td.(calibrated_fields{JJ}) =  downsampled_counter;
-                    else
-                        [t_resampled,y_resampled] = resample_w_time(raw_multi_file(II).rate,consts.DAQ.downsampled_rate,calibrated_data.td.Time,calibrated_data.td.(calibrated_fields{JJ}));
-                        results(KK).td.(calibrated_fields{JJ}) =  interp1(t_resampled,y_resampled,new_time');
-                    end
-                end
-            end
-        end
-    end
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 end
 
