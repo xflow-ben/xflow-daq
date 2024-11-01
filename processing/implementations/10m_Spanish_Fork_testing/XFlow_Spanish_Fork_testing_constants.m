@@ -1,5 +1,7 @@
 function consts = XFlow_Spanish_Fork_testing_constants()
 
+consts.debugMode = 0;
+
 %% DAQ
 consts.DAQ.downsampled_rate = 512; % Rate to downsample data to [Hz]
 %% Unit conversions

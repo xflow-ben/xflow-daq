@@ -61,7 +61,12 @@ for II = 1:length(consts.data.file_name_conventions)
     if isempty(dataFiles)
         raw_multi_file(II).rate = NaN;
     else
-        for JJ = 1%:length(dataFiles)
+        if consts.debugMode
+            forLoopInd = 1;
+        else
+            forLoopInd = 1:length(dataFiles);
+        end
+        for JJ = forLoopInd
             dataFiles(JJ).name
             % Load data
             tdms = readTDMS(dataFiles(JJ).name,fullfile(files.absolute_data_dir,files.relative_experiment_dir));

@@ -160,7 +160,7 @@ elseif strcmp(cal.type,'encoder')
     rate = data(2,ind_time) - data(1,ind_time);
 
     [y,dy,ddy] = process_sf_enc(data(:,ind));
-    out.(cal.output_names{1}) = y; %*(2*pi/cal.data.PPR)
+    out.(cal.output_names{1}) = y*(2*pi/cal.data.PPR);
     out.(cal.output_names{2}) = dy * rate;
     out.(cal.output_names{3}) = ddy * rate^2;
 else

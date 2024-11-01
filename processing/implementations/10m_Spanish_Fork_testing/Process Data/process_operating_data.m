@@ -2,6 +2,7 @@ clear all
 % close all
 clc
 
+
 %% Assign data folder
 files.absolute_data_dir = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\';
 files.relative_experiment_dir = 'operating_uncompressed';
@@ -13,6 +14,7 @@ load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spa
 
 %% Load constants
 consts = XFlow_Spanish_Fork_testing_constants();
+consts.debugMode = 1;
 
 %% Extract data groupings
 % Grouping is a set of files with the same embedded timestamp in the
@@ -68,7 +70,12 @@ end
 save(fullfile(files.absolute_data_dir,files.relative_tare_dir,'tareList.mat'),'tareList')
 
 %% Process data with the same filename timestamps
-for II = 6%1:length(data_filename_timestamps)
+if consts.debugMode
+    forLoopInd = 6;
+else
+    forLoopInd = 1:length(data_filename_timestamps);
+end
+for II = forLoopInd
     II/length(data_filename_timestamps)
     save_dir = fullfile(files.absolute_data_dir,files.relative_results_save_dir);
     save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',data_filename_timestamps(II)));
@@ -83,7 +90,11 @@ for II = 6%1:length(data_filename_timestamps)
         if II == 1 && ~exist(save_dir,'dir')
             mkdir(save_dir)
         end
+        if consts.debugMode
+            save_name_td = fullfile(save_dir,sprintf('DEBUG_operating_results_td_%d.mat',data_filename_timestamps(II)));
+        else
         save_name_td = fullfile(save_dir,sprintf('operating_results_td_%d.mat',data_filename_timestamps(II)));
+        end
         save(save_name_td,'results', '-v7.3')
         % pause(5)
         % % Remove td data if it is not a data type flagged to be saved
