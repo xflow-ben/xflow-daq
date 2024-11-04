@@ -129,6 +129,14 @@ for KK = 1:length(segment_start_ind)
             ind_time = strcmp(calibrated_fields,'Time');
             for JJ = 1:length(calibrated_fields)
                 if strcmp(calibrated_fields{JJ},'theta_encoder') % digitally resample counter channel
+                    %%% BEN: Put your encoder resetting here
+                    % resets are at calibrated_data(8).resetTimes
+                    % encoder thetas are at calibrate_data(II).theta_encoder
+                    % encoder time is at calibrate_data(II).Time
+                    % you should delete the resetTimes since it's going to be
+                    % resampled in the next step and become junk... or we can
+                    % make an exception so it stays useful information. Your
+                    % call.
                     if ~isfield(calibrated_data(8).td,'resetTimes')
                         error('calibrated_data(8) doesn''t have reset times')
                     end
@@ -163,18 +171,12 @@ for KK = 1:length(segment_start_ind)
                                 theta(j:end) = theta(j:end) - theta_interp;
                             end
                         end
-                        
+
                     end
-                  
-                %%% BEN: Put your encoder resetting here   
-                % resets are at calibrated_data(8).resetTimes
-                % encoder thetas are at calibrate_data(II).theta_encoder
-                % encoder time is at calibrate_data(II).Time
-                % you should delete the resetTimes since it's going to be
-                % resampled in the next step and become junk... or we can
-                % make an exception so it stays useful information. Your
-                % call.
+
+                    calibrated_data(II).td.(calibrated_fields{JJ}) = theta;
                 end
+                
             end
         end
     end
@@ -191,7 +193,7 @@ for KK = 1:length(segment_start_ind)
             end
         end
     end
-    
+
     %% Combine remaining channels raw data at downsampled rate then calibrate it
     flag = 0;
     for II = 1:length(raw_multi_file)
@@ -211,7 +213,7 @@ for KK = 1:length(segment_start_ind)
                     raw_multi_file(II).data(:,ind_time),raw_multi_file(II).data(:,~ind_time));
                 raw_combined.data = [raw_combined.data, interp1(t_resampled,y_resampled,new_time')];
             end
-            
+
         end
     end
     temp = calibrate_data(cal,raw_combined);

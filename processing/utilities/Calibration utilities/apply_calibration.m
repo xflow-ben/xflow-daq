@@ -151,18 +151,17 @@ elseif strcmp(cal.type,'encoder')
     % 
     % y = y*(2*pi/cal.data.PPR);
     % y_unwrapped = unwrap(y);
-    % t = data(:,ind_time);
-    % rate = 1/mean(diff(t),'omitnan');
+    t = data(:,ind_time);
+    rate = 1/mean(diff(t),'omitnan');
     % 
     % [dy, ddy] = multipolydiff(y_unwrapped, ceil(cal.data.windowSize*rate), 2);
 
     % create out.(field_names), where filed names are from cal.output_names
-    rate = data(2,ind_time) - data(1,ind_time);
 
     [y,dy,ddy] = process_sf_enc(data(:,ind));
-    out.(cal.output_names{1}) = y*(2*pi/cal.data.PPR);
-    out.(cal.output_names{2}) = dy * rate;
-    out.(cal.output_names{3}) = ddy * rate^2;
+    out.(cal.output_names{1}) = y * (2*pi/cal.data.PPR);
+    out.(cal.output_names{2}) = dy * rate * (2*pi/cal.data.PPR);
+    out.(cal.output_names{3}) = ddy * rate^2 * (2*pi/cal.data.PPR);
 else
     error(sprintf('%s is not a programmed calibration type',cal.type))
 end
