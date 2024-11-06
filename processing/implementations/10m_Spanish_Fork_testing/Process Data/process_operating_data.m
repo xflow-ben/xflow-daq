@@ -10,12 +10,12 @@ files.relative_tare_dir = files.relative_experiment_dir;
 files.relative_results_save_dir = 'operating_uncompressed\processed';
 
 %% Load calibration struct
-load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_30_10_24.mat')
-% load('C:\Users\Ben Strom\Documents\Coding\xfedaq\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_30_10_24.mat')
+% load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_30_10_24.mat')
+load('C:\Users\Ben Strom\Documents\Coding\xfedaq\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_30_10_24.mat')
 
 %% Load constants
 consts = XFlow_Spanish_Fork_testing_constants();
-consts.debugMode = 0;
+consts.debugMode = 1;
 
 %% Extract data groupings
 % Grouping is a set of files with the same embedded timestamp in the

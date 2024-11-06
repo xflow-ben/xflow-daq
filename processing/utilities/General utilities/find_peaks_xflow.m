@@ -1,4 +1,6 @@
 function peaks = find_peaks_xflow(signal, prominence, min_distance)
+fprintf('Starting Find peaks\n')
+tic;
     peaks = [];
     N = length(signal);
     i = 2;
@@ -30,4 +32,6 @@ function peaks = find_peaks_xflow(signal, prominence, min_distance)
             i = i + 1;  % No peak, move forward by 1
         end
     end
+    fprintf('Find Peaks finished\n')
+toc;
 end
