@@ -10,12 +10,12 @@ files.relative_tare_dir = files.relative_experiment_dir;
 files.relative_results_save_dir = 'operating_uncompressed\processed';
 
 %% Load calibration struct
-% load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_30_10_24.mat')
-load('C:\Users\Ben Strom\Documents\Coding\xfedaq\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_30_10_24.mat')
+load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_30_10_24.mat')
+% load('C:\Users\Ben Strom\Documents\Coding\xfedaq\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_30_10_24.mat')
 
 %% Load constants
 consts = XFlow_Spanish_Fork_testing_constants();
-consts.debugMode = 1;
+consts.debugMode = 0;
 
 %% Extract data groupings
 % Grouping is a set of files with the same embedded timestamp in the
@@ -84,7 +84,7 @@ for II = forLoopInd
     else
         save_name = fullfile(save_dir,sprintf('operating_results_%d.mat',data_filename_timestamps(II)));
     end
-    % if ~exist(save_name_td,'file')
+    if ~exist(save_name,'file')
         files.filename_timestamp = data_filename_timestamps(II);
         results = process_data_folder(files,cal,consts);
         results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,consts);
@@ -98,6 +98,6 @@ for II = forLoopInd
         save(save_name,'results', '-v7.3')
 
         clear results
-    % end
+    end
 end
 
