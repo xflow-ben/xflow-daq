@@ -1,6 +1,6 @@
 function peaks = find_peaks_xflow(signal, prominence, min_distance)
-fprintf('Starting Find peaks\n')
-tic;
+    fprintf('Starting Find peaks\n')
+    tic;
     peaks = [];
     N = length(signal);
     i = 2;
@@ -23,15 +23,17 @@ tic;
                     peaks = [peaks, peak_index];
                 end
 
-                % Move `i` beyond this peak's range
+                % Move `i` beyond this peak's range by `min_distance`
                 i = peak_index + min_distance;
             else
-                i = i + 1;  % No peak, move forward by 1
+                % No peak found, move `i` forward by 1
+                i = i + 1;
             end
         else
-            i = i + 1;  % No peak, move forward by 1
+            % Not a peak, move `i` forward by 1
+            i = i + 1;
         end
     end
     fprintf('Find Peaks finished\n')
-toc;
+    toc;
 end
