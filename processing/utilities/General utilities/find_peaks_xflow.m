@@ -24,14 +24,14 @@ function peaks = find_peaks_xflow(signal, prominence, min_distance)
                 end
 
                 % Move `i` beyond this peak's range by `min_distance`
-                i = peak_index + min_distance;
+                new_i = peak_index + min_distance;
+                % Ensure progress by at least 1 if `new_i` is the same or less
+                i = max(i + 1, new_i);
             else
-                % No peak found, move `i` forward by 1
-                i = i + 1;
+                i = i + 1;  % No peak found, move forward by 1
             end
         else
-            % Not a peak, move `i` forward by 1
-            i = i + 1;
+            i = i + 1;  % Not a peak, move forward by 1
         end
     end
     fprintf('Find Peaks finished\n')
