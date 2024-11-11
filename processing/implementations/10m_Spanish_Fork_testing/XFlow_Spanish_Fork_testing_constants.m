@@ -1,6 +1,8 @@
 function consts = XFlow_Spanish_Fork_testing_constants()
 
 consts.debugMode = 0;
+consts.isCalibration = 0; % flag for if the data being processed is from operational data or a calibration
+% We changed a few things so the processing needs to know
 
 %% DAQ
 consts.DAQ.downsampled_rate = 512; % Rate to downsample data to [Hz]
@@ -54,9 +56,24 @@ consts.data.calibrate_before_resample = [...
     1,...
     1]; %NaNs are for file name conventions which should have their rates in ther tdms files
 
-
 consts.data.save_types = {'sd'};
 consts.data.N = 60; % sd averaging time [s], if is NaN, the entire file will be averaged
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+consts.data.cali.file_name_conventions = {...
+    '*rotorStrain*',...
+    '*BladeRTDs*'};
+
+consts.data.cali.default_rates = [...
+    NaN, NaN]; %NaNs are for file name conventions which should have their rates in ther tdms files
+
+consts.data.cali.calibrate_before_resample = [...
+    1,1]; %NaNs are for file name conventions which should have their rates in ther tdms files
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Tare function
 consts.tare_func = @average_tare;

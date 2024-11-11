@@ -8,7 +8,7 @@ theta_array = 0:theta_step:360;
 theta_centers = theta_array(1:end-1) + theta_step/2;
 %% Load experimental data
 load('X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\processed\DEBUG_operating_results_1016172530.mat')
-% load('X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\processed\operating_results_1014180631.mat')
+% load('X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\processed\operating_results_1016172530.mat')
 
 data_theta_offset = 215; %deg
 
@@ -40,8 +40,7 @@ box on
 grid on
 
 
-Lower_Yoke_Fz = results.td.Lower_Yoke_Fz;
-Lower_Yoke_Fz_Means = accumarray(indTheta(indTheta > 0), Lower_Yoke_Fz(indTheta > 0), [], @(x) mean(x, 'omitnan'));
+Lower_Yoke_Fz_Means = accumarray(indTheta(indTheta > 0), results.td.Lower_Yoke_Fz(indTheta > 0), [], @(x) mean(x, 'omitnan'));
 
 figure(3)
 hold on
@@ -58,6 +57,19 @@ figure(5)
 hold on
 plot(theta_data,results.td.tau_gen,'.')
 % plot(theta_centers,Lower_Yoke_Fz_Means,'-k','LineWidth',3)
+
+set(gca,'XLim',[0 360])
+xlabel('Azimuthal Position [\theta]')
+box on
+grid on
+
+
+Lower_Arm_My_Means = accumarray(indTheta(indTheta > 0), results.td.Lower_Arm_My(indTheta > 0), [], @(x) mean(x, 'omitnan'));
+
+figure(400)
+hold on
+plot(theta_data,results.td.Lower_Arm_My,'.')
+plot(theta_centers,Lower_Arm_My_Means,'-k','LineWidth',3)
 
 set(gca,'XLim',[0 360])
 xlabel('Azimuthal Position [\theta]')
@@ -89,7 +101,7 @@ grid on
 
 %% Get QBlade file names to sweep through
 % Specify the directory (you can change this to your desired path)
-directory = 'X:\Simulation_File_Transfer\Polar and Oye sweep';  % Replace with your directory path
+directory = 'X:\Simulation_File_Transfer\Polar and Oye sweep - 12.2ms';  % Replace with your directory path
 
 
 % Get a list of all .dat files in the directory
@@ -158,6 +170,14 @@ pause(.1)
 %
 figure(4)
 plot(qblade.data.AzimuthalAngleBLD_1,qblade.data.AngleOfAttac___Blade1PAN,'k.')
+set(gca,'XLim',[0 360])
+xlabel('Azimuthal Position, \theta [deg]')
+box on
+grid on
+
+
+figure(400)
+plot(qblade.data.AzimuthalAngleBLD_1,qblade.data.Y_lMom_STR_1_1_TRQZ_17_7m,'r.')
 set(gca,'XLim',[0 360])
 xlabel('Azimuthal Position, \theta [deg]')
 box on

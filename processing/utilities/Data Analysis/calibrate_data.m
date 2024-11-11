@@ -42,6 +42,6 @@ end
 %     td.not_calibrated.(strrep(results.chanNames{uncalibrated_ind(II)},' ','_')) = in.data(:,uncalibrated_ind(II));
 % end
 
-%% Put td in export struct
+%% Put td in export struct 
 results.td = td;
 end

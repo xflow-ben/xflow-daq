@@ -3,6 +3,12 @@ function results_all = process_data_folder(files,cal,consts)
 % cal is an array of calibration structs
 % consts is a struct with project specific values
 
+if consts.isCalibration
+    consts.data.file_name_conventions = consts.data.cali.file_name_conventions;
+    consts.data.default_rates = consts.data.cali.default_rates;
+    consts.data.calibrate_before_resample = consts.data.cali.calibrate_before_resample;
+end
+
 %% Load tares
 % Check if list of applicable tares is present in dataDir
 tareList = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,'tare*.mat'));
@@ -53,13 +59,21 @@ end
 for II = 1:length(consts.data.file_name_conventions)
     II/length(consts.data.file_name_conventions)
     if isfield(files,'filename_timestamp')
-        dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',files.filename_timestamp,consts.data.file_name_conventions{II})));
+        if consts.isCalibration
+            dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('full_hub_test_%s%d*.tdms',consts.data.cali.file_name_conventions{II},files.filename_timestamp)));
+        else
+            dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',files.filename_timestamp,consts.data.file_name_conventions{II})));
+        end
     else
         dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,consts.data.file_name_conventions{II}));
     end
 
     if isempty(dataFiles)
         raw_multi_file(II).rate = NaN;
+        raw_multi_file(II).chanNames = NaN;
+        raw_multi_file(II).data = NaN;
+        raw_multi_file(II).tare_applied = NaN;
+
     else
         if consts.debugMode
             forLoopInd = 1;
@@ -107,11 +121,17 @@ end
 
 
 %% Bring all data at the same rate together and calibrate
-file_ind = strcmp(consts.data.file_name_conventions,'*rotor_strain*.tdms');
+if consts.isCalibration
+    file_ind = strcmp(consts.data.file_name_conventions,'*rotorStrain*');
+else
+    file_ind = strcmp(consts.data.file_name_conventions,'*rotor_strain*.tdms');
+
+end
+
 master_time =  raw_multi_file(file_ind).data(:,strcmp(raw_multi_file(file_ind).chanNames,'time'));
 temp = find(diff(master_time)>1);
-segment_start_ind = [1,temp + 1]; % indcies where a segment of continous data starts
-segment_end_ind = [temp, length(master_time)]; % indcies where a segment of continous data ends
+segment_start_ind = [1;temp + 1]; % indcies where a segment of continous data starts
+segment_end_ind = [temp; length(master_time)]; % indcies where a segment of continous data ends
 
 for KK = 1:length(segment_start_ind)
     start_time = master_time(segment_start_ind(KK));
@@ -123,7 +143,7 @@ for KK = 1:length(segment_start_ind)
     % if it is the encoder file, it needs the reset commands from the RPM
     % sensor
     for II = 1:length(raw_multi_file)
-        if consts.data.calibrate_before_resample(II) & ~isempty(raw_multi_file(II).chanNames)
+        if consts.data.calibrate_before_resample(II) && ~isnan(raw_multi_file(II).rate)
             calibrated_data(II) = calibrate_data(cal,raw_multi_file(II));
             calibrated_fields = fieldnames(calibrated_data(II).td);
             ind_time = strcmp(calibrated_fields,'Time');
@@ -176,7 +196,7 @@ for KK = 1:length(segment_start_ind)
 
                     calibrated_data(II).td.(calibrated_fields{JJ}) = theta;
                 end
-                
+
             end
         end
     end
@@ -185,7 +205,7 @@ for KK = 1:length(segment_start_ind)
         if ~isempty(calibrated_data(II).td)
             calibrated_fields = fieldnames(calibrated_data(II).td);
             for JJ = 1:length(calibrated_fields)
-                if ~strcmp(calibrated_fields{JJ},'Time')
+                if ~strcmp(calibrated_fields{JJ},'Time') && ~strcmp(calibrated_fields{JJ},'resetTimes')
                     [t_resampled,y_resampled] = resample_w_time(calibrated_data(II).rate,consts.DAQ.downsampled_rate,...
                         calibrated_data(II).td.Time,calibrated_data(II).td.(calibrated_fields{JJ}));
                     results(KK).td.(calibrated_fields{JJ}) =  interp1(t_resampled,y_resampled,new_time');
@@ -197,7 +217,7 @@ for KK = 1:length(segment_start_ind)
     %% Combine remaining channels raw data at downsampled rate then calibrate it
     flag = 0;
     for II = 1:length(raw_multi_file)
-        if ~consts.data.calibrate_before_resample(II) & ~isempty(raw_multi_file(II).chanNames) % is there is no data, skip II
+        if ~consts.data.calibrate_before_resample(II) && ~isnan(raw_multi_file(II).rate) % is there is no data, skip II
             ind_time = strcmp(raw_multi_file(II).chanNames,'time');
             if flag == 0
                 raw_combined = raw_multi_file(II);
@@ -216,12 +236,14 @@ for KK = 1:length(segment_start_ind)
 
         end
     end
-    temp = calibrate_data(cal,raw_combined);
-    temp_fieldnames = fieldnames(temp.td);
-    for II = 1:length(temp_fieldnames)
-        results(KK).td.(temp_fieldnames{II}) = temp.td.(temp_fieldnames{II});
+    if exist('raw_combined')
+        temp = calibrate_data(cal,raw_combined);
+        temp_fieldnames = fieldnames(temp.td);
+        for II = 1:length(temp_fieldnames)
+            results(KK).td.(temp_fieldnames{II}) = temp.td.(temp_fieldnames{II});
+        end
+        results(KK).rate = temp.rate;
     end
-    results(KK).rate = temp.rate;
     results(KK).td.Time = new_time';
 
 end

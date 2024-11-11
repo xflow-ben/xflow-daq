@@ -15,18 +15,20 @@ function [applied_load, calculated_load] = calibration_verification(verify)
 % calibration structs from verify.data.absolute_cali_path which apply to
 % each of the load channels in verify.data.chanNames
 
+verify.consts.isCalibration = 1; % This script is only for verfication cases, which have the same data strucutres as calibrations
+ 
+data_files = dir(fullfile(verify.absolute_data_path,verify.relative_data_folder,verify.tdms_filter));
 
-files = dir(fullfile(verify.absolute_data_path,verify.relative_data_folder,verify.tdms_filter));
-
-if isempty(files)
+if isempty(data_files)
     error(sprintf('No files with the format %s found in %s',verify.tdms_filter,fullfile(verify.absolute_data_path,verify.relative_data_folder)))
 end
+
 
 %% Extract applied load
 % This is done first so we can generate the tare list when using
 % process_data_folder
-for II =1:length(files)
-    TDMS = readTDMS(files(II).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
+for II =1:length(data_files)
+    TDMS = readTDMS(data_files(II).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
     d = convertTDMStoXFlowFormat(TDMS);
 
     applied_load_ind = find(strcmp({TDMS.property.name},verify.applied_load_var_name));
@@ -34,7 +36,7 @@ for II =1:length(files)
 end
 
 %% Create tareList in the data directory
-tareList = {files(applied_load == 0).name};
+tareList = {data_files(applied_load == 0).name};
 save(fullfile(verify.absolute_data_path,verify.relative_data_folder,'tareList.mat'),'tareList')
 
 %% Process data folder
@@ -44,7 +46,12 @@ files.relative_experiment_dir =  fullfile(verify.absolute_data_path,verify.relat
 files.relative_tare_dir = files.relative_experiment_dir; % This is relative to files.absolute_data_dir
 
 load(verify.data.absolute_cali_path)
-results = process_data_folder(files,cal,verify.consts);
+for II =1:length(data_files)
+    files.filename_timestamp = str2num(data_files(II).name(end-8:end-5));
+    temp = process_data_folder(files,cal,verify.consts);
+    verify.consts.data.N = NaN; % sd averaging time [s]
+    results(II) = calculate_sd(temp,verify.consts);
+end
 
 %% Calculate load of intrest
 

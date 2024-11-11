@@ -15,7 +15,7 @@ load('C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spa
 
 %% Load constants
 consts = XFlow_Spanish_Fork_testing_constants();
-consts.debugMode = 1;
+consts.debugMode = 0;
 
 %% Extract data groupings
 % Grouping is a set of files with the same embedded timestamp in the
@@ -44,6 +44,7 @@ all_filename_timestamps = unique(extractedValues);
 %% Determine if any of these filenames correspond to tares
 tare_count = 0;
 data_files_count = 0;
+
 for II = 1:length(all_filename_timestamps)
     dataFiles = dir(fullfile(files.absolute_data_dir,files.relative_experiment_dir,sprintf('data_%d%s',all_filename_timestamps(II),consts.data.file_name_conventions{1})));
     if length(dataFiles) == 2
@@ -63,6 +64,7 @@ for II = 1:length(all_filename_timestamps)
             tareList{tare_count} = sprintf('data_%d_gw_strain_0000.tdms',all_filename_timestamps(II));
             tare_count = tare_count + 1;
             tareList{tare_count} = sprintf('data_%d_gw_strain_0001.tdms',all_filename_timestamps(II));
+            tare_filename_timestamps(tare_count) = all_filename_timestamps(II);
         else
             data_files_count = data_files_count + 1;
             data_filename_timestamps(data_files_count) = all_filename_timestamps(II);

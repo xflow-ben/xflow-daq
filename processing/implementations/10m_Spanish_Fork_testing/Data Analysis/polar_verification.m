@@ -3,8 +3,8 @@ clear all
 clc
 
 %%
-load('X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\processed\DEBUG_operating_results_1016172530.mat')
-% load('X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\processed\operating_results_1014180631.mat')
+% load('X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\processed\DEBUG_operating_results_1016172530.mat')
+load('X:\Experiments and Data\20 kW Prototype\Loads_Data\operating_uncompressed\processed\operating_results_1016172530.mat')
 
 data_theta_offset = 215; %deg
 %%
@@ -144,7 +144,7 @@ end
 
 
 %%
-qblade = processHAWC2Binary('X:\Simulation_File_Transfer\plr_verification1-1-75_polars-oye8.sel', 'X:\Simulation_File_Transfer\plr_verification1-1-75_polars-oye8.dat');
+qblade = processHAWC2Binary('X:\Simulation_File_Transfer\Polar and Oye sweep - 12.2ms\plr_verification1-1-75_polars-oye8.sel', 'X:\Simulation_File_Transfer\Polar and Oye sweep - 12.2ms\plr_verification1-1-75_polars-oye8.dat');
 
 figure(2)
 plot(qblade.data.AzimuthalAngleBLD_1,qblade.data.TotalTangentialLoadBlade1,'r.')
