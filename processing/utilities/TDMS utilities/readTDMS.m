@@ -77,6 +77,8 @@ handleTDMSLibErr(lib,err);
 unloadlibrary(lib);
 
 
+
+
     function properties = readProperties(lib, handle, type)
         err = 0;
         % Read all properties of the specified type (file, group, channel)
@@ -137,13 +139,13 @@ unloadlibrary(lib);
         elseif strcmp(type, 'channel')
             err = calllib(lib, 'DDC_GetChannelPropertyType', handle, propertyName, dataType);
         end
-
+        handleTDMSLibErr(lib, err);
         temp = typecast(dataType.Value,'int32');
         dataType = temp(1);
         if ~ismember(dataType,int32([5,2,3,9,10,23,30]))
             error('Did not find a valid data type for data (maybe typecast/ptr issue). dataType was %d',dataType)
         end
-        handleTDMSLibErr(lib, err);
+        
 
         % Retrieve the property value based on its data type
         try
@@ -174,6 +176,18 @@ unloadlibrary(lib);
 
                 case 3  % DDC_Int32
                     value = libpointer('int32Ptr', 0);
+                    if strcmp(type, 'file')
+                        err = calllib(lib, 'DDC_GetFilePropertyInt32', handle, propertyName, value);
+                    elseif strcmp(type, 'group')
+                        err = calllib(lib, 'DDC_GetChannelGroupPropertyInt32', handle, propertyName, value);
+                    elseif strcmp(type, 'channel')
+                        err = calllib(lib, 'DDC_GetChannelPropertyInt32', handle, propertyName, value);
+                    end
+                    handleTDMSLibErr(lib, err);
+                    value = value.Value;
+                case 21
+
+                    value = libpointer('uint64Ptr', 0);
                     if strcmp(type, 'file')
                         err = calllib(lib, 'DDC_GetFilePropertyInt32', handle, propertyName, value);
                     elseif strcmp(type, 'group')
@@ -286,6 +300,7 @@ unloadlibrary(lib);
 
             % Read channel name
             temp = readProperty(lib,channelHandle, 'name', 'channel');
+
 
             % Only read channel if it is a requested channel name
             if nargin < 3 || strcmp(temp,channelName)

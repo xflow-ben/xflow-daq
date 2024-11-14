@@ -261,3 +261,10 @@ grid on
 % % figure(3)
 % % plot(d(:,1),d(:,2),'r.')
 %
+
+Lower_Yoke_Fz = results.td.Upper_Arm_Mx;
+Lower_Yoke_Fz_Means = accumarray(indTheta(indTheta > 0), Lower_Yoke_Fz(indTheta > 0), [], @(x) mean(x, 'omitnan'));
+
+figure;
+plot(qblade.data.AzimuthalAngleBLD_1,qblade.data.X_lMom_STR_1_1_TRQZ_17_7m,'.')
+
