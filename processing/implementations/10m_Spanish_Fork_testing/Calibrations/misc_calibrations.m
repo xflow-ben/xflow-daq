@@ -8,12 +8,12 @@ saveName = 'misc_calibrations';
 count = 0;
 
 %% Time
-count = count + 1;
-cal(count).type = 'linear_k';
-cal(count).data.k = 1;
-cal(count).input_channels = {'time'};
-cal(count).output_names = {'Time'};
-cal(count).output_units = {'s'};
+% count = count + 1;
+% cal(count).type = 'linear_k';
+% cal(count).data.k = 1;
+% cal(count).input_channels = {'time'};
+% cal(count).output_names = {'Time'};
+% cal(count).output_units = {'s'};
 
 % count = count + 1;
 % cal(count).type = 'counter_voltage_signal';
@@ -47,6 +47,7 @@ cal(count).input_channels = {'RPM Sensor'}; % Names of load channels of intrest
 cal(count).output_names = {'theta_NEEDS_RESET_sensor','omega_sensor','acc_sensor'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).output_units = {'rad','rad/s','rad/s^2'}; % Units of load channels after calibration
 cal(count).data.output_derivative_orders = [1 2 3];
+cal(count).stage = 'beforeResample';
 
 count = count + 1;
 cal(count).type = 'encoder';
@@ -55,7 +56,7 @@ cal(count).data.windowSize = 0.01; % Size of the time window for averaging (in s
 cal(count).input_channels = {'Encoder'};
 cal(count).output_names = {'theta_encoder','omega_encoder','acc_encoder'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).output_units = {'rad','rad/s','rad/s^2'}; % Units of load channels after calibration
-
+cal(count).stage = 'beforeResample';
 
 count = count + 1;
 cal(count).type = 'linear_k';
@@ -63,7 +64,7 @@ cal(count).data.k = 3603;
 cal(count).input_channels = {'Power Transducer'};
 cal(count).output_names = {'electric_power'};
 cal(count).output_units = {'W'}; %Electrical power at point of grid connection [W]
-
+cal(count).stage = 'afterResample';
 
 count = count + 1;
 cal(count).type = 'linear_k';
@@ -71,6 +72,7 @@ cal(count).data.k = 3603;
 cal(count).input_channels = {'Power Transducer Filt'};
 cal(count).output_names = {'electric_power_filtered'};
 cal(count).output_units = {'W'}; %Electrical power at point of grid connection [W]
+cal(count).stage = 'afterResample';
 
 count = count + 1;
 cal(count).type = 'linear_k';
@@ -78,6 +80,7 @@ cal(count).data.k = 3.715170279;
 cal(count).input_channels = {'Battery Voltage'};
 cal(count).output_names = {'Hub_Battery_Voltage'};
 cal(count).output_units = {'VDC'}; % Hub DAQ battery voltage
+cal(count).stage = 'afterResample';
 
 %% Save
 save(fullfile(savePath,saveName),'cal')

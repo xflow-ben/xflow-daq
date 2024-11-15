@@ -258,6 +258,9 @@ cal(count).data.offset = 0;%(10.4/1000)^(-1);
 cal(count).data.SN = 'LW13646'; % Instrument SN. Slope and offset are from the calibration of this instrument
 
 %% Save
+for i = 1:length(cal)
+    cal(i).stage = afterResample';
+end
 save(fullfile(savePath,saveName),'cal')
 
 

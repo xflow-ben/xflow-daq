@@ -3,11 +3,10 @@ out.chanNames = cal.outputNames;
 
 [data,time] = extractChanData(taskRaw,cal.inputChannels,cal.outputChannels);
 out.time = time;
-out.isRaw = 0;
+out.isRaw = zeros(size(cal.outputNames));
 
 switch cal.type
     case {'linear_k','multi_part_linear_k'}
-
 
         % multiply by k appropriately (should work for single avalue and square
         % and rectangular matricies)
@@ -89,6 +88,7 @@ switch cal.type
         % save reset times here
         out.time = findResetRPM(data,time);
         out.data = NaN(size(out.time));
+        out.isRaw = 1; % we want this to get removed later
 
     case 'encoder'
         % get the indicies of the dataColumns listed in cal.inputChannels
@@ -101,6 +101,7 @@ switch cal.type
 
         [y,dy,ddy] = process_sf_enc(data);
         out.data = [y * (2*pi/cal.data.PPR),dy * rate * (2*pi/cal.data.PPR),ddy * rate^2 * (2*pi/cal.data.PPR)];
+        out.isRaw(1) = 1; % this way this will be deleted later, as resetted theta will replace it
 
     case 'reset_encoder_via_rpm_sensor'
 
@@ -173,5 +174,3 @@ end
 
 end
 
-% add other cal.type's here as we need them (examples: slope-offset form,
-% nonlinear function, etc.)

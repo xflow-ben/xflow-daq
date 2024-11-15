@@ -44,7 +44,13 @@ fprintf('%.2f   \t%.2f   \t%.2f\n',[cal_single(count_single-2).data.k,0,0;...
     0,0,cal_single(count_single).data.k])
 fprintf('\n\n')
 
+for i = 1:length(cal_single)
+    cal_single(i).stage = 'afterResample';
+end
 
+for i = 1:length(cal_multi)
+    cal_multi(i).stage = 'afterResample';
+end
 %% Save
 % save(fullfile(savePath,saveName_single),'cal_single')
 % save(fullfile(savePath,saveName_multi),'cal_multi')

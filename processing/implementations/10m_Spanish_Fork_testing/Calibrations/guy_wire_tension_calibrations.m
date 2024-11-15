@@ -57,4 +57,8 @@ count = count + 1;
 cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,savePath);
 
 %% Save
+
+for i = 1:length(cal)
+    cal(i).stage = 'afterResample';
+end
 save(fullfile(savePath,saveName),'cal')

@@ -37,10 +37,10 @@ end
 % tare(n).time - 1 x m vector, datetime, times at which tare points were
 % taken
 
-taskRaw = applyTare(taskRaw,tare);
+% taskRaw = applyTare(taskRaw,tare);
 %% Add an israw field to the tasks, to be able to separate raw and calibrated tasks later
-for i = 1:lenght(taskRaw)
-    taskRaw(i).isRaw = 1;
+for i = 1:length(taskRaw)
+    taskRaw(i).isRaw = ones(size(taskRaw(i).chanNames));
 end
 %% Apply pre-resample calibrations
 
@@ -52,21 +52,58 @@ if ~isfield(opts,'resample')
 else
     resampleOpts = opts.resample;
 end
-taskRaw = resampleAndCombine(taskRaw,resampleOpts);
+td = resampleAndCombine(taskRaw,resampleOpts); % adds a task named "resampled" to the task list
 
 %% Apply post-resample calibrations
 
-taskRaw = applyAllCalForStage(taskRaw,cal,'afterResample'); % adds a single field called rawCal
+td = applyAllCalForStage(td,cal,'afterResample'); % adds a single field called rawCal
 
 %% Apply final calibrations
-taskRaw = applyAllCalForStage(taskRaw,cal,'final'); % adds a single field called rawCal
+td = applyAllCalForStage(td,cal,'final'); % adds a single field called rawCal
 
-%% remove the raw data (don't need it any more)
-isRawVec = [taskRaw.isRaw];
-td = taskRaw(~isRawVec);
-if nargout > 1
-    % remove
-    taskRaw = rmfield(taskRaw,'calibrated');
+%% remove the raw data from our struct (don't need it any more)
+
+tdRMinds = [];
+for i = 1:length(td)
+    if all(td(i).isRaw == 1)
+        tdRMinds = [tdRMinds, i];
+    elseif ~all(td(i).isRaw == 0)
+        % then a subset of chans needs to be removed
+        chanRMinds = [];
+        for j = 1:length(taskRaw(i).chanNames)
+            if taskRaw(i).isRaw(j) == 1
+            chanRMinds = [chanRMinds, j];
+            end
+        end
+        td(i).data(:,chanRMinds) = [];
+        td(i).chanNames(chanRMinds) = [];
+        td(i).isRaw(chanRMinds) = [];
+    end
+end
+
+td(tdRMinds) = [];
+
+tdout.data = [];
+k = 1;
+% put together the remaining ones all into one structure. Chonk everything
+% that is on the same timebase together
+if length(td) > 1
+    for i = 1:length(td)
+        if i == 1 % this method doesn't work if the first one is the one with the oddball length
+            tdLg = size(td(i).data,1);
+            tdout(1).time = td(i).time;
+        else
+            if size(td(i).data,1) ~= tdLg
+                error('We ended up with different lengths of data out of the calibrations? This error could be removed if this is on purpose but the code needs some fixes')
+                k = k + 1;
+                tdout(k) = td(i).data;
+                tdout(k).chanNames = td(i).chanNames;
+            else
+                tdout(1).data = [tdout.data,td(i).data];
+                tdout(1).chanNames = [tdout(1).chanNames];
+            end
+        end
+    end
 end
 
 

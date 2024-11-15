@@ -118,6 +118,17 @@ cal_split(count_split).data.k2(2,2) = k22;
 %     0,0,cal_single(count_single).data.k])
 % fprintf('\n\n')
 
+for i = 1:length(cal_split)
+    cal_split(i).stage = 'afterResample';
+end
+
+for i = 1:length(cal_multi)
+    cal_multi(i).stage = 'afterResample';
+end
+
+for i = 1:length(cal_single)
+    cal_single(i).stage = 'afterResample';
+end
 %% Save
 save(fullfile(savePath,saveName_single),'cal_single')
 save(fullfile(savePath,saveName_multi),'cal_multi')
