@@ -157,44 +157,7 @@ for KK = 1:length(segment_start_ind)
                     % resampled in the next step and become junk... or we can
                     % make an exception so it stays useful information. Your
                     % call.
-                    if ~isfield(calibrated_data(8).td,'resetTimes')
-                        error('calibrated_data(8) doesn''t have reset times')
-                    end
-                    tr = calibrated_data(8).td.resetTimes;
-                    tenc = calibrated_data(II).td.Time;
-                    theta = calibrated_data(II).td.theta_encoder;
-                    if theta(end) == 0
-                        theta(end) = NaN;
-                    end
-                    j = 1;
-                    for i = 1:length(tr)
-                        % Skip if tr(i) is outside the range of tenc
-                        if tr(i) < tenc(1) || tr(i) > tenc(end)
-                            continue;
-                        end
 
-                        % Move j forward until tenc(j) is greater than or equal to tr(i)
-                        while j < length(tenc) && tenc(j) < tr(i)
-                            j = j + 1;
-                        end
-
-                        if ~isnan(theta(j)) && ~isnan(theta(j-1))
-                            % Check if tr(i) exactly matches tenc(j)
-                            if tr(i) == tenc(j)
-                                % Perform special operation when tr(i) == tenc(j)
-                                theta(j:end) = theta(j:end) - theta(j);
-                            else
-                                % Store indices on either side of tr(i)
-                                idx1 = j - 1;
-                                idx2 = j;
-                                theta_interp = theta(idx1) + (tr(i) - tenc(idx1)) * (theta(idx2) - theta(idx1)) / (tenc(idx2) - tenc(idx1));
-                                theta(j:end) = theta(j:end) - theta_interp;
-                            end
-                        end
-
-                    end
-
-                    calibrated_data(II).td.(calibrated_fields{JJ}) = theta;
                 end
 
             end

@@ -87,7 +87,7 @@ if isfield(opts,'rate')
         % this could be fixed if needed, but I'd rather be able to rely on
         % wf_start_time in the files as we use that the ensure no gaps in
         % files in fileList
-        error('Currently, you can only specify the rate if for single-shot acquisitions, not for continuous (multi-file) acquisitions')
+        error('Currently, you can only specify the rate for single-shot acquisitions, not for continuous (multi-file) acquisitions')
     end
 
     rateTaskNames = {opts.rate.taskNames};
@@ -119,7 +119,7 @@ for i = 1:nTasks
     end
     taskRaw(i).taskName = taskListUnique{i};
     nSamplesTotal = sum([taskData{i}.nSamples]);
-    taskRaw(i).time = taskStartTimes(1) + seconds((0:(nSamplesTotal - 1)).*samplePeriod(i));
+    taskRaw(i).time = taskStartTimes(1) + seconds((0:(nSamplesTotal - 1))'.*samplePeriod(i));
     taskRaw(i).data = vertcat(taskData{i}(startInds).data);
     taskRaw(i).chanNames = taskData{i}(1).chanNames;
     taskRaw(i).metaData = taskData{i}(1).metaData;
