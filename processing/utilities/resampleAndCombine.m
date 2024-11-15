@@ -11,6 +11,16 @@ function resampleAndCombine(taskRaw,opts)
 % if opts.rate is given, resample will happen at this rate
 % if opts.startTime (datetime format) is given, resample will initiate at this time
 
+if nargin < 1
+    opts = struct;
+end
+
+if isfield(opts,'taskName')
+    taskNames = {taskRaw.taskName};
+    ind = find(strcmp(taskNames,opts.taskName));
+    
+end
+
 
 
  [t_new,y_resampled] = resample_w_time(Fs_old,Fs_new,t,y)
