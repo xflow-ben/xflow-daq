@@ -1,9 +1,12 @@
 function out = applyChannelCal(taskRaw,cal)
 out.chanNames = cal.outputNames;
 
-[data,time] = extractChanData(taskRaw,cal.inputChannels,cal.outputChannels);
+[data,time,samplePeriod,metaData] = extractChanData(taskRaw,cal.inputChannels,cal.outputNames);
 out.time = time;
 out.isRaw = zeros(size(cal.outputNames));
+out.taskName = 'cal output';
+out.samplePeriod = samplePeriod;
+out.metaData = metaData;
 
 switch cal.type
     case {'linear_k','multi_part_linear_k'}
@@ -32,8 +35,7 @@ switch cal.type
     case 'counter_voltage_signal_basic'
         % get the indicies of the dataColumns listed in cal.inputChannels
         % Grab out that data
-
-        timeStep = seconds(time(2)-time(1));
+        timeStep = seconds(time(2) - time(1));
 
         % Inputs:
         %   voltageData - Array of voltage readings
@@ -48,31 +50,43 @@ switch cal.type
         halfWindowSamples = floor(samplesPerWindow / 2);
 
         % Initialize wind speed vector (same length as voltageData)
-        out.data = nan(length(data), 1);
+        out.data = zeros(length(data), 1);  % No NaNs, initialize with zeros
 
         % Loop through each data point in voltageData
         for i = 1:length(data)
             % Determine the window range for the current point
-            startIdx = i - halfWindowSamples;
-            endIdx = i + halfWindowSamples;
+            startIdx = max(1, i - halfWindowSamples);  % Ensure within bounds
+            endIdx = min(length(data), i + halfWindowSamples);  % Ensure within bounds
 
-            % If the window is within bounds, process it
-            if startIdx > 0 && endIdx <= length(data)
-                % Extract the voltage data for the current window
-                windowData = data(startIdx:endIdx);
-
-                % Detect rising edges in the current window
-                isAboveThreshold = windowData > cal.data.threshold;
-                risingEdges = diff(isAboveThreshold) == 1;
-                count = sum(risingEdges);
-
-                % Calculate the frequency (counts per second)
-                frequency = count / cal.data.windowSize;
-
-                % Convert frequency to wind speed using the calibration factors
-                out.data(i) = cal.data.slope * frequency + cal.data.offset;
+            % Check if the full window is available
+            if startIdx == 1 || endIdx == length(data)
+                % Use the first valid value for start edge or last valid for end edge
+                continue;  % Skip processing for edges for now
             end
+
+            % Extract the voltage data for the current window
+            windowData = data(startIdx:endIdx);
+
+            % Detect rising edges in the current window
+            isAboveThreshold = windowData > cal.data.threshold;
+            risingEdges = diff(isAboveThreshold) == 1;
+            count = sum(risingEdges);
+
+            % Calculate the frequency (counts per second)
+            frequency = count / cal.data.windowSize;
+
+            % Convert frequency to wind speed using the calibration factors
+            out.data(i) = cal.data.slope * frequency + cal.data.offset;
         end
+
+        % Fill edge cases
+        % Use the first valid value for the start edge
+        firstValidValue = out.data(halfWindowSamples + 1);
+        out.data(1:halfWindowSamples) = firstValidValue;
+
+        % Use the last valid value for the end edge
+        lastValidValue = out.data(end - halfWindowSamples);
+        out.data(end - halfWindowSamples + 1:end) = lastValidValue;
 
 
     case 'rpm_voltage_signal'
@@ -105,7 +119,7 @@ switch cal.type
 
     case 'reset_encoder_via_rpm_sensor'
 
-        [~,tr] = extractChanData(taskRaw,'resetTimes',cal.outputChannels);
+        [~,tr] = extractChanData(taskRaw,'resetTimes',cal.outputNames);
 
         tenc = time;
         theta = data;
@@ -145,7 +159,7 @@ switch cal.type
         error('%s is not a programmed calibration type',cal.type)
 end
 
-    function [data,time] = extractChanData(taskRaw,inputChannels,outputChannels)
+    function [data,time,samplePeriod,metaData] = extractChanData(taskRaw,inputChannels,outputNames)
 
         for j = 1:length(inputChannels)
             datalg = [];
@@ -158,16 +172,18 @@ end
                     if isempty(datalg) % check to make sure data is same length
                         datalg = size(taskRaw(k).data,1);
                         time = taskRaw(k).time;
-                        % samplePeriod = taskRaw(k).samplePeriod; % not sure if
+
+                        samplePeriod = taskRaw(k).samplePeriod; % not sure if
+                        metaData = taskRaw(k).metaData;
                         % needed
                     elseif datalg ~= size(taskRaw(k).data,1)
-                        error('Cal with first output name %s is requesting data from tasks of differing lengths',outputChannels{1})
+                        error('Cal with first output name %s is requesting data from tasks of differing lengths',outputNames{1})
                     end
-                    data(:,j) = taskRaw(k).data(:,find(strcmp(taskRaw(k).chanNames,inputChannels(j))));
+                    data(:,j) = taskRaw(k).data(:,find(strcmp(taskRaw(k).chanNames,inputChannels{j})));
                 end
             end
             if chanFound == 0
-                error('Channel %s not found in the data, though requested by calibration',inputChannel(j));
+                warning('Channel %s not found in the data, though requested by calibration',inputChannels{j});
             end
         end
     end

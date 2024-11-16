@@ -74,6 +74,10 @@ for i = 1:length(taskRaw)
     if i == resampleTaskInd
         out.data = [out.data,taskRaw(i).data];
     else
+        try
         out.data = [out.data,resampleXFlow(taskRaw(i).data,taskRaw(i).time,resampleTime)];
+        catch
+            1+1
+        end
     end
 end

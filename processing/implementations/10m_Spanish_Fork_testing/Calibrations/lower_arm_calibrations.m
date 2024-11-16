@@ -82,6 +82,6 @@ for i = 1:length(cal_multi)
     cal_multi(i).stage = 'afterResample';
 end
 %% Save
-% save(fullfile(savePath,saveName_single),'cal_single')
-% save(fullfile(savePath,saveName_multi),'cal_multi')
+save(fullfile(savePath,saveName_single),'cal_single')
+save(fullfile(savePath,saveName_multi),'cal_multi')
 

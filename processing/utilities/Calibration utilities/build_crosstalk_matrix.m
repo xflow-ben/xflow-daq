@@ -18,26 +18,26 @@ end
 
 
 %% Combine loads and response (volts) matricies
-cal.data.load_mat = [load_mats{:}]; % X matrix
-cal.data.response_mat = [volts{:}]; % O matrix
+cal.data.loadMat = [load_mats{:}]; % X matrix
+cal.data.responseMat = [volts{:}]; % O matrix
 
 % remove any columns with NaN
-[~,nanind] = find(isnan(cal.data.response_mat));
-cal.data.load_mat(:,nanind) = [];
-cal.data.response_mat(:,nanind) = [];
-[~,nanind] = find(isnan(cal.data.load_mat));
-cal.data.load_mat(:,nanind) = [];
-cal.data.response_mat(:,nanind) = [];
+[~,nanind] = find(isnan(cal.data.responseMat));
+cal.data.loadMat(:,nanind) = [];
+cal.data.responseMat(:,nanind) = [];
+[~,nanind] = find(isnan(cal.data.loadMat));
+cal.data.loadMat(:,nanind) = [];
+cal.data.responseMat(:,nanind) = [];
 %% Compute crosstalk
 % K^(-1) O = X, K^(-1) = X / O
 % x*A = B, x = B / A in matlab lingo
-cal.data.k = cal.data.load_mat/cal.data.response_mat;
+cal.data.k = cal.data.loadMat/cal.data.responseMat;
 
 %% Finish building output cal struct
 cal.type = 'linear_k';
-cal.input_channels = crosstalk.channel_names; % name of data columns to input
-cal.output_names = crosstalk.loads_names; % names for output (calibrated) channels
-cal.output_units = crosstalk.output_units; % units corresponding to output names
+cal.inputChannels = crosstalk.channel_names; % name of data columns to input
+cal.outputNames = crosstalk.loads_names; % names for output (calibrated) channels
+cal.outputUnits = crosstalk.output_units; % units corresponding to output names
 
 %% Plot applied load versus calculated load
 isSingleChannelCal = size(cal.data.k,1) == 1 && size(cal.data.k,2) == 1; % Flag for single or multi channel calibration
@@ -45,7 +45,7 @@ isSingleChannelCal = size(cal.data.k,1) == 1 && size(cal.data.k,2) == 1; % Flag 
 if nargin > 5 && plot_opt % plot_opt activates plotting
    
     % Calculate R^2
-    r_squared = 1-sum((cal.data.k*cal.data.response_mat-cal.data.load_mat).^2,2)./sum((cal.data.load_mat-mean(cal.data.load_mat,2)).^2,2); % r^2 comparing measured versus applied load
+    r_squared = 1-sum((cal.data.k*cal.data.responseMat-cal.data.loadMat).^2,2)./sum((cal.data.loadMat-mean(cal.data.loadMat,2)).^2,2); % r^2 comparing measured versus applied load
   
     % Initialize figures for each channel
     for i = 1:size(load_mats{1},1)
@@ -78,11 +78,11 @@ if nargin > 5 && plot_opt % plot_opt activates plotting
     for i = 1:size(load_mats{1},1) % index for each load channel
         figure(fh{i}); hold on;
         title([strrep(crosstalk.loads_names{i},'_',' '),', R^2 = ',sprintf('%0.5f',r_squared(i))]);
-        xlabel(sprintf('Load Applied [%s]',cal.output_units{i}))
+        xlabel(sprintf('Load Applied [%s]',cal.outputUnits{i}))
         if isSingleChannelCal
-            ylabel(sprintf('Load Computed from Guages\nUsing Single Channel Calibration [%s]',cal.output_units{i}))
+            ylabel(sprintf('Load Computed from Guages\nUsing Single Channel Calibration [%s]',cal.outputUnits{i}))
         else
-            ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [%s]',cal.output_units{i}))
+            ylabel(sprintf('Load Computed from Guages\nUsing Crosstalk Matrix [%s]',cal.outputUnits{i}))
         end
         box on
         grid on

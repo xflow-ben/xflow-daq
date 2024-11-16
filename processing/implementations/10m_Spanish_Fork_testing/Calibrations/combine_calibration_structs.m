@@ -1,5 +1,13 @@
 clear all
-
+tower_top_calibration();
+misc_calibrations();
+met_tower_calibrations();
+lower_arm_calibrations();
+guy_wire_tension_calibrations();
+blade_bending_calibrations();
+accelerometer_calibrations();
+upper_arm_calibrations();
+clear all
 
 % Get path where the calibration struct should be saved
 fullFileName = mfilename('fullpath');

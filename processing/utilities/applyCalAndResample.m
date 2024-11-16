@@ -84,6 +84,7 @@ end
 td(tdRMinds) = [];
 
 tdout.data = [];
+tdout(1).chanNames = {};
 k = 1;
 % put together the remaining ones all into one structure. Chonk everything
 % that is on the same timebase together
@@ -100,7 +101,7 @@ if length(td) > 1
                 tdout(k).chanNames = td(i).chanNames;
             else
                 tdout(1).data = [tdout.data,td(i).data];
-                tdout(1).chanNames = [tdout(1).chanNames];
+                tdout(1).chanNames = [tdout(1).chanNames, td(i).chanNames];
             end
         end
     end
@@ -112,9 +113,19 @@ end
             % look for cals with the given stage
             if strcmp(cal(ii).stage,stage)
                 % scan through and extract the appropriate data
-                taskRaw(end+1) = applyChannelCal(taskRaw,cal(ii));
+                if checkForChannel(cal(ii).inputChannels,taskRaw)
+                    taskRaw(end+1) = applyChannelCal(taskRaw,cal(ii));
+                end
+
             end
         end
+    end
+
+    function out = checkForChannel(chanelNames,taskRaw)
+        taskChannels = [taskRaw.chanNames];
+        out = all(ismember(chanelNames,taskChannels));
+
+
     end
 
 

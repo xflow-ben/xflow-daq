@@ -75,5 +75,8 @@ for k = 1:length(gap_starts)
 end
 
 [yout,dy,ddy] = multipolydiffNaN(y_shifted,multi_poly_wind,n);
+yout = fillmissing(yout,'linear');
+dy = fillmissing(dy,'linear');
+ddy = fillmissing(ddy,'linear');
 
-end
+end 

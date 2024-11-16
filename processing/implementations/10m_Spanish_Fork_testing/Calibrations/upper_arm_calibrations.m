@@ -95,12 +95,12 @@ cal_split(count_split).data.k = [];
 cal_split(count_split).data.k1 = temp{1}.data.k;
 cal_split(count_split).data.k2 = temp{2}.data.k;
 
-cal_split(count_split).data.load_mat = [];
-cal_split(count_split).data.response_mat = [];
-cal_split(count_split).data.load_mat1 = temp{1}.data.load_mat;
-cal_split(count_split).data.load_mat2 = temp{2}.data.load_mat;
-cal_split(count_split).data.response_mat1 = temp{1}.data.response_mat;
-cal_split(count_split).data.response_mat2 = temp{2}.data.response_mat;
+cal_split(count_split).data.loadMat = [];
+cal_split(count_split).data.responseMat = [];
+cal_split(count_split).data.loadMat1 = temp{1}.data.loadMat;
+cal_split(count_split).data.loadMat2 = temp{2}.data.loadMat;
+cal_split(count_split).data.responseMat1 = temp{1}.data.responseMat;
+cal_split(count_split).data.responseMat2 = temp{2}.data.responseMat;
 
 % Enforce that the diagnals are the same for the non-My loads
 k11 = mean([temp{1}.data.k(1,1),temp{2}.data.k(1,1)]);
