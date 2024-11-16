@@ -172,8 +172,11 @@ end
                     if isempty(datalg) % check to make sure data is same length
                         datalg = size(taskRaw(k).data,1);
                         time = taskRaw(k).time;
-
+                        try
                         samplePeriod = taskRaw(k).samplePeriod; % not sure if
+                        catch
+                            1+1
+                        end
                         metaData = taskRaw(k).metaData;
                         % needed
                     elseif datalg ~= size(taskRaw(k).data,1)

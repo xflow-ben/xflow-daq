@@ -63,10 +63,12 @@ end
 
 % resample all the channe;s
 out.taskName = 'resampled';
+out.samplePeriod = seconds(resampleTime(2)-resampleTime(1));
 out.chanNames = {};
 out.data = [];
 out.isRaw = 0;
 out.time = resampleTime;
+out.metaData = [];
 out.isRaw = [];
 for i = 1:length(taskRaw)
     out.chanNames = [out.chanNames, taskRaw(i).chanNames];
