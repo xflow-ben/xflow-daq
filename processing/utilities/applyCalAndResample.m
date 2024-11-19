@@ -1,4 +1,4 @@
-function [td,taskRaw] = applyCalAndResample(taskRaw,tare,cal,opts)
+function [tdout,taskRaw] = applyCalAndResample(taskRaw,tare,cal,opts)
 % % Applies tare and calibrations, resamples a group of tasks sampled at the
 % same time (one single shot, or one set of continuous acuqisition files)
 % Use LoadTDMSFileGroup to read in TDMS files to taskRAW
@@ -67,11 +67,11 @@ tdRMinds = [];
 for i = 1:length(td)
     if all(td(i).isRaw == 1)
         tdRMinds = [tdRMinds, i];
-    elseif ~all(td(i).isRaw == 0)
+    elseif any(td(i).isRaw == 1)
         % then a subset of chans needs to be removed
         chanRMinds = [];
-        for j = 1:length(taskRaw(i).chanNames)
-            if taskRaw(i).isRaw(j) == 1
+        for j = 1:length(td(i).chanNames)
+            if td(i).isRaw(j) == 1
             chanRMinds = [chanRMinds, j];
             end
         end
@@ -116,7 +116,6 @@ end
                 if checkForChannel(cal(ii).inputChannels,taskRaw)
                     taskRaw(end+1) = applyChannelCal(taskRaw,cal(ii));
                 end
-
             end
         end
     end
