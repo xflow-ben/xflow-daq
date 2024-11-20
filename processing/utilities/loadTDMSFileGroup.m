@@ -62,7 +62,7 @@ if length(fileList) > 1 % only bother if processing more than one file
     end
 
 else
-    taskListUnique = taskListAll;
+    taskListUnique = {d.taskName};
     uinds = 1;
     nTasks = 1;
     nFilesPerTask = 1;

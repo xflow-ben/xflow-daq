@@ -17,12 +17,12 @@ switch cal.type
         if strcmp(cal.type,'multi_part_linear_k')
             % k2 is used for all cal.data.split.input_channel values greater than cal.data.split.value
             % Otherwise use k1
-            out.data = (cal.data.k1*data')';
-            data_temp = (cal.data.k2*data')';
+            out.data = data*cal.data.k1;%(cal.data.k1*data')';
+            data_temp = data*cal.data.k2;%(cal.data.k2*data')';
             ind = data(:,cal.data.split.input_channel)>cal.data.split.value;
             out.data(ind,:) = data_temp(ind,:);
         else
-            out.data = (cal.data.k*data')';%raw*cal.data.k';
+            out.data = data*cal.data.k; % (cal.data.k*data')';%raw*cal.data.k';
         end
 
     case 'slope_offset'
@@ -160,11 +160,12 @@ switch cal.type
 end
 
     function [data,time,samplePeriod,metaData] = extractChanData(taskRaw,inputChannels,outputNames)
+        data = [];
+        time = [];
+        datalg = [];
 
         for j = 1:length(inputChannels)
-            datalg = [];
-            data = [];
-            time = [];
+            
             chanFound = 0;
             for k = 1:length(taskRaw)
                 if any(strcmp(taskRaw(k).chanNames,inputChannels(j)))
@@ -172,11 +173,8 @@ end
                     if isempty(datalg) % check to make sure data is same length
                         datalg = size(taskRaw(k).data,1);
                         time = taskRaw(k).time;
-                        try
                         samplePeriod = taskRaw(k).samplePeriod; % not sure if
-                        catch
-                            1+1
-                        end
+
                         metaData = taskRaw(k).metaData;
                         % needed
                     elseif datalg ~= size(taskRaw(k).data,1)

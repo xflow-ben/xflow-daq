@@ -15,6 +15,10 @@ function [tdout,taskRaw] = applyCalAndResample(taskRaw,tare,cal,opts)
 % if opts.resample.startTime (datetime format) is given, resample will initiate at this time
 %
 %
+%   Tare options
+% opts.tare.method - input standard tare methods here. e.g.
+% 'nearest','linear', etc. 
+%
 % Calibration stages
 %   - 'beforeResample' - this is pre resample, before any other calibs are applied
 %   - 'afterResample' - this is post-resample. Good for cals that rely on
@@ -22,6 +26,9 @@ function [tdout,taskRaw] = applyCalAndResample(taskRaw,tare,cal,opts)
 %   - 'final' - For cals that rely on outputs from the 'resampled' stage.
 %   You can have cals in Final rely on eachother, they just need to
 %   arranged after the ones they rely on
+%
+%
+%
 
 
 if nargin < 4 || isempty(opts)
@@ -36,8 +43,13 @@ end
 % are means or medians of tare points)
 % tare(n).time - 1 x m vector, datetime, times at which tare points were
 % taken
-
-% taskRaw = applyTare(taskRaw,tare);
+%% tare
+if ~isfield(opts,'tare')
+    tareOpts = [];
+else
+    tareOpts = opts.tare;
+end
+taskRaw = applyTare(taskRaw,tare,tareOpts);
 %% Add an israw field to the tasks, to be able to separate raw and calibrated tasks later
 for i = 1:length(taskRaw)
     taskRaw(i).isRaw = ones(size(taskRaw(i).chanNames));
@@ -53,6 +65,7 @@ else
     resampleOpts = opts.resample;
 end
 td = resampleAndCombine(taskRaw,resampleOpts); % adds a task named "resampled" to the task list
+
 
 %% Apply post-resample calibrations
 
@@ -93,6 +106,8 @@ if length(td) > 1
         if i == 1 % this method doesn't work if the first one is the one with the oddball length
             tdLg = size(td(i).data,1);
             tdout(1).time = td(i).time;
+            tdout(1).data = td(i).data;
+            tdout(1).chanNames = td(i).chanNames;
         else
             if size(td(i).data,1) ~= tdLg
                 error('We ended up with different lengths of data out of the calibrations? This error could be removed if this is on purpose but the code needs some fixes')
@@ -100,7 +115,7 @@ if length(td) > 1
                 tdout(k) = td(i).data;
                 tdout(k).chanNames = td(i).chanNames;
             else
-                tdout(1).data = [tdout.data,td(i).data];
+                tdout(1).data = [tdout(1).data,td(i).data];
                 tdout(1).chanNames = [tdout(1).chanNames, td(i).chanNames];
             end
         end

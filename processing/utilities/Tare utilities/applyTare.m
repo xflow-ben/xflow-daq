@@ -1,4 +1,4 @@
-function taskRaw = applyTare(taskRaw,tare)
+function taskRaw = applyTare(taskRaw,tare,opts)
 % 
 % tare file format: n long struct
 % tare(n).chanName - raw data name to which to apply tare
@@ -13,6 +13,10 @@ function taskRaw = applyTare(taskRaw,tare)
 % We could add an option (or change it) to interpolate using only the middle time of the
 % data, to avoid introducing slope to the data. 
 
+if nargin < 3 || isempty(opts)
+    opts.method = 'linear';
+end
+
 tareChans = {tare.chanName};
 tareApplied = zeros([1,length(tareChans)]); % keep track of if all tares are used so we can throw an error if not
 
@@ -23,7 +27,7 @@ for i = 1:length(taskRaw)
             ind = find(strcmp(tareChans,taskRaw(i).chanNames(j)));
             tareApplied(ind) = 1; % Record that given tare has been used
             taskRaw(i).tareApplied(j) = 1; % Record that channel has been tared
-            taskRaw(i).data(:,j) = interpTare(taskRaw(i).data(:,j),taskRaw(i).time,tare(ind));
+            taskRaw(i).data(:,j) = interpTare(taskRaw(i).data(:,j),taskRaw(i).time,tare(ind),opts);
         end
     end
 end
@@ -33,7 +37,7 @@ if any(tareApplied == 0) % this could be removed if it becomes annoying
     error('At least one given tare, channel %s, was unused. Make sure it matches the data channel name',tare(unusedInds(1)).chanName);
 end
 
-    function data = interpTare(data,dataTime,tareStruct)
+    function data = interpTare(data,dataTime,tareStruct,opts)
         if isscalar(tareStruct.value)
             data = data - tareStruct.value;
         else
@@ -43,9 +47,10 @@ end
             end
             % check that the data falls between the tares
             if max(dataTime) > max(tareStruct.time) || min(dataTime) < min(tareStruct.time)
-                error('Multiple tare values given for channel ''%s'', but the data falls before or after the tare times',tareStruct.chanName)
+                warning('Multiple tare values given for channel ''%s'', but the data falls before or after the tare times',tareStruct.chanName)
             end
-            data = data - interp1(tareStruct.time(:),tareStruct.value(:),dataTime);
+            t_capped = min(max(dataTime, tareStruct.time(1)), tareStruct.time(end));  % Cap xq to [x(1), x(end)]
+            data = data - interp1(tareStruct.time(:),tareStruct.value(:),t_capped,opts.method, 'extrap');
         end
 
     end

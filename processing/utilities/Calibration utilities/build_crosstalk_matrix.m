@@ -29,9 +29,10 @@ cal.data.responseMat(:,nanind) = [];
 cal.data.loadMat(:,nanind) = [];
 cal.data.responseMat(:,nanind) = [];
 %% Compute crosstalk
-% K^(-1) O = X, K^(-1) = X / O
-% x*A = B, x = B / A in matlab lingo
-cal.data.k = cal.data.loadMat/cal.data.responseMat;
+% k = Response \ Load
+% Backslash solves equation for k for Response * k = Load
+% transpose the inputs as our data (time) direction is along the columns
+cal.data.k = (cal.data.responseMat')\(cal.data.loadMat');
 
 %% Finish building output cal struct
 cal.type = 'linear_k';
@@ -45,7 +46,7 @@ isSingleChannelCal = size(cal.data.k,1) == 1 && size(cal.data.k,2) == 1; % Flag 
 if nargin > 5 && plot_opt % plot_opt activates plotting
    
     % Calculate R^2
-    r_squared = 1-sum((cal.data.k*cal.data.responseMat-cal.data.loadMat).^2,2)./sum((cal.data.loadMat-mean(cal.data.loadMat,2)).^2,2); % r^2 comparing measured versus applied load
+    r_squared = 1-sum((((cal.data.responseMat')*cal.data.k)'-cal.data.loadMat).^2,2)./sum((cal.data.loadMat-mean(cal.data.loadMat,2)).^2,2); % r^2 comparing measured versus applied load
   
     % Initialize figures for each channel
     for i = 1:size(load_mats{1},1)
@@ -62,7 +63,7 @@ if nargin > 5 && plot_opt % plot_opt activates plotting
         calculated_loads = [];
         applied_load = [];
         for m = 1:size(load_mats{j},2) % index for each load applied in a folder
-            calculated_loads(m,:) = cal.data.k*volts{j}(:,m);
+            calculated_loads(m,:) = ((volts{j}(:,m)')*cal.data.k)';
             applied_load(m,:) = load_mats{j}(:,m);
         end
         for i = 1:size(load_mats{1},1) % index for each load channel

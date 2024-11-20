@@ -45,11 +45,29 @@ for i = 1:length(tareIn)
             values = [values,median(tdmsIn.data,1)];
             chanNames = [chanNames, tdmsIn.chanNames];
             times = [times, repmat(tdmsIn.startTime + seconds(tdmsIn.nSamples.*tdmsIn.samplePeriod/2),[1,length(tdmsIn.chanNames)])];
-
         end
-
     end
-    [uniqueChanNames,uAinds,uBinds] = unique(chanNames);
+
+    switch mode
+        case 'allExcept'
+            rminds = find(strcmp(chanNames,exceptList));
+            values(rminds) = [];
+            chanNames(rminds) = [];
+            times(rminds) = [];
+        case 'specify'
+            keepInds = find(ismember(chanNames,tareIn(i).channelNames));
+            values = values(keepInds);
+            chanNames = chanNames(keepInds);
+            times = times(keepInds);
+        case 'useAll'
+            % do nothing
+        otherwise
+            error('Unknown keep /remove option')
+    end
+
+
+
+    [uniqueChanNames,~,uBinds] = unique(chanNames);
     for j = 1:length(uniqueChanNames)
         if ~isempty(tare)
             existingChanNames = {tare.chanName};
@@ -64,12 +82,11 @@ for i = 1:length(tareIn)
             tareOutInd = 1;
             nTares = 0;
         end
-
-        tare(tareOutInd).value(nTares+1) = mean(values(uBinds == uAinds(j)));
+        extractInds = find(uBinds == j);
+        tare(tareOutInd).value(nTares+1) = mean(values(extractInds));
         tare(tareOutInd).chanName = uniqueChanNames{j};
-        tare(tareOutInd).time(nTares+1) = mean(times(uBinds == uAinds(j)));
+        tare(tareOutInd).time(nTares+1) = mean(times(extractInds));
     end
-
 end
 
 end

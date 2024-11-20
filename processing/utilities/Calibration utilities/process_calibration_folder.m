@@ -45,7 +45,11 @@ volts(inds) = NaN;
 
 % Separate out the tare points
 tare_inds = loads == 0;
+try
 tare_volts = volts(:,tare_inds);
+catch
+    1+1
+end
 tare_time = mid_time(tare_inds);
 
 % delete tare points from non-tare data

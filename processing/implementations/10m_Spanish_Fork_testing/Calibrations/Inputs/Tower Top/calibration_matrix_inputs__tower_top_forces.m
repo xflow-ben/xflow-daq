@@ -49,7 +49,7 @@ E_GW_dist = [18*12 + 1, 18*12 + 7, 18*12 + 3, 18*12 + 9]*consts.units.inch_to_m;
 S_GW_dist = [15*12 + 7, 15*12 + 1, 15*12 + 7, 15*12 + 6]*consts.units.inch_to_m;
 W_GW_dist = [39*12 + 3, 39*12 + 2, 39*12 + 1, 39*12 + 1]*consts.units.inch_to_m;
 horiz_angle = [2.8, 2.8, 2.1, 3];
-manual_applied_loads = [0, 0; 0, 0; 1976.5, 1975.5; 965.5, 969.5; 0, 0; 0, 0; 880.5, 880.5; 2049, 2050; 0, 0];
+manual_applied_loads = [0, 0; 1976.5, 1975.5; 965.5, 969.5; 0, 0; 0, 0; 880.5, 880.5; 2049, 2050; 0, 0];
 
 % Calculated inputs
 [~, theta] = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,consts.foundation.E_GW__SW_bolt,consts.foundation.S_GW__NE_bolt,consts.foundation.W_GW__SE_bolt,tol);
