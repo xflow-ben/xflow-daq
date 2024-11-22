@@ -2,15 +2,14 @@ clear all
 close all
 clc
 
-opts.resample.taskName = 'rotor_strain';
-opts.resample.rate = 512;
-opts.fileConvention = 'trailingNumber';
 %% Common inputs
 verify.consts = XFlow_Spanish_Fork_testing_constants();
 
 % verify.data.physical_loads = {'Tower_Top_Fx','Tower_Top_Fy','Tower_Top_Mx','Tower_Top_My'};
 verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_19_11_24.mat';
-
+opts.resample.taskName = 'rotor_strain';
+opts.resample.rate = 512;
+opts.fileConvention = 'trailingNumber';
 
 %% 
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
@@ -26,17 +25,17 @@ if isempty(files)
 end
 
 %% Extract applied load
-% % This is done first so we can generate the tare list when using
-% % process_data_folder
-% for II =1:length(files)
-%     TDMS = readTDMS(files(II).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
-%     d = convertTDMStoXFlowFormat(TDMS);
-% 
-%     applied_load_ind = find(strcmp({TDMS.property.name},verify.applied_load_var_name));
-%     applied_load(II) = str2double(TDMS.property(applied_load_ind).value);
-% end
-% 
-% %% Create tareList in the data directory
+% This is done first so we can generate the tare list when using
+% process_data_folder
+for II =1:length(files)
+    TDMS = readTDMS(files(II).name,fullfile(verify.absolute_data_path,verify.relative_data_folder));
+    d = convertTDMStoXFlowFormat(TDMS);
+
+    applied_load_ind = find(strcmp({TDMS.property.name},verify.applied_load_var_name));
+    applied_load(II) = str2double(TDMS.property(applied_load_ind).value);
+end
+
+%% Create tareList in the data directory
 % tareList = {files(applied_load == 0).name};
 % save(fullfile(verify.absolute_data_path,verify.relative_data_folder,'tareList.mat'),'tareList')
 
@@ -47,7 +46,7 @@ files.relative_experiment_dir =  fullfile(verify.absolute_data_path,verify.relat
 files.relative_tare_dir = files.relative_experiment_dir; % This is relative to files.absolute_data_dir
 
 load(verify.data.absolute_cali_path)
-results = process_data_folder(files,cal,verify.consts);
+results.td = processDataFolder2(files.relative_experiment_dir,cal,opts);
 results.td = calculate_XFlow_Spanish_Fork_quantities(results.td,verify.consts);
 results = calculate_sd(results,verify.consts);
 
