@@ -34,23 +34,25 @@ if sum(strcmp(consts.data.save_types, 'sd'))
         indices = find(results.td.Time >= chunk_start & results.td.Time < chunk_end);
 
         if ~isempty(indices)
-            if sum(isnan(results.td.(fields{1})(indices))) == 0 % Don't except chunks with nans
+            % if sum(isnan(results.td.(fields{1})(indices))) == 0 % Don't except chunks with nans
                 count = count + 1;
 
                 % Compute the average for each field in the struct
                 for LL = 1:numel(fields)
-                    % if ~strcmp(fields{LL}, 'Time')
+                    if ~strcmp(fields{LL}, 'Time')
                     % Extract the chunk data statistics
                     chunk_data = results.td.(fields{LL})(indices);
-                    results.sd.(fields{LL}).mean(count) = mean(chunk_data);
-                    results.sd.(fields{LL}).std(count) = std(chunk_data);
-                    results.sd.(fields{LL}).min(count) = min(chunk_data);
-                    results.sd.(fields{LL}).max(count) = max(chunk_data);
-                    % end
+
+                    results.sd.(fields{LL}).mean(count) = mean(chunk_data,1,'omitnan');
+
+                    results.sd.(fields{LL}).std(count) = std(chunk_data,'omitnan');
+                    results.sd.(fields{LL}).min(count) = min(chunk_data,[],'omitnan');
+                    results.sd.(fields{LL}).max(count) = max(chunk_data,[],'omitnan');
+                    end
                 end
                 results.sd.td_index.start(count) = indices(1);
                 results.sd.td_index.end(count) = indices(end);
-            end
+            % end
         end
     end
 end

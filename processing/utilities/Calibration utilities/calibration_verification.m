@@ -1,4 +1,4 @@
-function [applied_load, calculated_load] = calibration_verification(verify)
+function [applied_load, calculated_load] = calibration_verification(verify,opts)
 
 
 % verify is a struct with the following elements
@@ -23,7 +23,8 @@ if isempty(data_files)
     error(sprintf('No files with the format %s found in %s',verify.tdms_filter,fullfile(verify.absolute_data_path,verify.relative_data_folder)))
 end
 
-
+in = load(verify.data.absolute_cali_path);
+cal = in.cal;
 %% Extract applied load
 % This is done first so we can generate the tare list when using
 % process_data_folder
@@ -34,10 +35,11 @@ for II =1:length(data_files)
     applied_load_ind = find(strcmp({TDMS.property.name},verify.applied_load_var_name));
     applied_load(II) = verify.applied_load_scaling*str2double(TDMS.property(applied_load_ind).value);
 end
+applied_load(applied_load == 0) = [];
 
 %% Create tareList in the data directory
-tareList = {data_files(applied_load == 0).name};
-save(fullfile(verify.absolute_data_path,verify.relative_data_folder,'tareList.mat'),'tareList')
+% tareList = {data_files(applied_load == 0).name};
+% save(fullfile(verify.absolute_data_path,verify.relative_data_folder,'tareList.mat'),'tareList')
 
 %% Process data folder
 files = struct;
@@ -45,12 +47,13 @@ files.absolute_data_dir = '';
 files.relative_experiment_dir =  fullfile(verify.absolute_data_path,verify.relative_data_folder); % This is relative to files.absolute_data_dir
 files.relative_tare_dir = files.relative_experiment_dir; % This is relative to files.absolute_data_dir
 
-load(verify.data.absolute_cali_path)
-for II =1:length(data_files)
-    files.filename_timestamp = str2num(data_files(II).name(end-8:end-5));
-    temp = process_data_folder(files,cal,verify.consts);
+td = processDataFolder2(fullfile(verify.absolute_data_path,verify.relative_data_folder),cal,opts);
+results.td = struct();
+results.sd = struct();
+for i =1:length(td)
     verify.consts.data.N = NaN; % sd averaging time [s]
-    results(II) = calculate_sd(temp,verify.consts);
+    results(i).td = td(i);
+    results(i) = calculate_sd(results(i),verify.consts);
 end
 
 %% Calculate load of intrest

@@ -15,6 +15,10 @@ function taskRaw = loadTDMSFileGroup(fileList,fileDirectory,opts)
 % than one files with the specified channel. This is because the
 % wf_start_times could be wrong in subsequent files
 
+if isempty(fileList)
+    error('You gave an empty file list')
+end
+
 if ~iscell(fileList) || (~ischar(fileList{1}) && ~istring(fileList{1}))
     error('FileList must be a cell array of file name strings or chars')
 end

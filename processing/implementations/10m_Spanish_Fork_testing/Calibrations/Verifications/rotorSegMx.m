@@ -2,6 +2,9 @@ clear all
 % close all
 clc
 
+opts.resample.taskName = 'rotorStrain';
+opts.resample.rate = 512;
+opts.fileConvention = 'trailingNumber';
 %% Common inputs
 verify.consts = XFlow_Spanish_Fork_testing_constants();
 verify.func = @(x) -x(1)/(verify.consts.lowerArm.span)*cosd(verify.consts.lowerArm.angle)...
@@ -9,7 +12,7 @@ verify.func = @(x) -x(1)/(verify.consts.lowerArm.span)*cosd(verify.consts.lowerA
     +x(3)*sind(verify.consts.lowerArm.angle)...
     +x(4)*sind(verify.consts.upperArm.angle);
 verify.data.physical_loads = {'Lower_Arm_Mx','Upper_Arm_Mx','Lower_Yoke_Fz','Upper_Yoke_Fz'};
-verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_27_09_24.mat';
+verify.data.absolute_cali_path =  'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment\cal_with_LowerArm_Mz.mat';
 
 %% Rotor segment on ground
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\rotor_segment';
@@ -25,7 +28,7 @@ fh2 = figure;
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
 
-    [applied_load, measured_load] = calibration_verification(verify);
+    [applied_load, measured_load] = calibration_verification(verify,opts);
 
     figure(fh1)
     plot(applied_load,measured_load,'o')
@@ -33,15 +36,20 @@ for II = 1:length(data_folders)
 
     figure(fh2)
     plot(applied_load,(measured_load./applied_load-1)*100,'o')
+    if any(abs((measured_load./applied_load-1)*100)>7)
+        error('error in checks')
+    end
     hold on
 
     pause(0.01)
 end
 
 %% Raised rotor
+opts.resample.taskName = 'rotor_strain';
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
 verify.tdms_filter = '*rotor_strain*.tdms';
 verify.applied_load_var_name = 'appliedLoad';
+verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_19_11_24.mat';
 
 data_folders = {'-Z_pos_1','-Z_pos_2'};
 verify.applied_load_scaling = -verify.consts.units.lbf_to_N;
@@ -50,7 +58,7 @@ verify.applied_load_scaling = -verify.consts.units.lbf_to_N;
 for II = 1:length(data_folders)
     verify.relative_data_folder = data_folders{II};
 
-    [applied_load, measured_load] = calibration_verification(verify);
+    [applied_load, measured_load] = calibration_verification(verify,opts);
 
     figure(fh1)
     plot(applied_load,measured_load,'o')
@@ -59,6 +67,9 @@ for II = 1:length(data_folders)
     figure(fh2)
     plot(applied_load,(measured_load./applied_load-1)*100,'o')
     hold on
+    if any(abs((measured_load./applied_load-1)*100)>7.1)
+        error('error in checks')
+    end
 
     pause(0.01)
 end

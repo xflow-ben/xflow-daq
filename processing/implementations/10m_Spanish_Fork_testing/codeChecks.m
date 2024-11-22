@@ -150,8 +150,8 @@ if any(errors(:)>15)
     error('Possible error in tower top force calibration')
 end
 
-%% Rotor segment verifications, on ground
-
-
-
-%% Rotor segment verifications, mounted to turbine
+%% Rotor segment checks and nacelle moment checks
+rotorSegMy;
+rotorSegMx;
+rotorSegFx;
+tower_Mx_My;
