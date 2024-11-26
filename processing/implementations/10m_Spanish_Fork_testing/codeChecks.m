@@ -1,7 +1,8 @@
 % load in cal
 repoDir = 'C:\Users\Ian\Documents\GitHub\';
-
-in = load(fullfile(repoDir,'xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_19_11_24.mat'));
+calSubPat = 'xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_25_11_24.mat';
+calPath = fullfile(repoDir,calSubPat);
+in = load(calPath);
 
 cal = in.cal;
 %% Check against some tares
@@ -151,7 +152,56 @@ if any(errors(:)>15)
 end
 
 %% Rotor segment checks and nacelle moment checks
-rotorSegMy;
-rotorSegMx;
-rotorSegFx;
-tower_Mx_My;
+rotorSegMy(calPath);
+rotorSegMx(calPath);
+rotorSegFx(calPath);
+%tower_Mx_My;
+
+%% Tower top Mz My
+
+
+clearvars('-except','cal')
+
+expDir = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor\-Z_pos_1';
+
+
+in = load(fullfile(expDir,'tare.mat'));
+tare = in.tare;
+
+
+tareStr = makeTareFromFile(expDir);
+
+opts.resample.taskName = 'rotor_strain';
+opts.resample.rate = 512;
+
+tareFiles = [tare.filePaths];
+tareFileNames = {};
+for i = 1:length(tareFiles)
+    f = dir(tareFiles{i});
+    tareFileNames = [tareFileNames, {f.name}];
+end
+
+
+fileEndings = [1 2 3 5 6 7];
+
+
+for j = 1:length(fileEndings)
+    filesToProc = dir(fullfile(expDir,sprintf('*_strain_%04d.tdms',fileEndings(j))));
+    fileNames = {filesToProc.name};
+    taskRaw = loadTDMSFileGroup(fileNames,expDir);
+    [td(j),rawOut] = applyCalAndResample(taskRaw,tareStr,cal,opts);
+    medValsAll(j,:) = median(td(j).data,'omitnan');
+end
+
+chanInds = [];
+chans = {'Tower_Top_Mx','Tower_Top_My'};
+for i = 1:length(chans)
+    chanInds(i) = find(strcmp(chans{i},td(1).chanNames));
+end
+appliedLoad = cal(25).data.loadMat(3:4,19:24)';
+
+
+medVals = medValsAll(:,chanInds);
+
+avErr = mean(abs(appliedLoad - medVals)./abs(appliedLoad));
+plot

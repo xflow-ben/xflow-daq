@@ -33,7 +33,7 @@ for i = 1:length(taskRaw)
 end
 
 if any(tareApplied == 0) % this could be removed if it becomes annoying
-    unusedInds = find(tareApplied = 0);
+    unusedInds = find(tareApplied == 0);
     error('At least one given tare, channel %s, was unused. Make sure it matches the data channel name',tare(unusedInds(1)).chanName);
 end
 

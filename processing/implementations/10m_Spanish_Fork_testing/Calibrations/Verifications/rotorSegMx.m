@@ -1,6 +1,4 @@
-clear all
-% close all
-clc
+function rotorSegMx(calPath)
 
 opts.resample.taskName = 'rotorStrain';
 opts.resample.rate = 512;
@@ -49,8 +47,7 @@ opts.resample.taskName = 'rotor_strain';
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
 verify.tdms_filter = '*rotor_strain*.tdms';
 verify.applied_load_var_name = 'appliedLoad';
-verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_19_11_24.mat';
-
+ 
 data_folders = {'-Z_pos_1','-Z_pos_2'};
 verify.applied_load_scaling = -verify.consts.units.lbf_to_N;
 

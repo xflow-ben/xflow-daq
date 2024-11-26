@@ -8,9 +8,11 @@ V_B_pull_z = 84.23*consts.units.inch_to_m; % Distance of pull location from towe
 
 %% Crosstalk grouping high level info
 crosstalk.loads_names = {'Tower_Top_Mx','Tower_Top_My'}; % Names of physical loads of intrest which are applied during calibrations
-crosstalk.channel_names = {'Upper GW N','Upper GW S','Upper GW E','Upper GW W',...
-    'Lower GW N','Lower GW S','Lower GW E','Lower GW W',...
-    'Torque Arm Left','Torque Arm Right','Nacelle Bending A','Nacelle Bending B'}; % Names of load channels of intrest
+crosstalk.channel_names = {'Nacelle Bending A','Nacelle Bending B'}; % Names of load channels of intrest
+
+% crosstalk.channel_names = {'Upper GW N','Upper GW S','Upper GW E','Upper GW W',...
+%     'Lower GW N','Lower GW S','Lower GW E','Lower GW W',...
+%     'Torque Arm Left','Torque Arm Right','Nacelle Bending A','Nacelle Bending B'}; % Names of load channels of intrest
 crosstalk.output_units = {'N-m','N-m'};
 calibNum = 0; % Initiate counting varible
 
@@ -29,7 +31,7 @@ manual_applied_loads = [0, 0; 1804, 1804; 924, 923; 0, 0; 1133, 1136; 1969, 1964
 % Calculated inputs
 [~, theta] = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,consts.foundation.E_GW__SW_bolt,consts.foundation.S_GW__NW_bolt,consts.foundation.W_GW__SE_bolt,tol);
 moment_arm = V_B_pull_z - V_B_pull_r*sind(horiz_angle);
-calib(calibNum).applied_load_scaling = cosd(horiz_angle).*[cosd(theta).*moment_arm; sind(theta).*moment_arm];
+calib(calibNum).applied_load_scaling = cosd(horiz_angle).*[sind(theta).*moment_arm; cosd(theta).*moment_arm].*consts.units.lbf_to_N;
 calib(calibNum).corrections.load = [(1:length(manual_applied_loads))', mean(manual_applied_loads,2)];
 
 %% V-B, H-C
@@ -46,7 +48,7 @@ manual_applied_loads = [0, 0; 1982, 1979; 815, 808.5; 0, 0; 975, 976; 2043.5, 20
 % Calculated inputs
 [~, theta] = get_tower_pull_coordinate(E_GW_dist,S_GW_dist,W_GW_dist,consts.foundation.E_GW__SW_bolt,consts.foundation.S_GW__NE_bolt,consts.foundation.W_GW__SE_bolt,tol);
 moment_arm = V_B_pull_z - V_B_pull_r*sind(horiz_angle);
-calib(calibNum).applied_load_scaling = cosd(horiz_angle).*[cosd(theta).*moment_arm; sind(theta).*moment_arm];
+calib(calibNum).applied_load_scaling = cosd(horiz_angle).*[sind(theta).*moment_arm; cosd(theta).*moment_arm].*consts.units.lbf_to_N;;
 calib(calibNum).corrections.load = [(1:length(manual_applied_loads))', mean(manual_applied_loads,2)];
 
 %% -Z_pos_1
@@ -61,7 +63,7 @@ W_GW_dist = (14*12 + 2)*consts.units.inch_to_m;
 % Calculated inputs
 [~, theta] = get_tower_pull_coordinate(N_GW_dist,S_GW_dist,W_GW_dist,consts.foundation.N_GW__SW_bolt,consts.foundation.S_GW__NW_bolt,consts.foundation.W_GW__SE_bolt,tol);
 moment_arm = consts.rotor.radius;
-calib(calibNum).applied_load_scaling = [cosd(theta)*moment_arm; sind(theta)*moment_arm];
+calib(calibNum).applied_load_scaling = [sind(theta)*moment_arm; cosd(theta)*moment_arm].*consts.units.lbf_to_N;
 
 %% -Z_pos_2
 calibNum = calibNum + 1;
@@ -75,5 +77,5 @@ E_GW_dist = (15*12 + 10)*consts.units.inch_to_m;
 % Calculated inputs
 [~, theta] = get_tower_pull_coordinate(N_GW_dist,S_GW_dist,E_GW_dist,consts.foundation.N_GW__SE_bolt,consts.foundation.S_GW__NE_bolt,consts.foundation.E_GW__SW_bolt,tol);
 moment_arm = consts.rotor.radius;
-calib(calibNum).applied_load_scaling = [cosd(theta)*moment_arm; sind(theta)*moment_arm];
+calib(calibNum).applied_load_scaling = [sind(theta)*moment_arm; cosd(theta)*moment_arm].*consts.units.lbf_to_N;
 

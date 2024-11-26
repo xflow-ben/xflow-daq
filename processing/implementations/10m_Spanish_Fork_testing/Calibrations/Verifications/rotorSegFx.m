@@ -1,6 +1,5 @@
-clear all
-% close all
-clc
+function rotorSegFx(calPath)
+close all
 
 %% Common inputs
 verify.consts = XFlow_Spanish_Fork_testing_constants();
@@ -37,7 +36,7 @@ pause(0.01)
 verify.absolute_data_path = 'X:\Experiments and Data\20 kW Prototype\Loads_Data\load_calibrations\installed_rotor';
 verify.tdms_filter = '*rotor_strain*.tdms';
 verify.applied_load_var_name = 'appliedLoad';
-verify.data.absolute_cali_path = 'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_19_11_24.mat';
+verify.data.absolute_cali_path = calPath;%'C:\Users\Ian\Documents\GitHub\xflow-daq\processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_19_11_24.mat';
 
 opts.resample.taskName = 'rotor_strain';
 data_folders = {'-X','+X'};

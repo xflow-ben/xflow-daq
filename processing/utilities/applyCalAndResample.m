@@ -129,7 +129,11 @@ end
             if strcmp(cal(ii).stage,stage)
                 % scan through and extract the appropriate data
                 if checkForChannel(cal(ii).inputChannels,taskRaw)
+                    try
                     taskRaw(end+1) = applyChannelCal(taskRaw,cal(ii));
+                    catch
+                        1+1
+                    end
                 end
             end
         end

@@ -15,22 +15,31 @@ saveName = 'tower_top_cal_struct';
 tdmsPrefix.data_files = {'data_gw_strain','data_nacelle_strain'};
 tdmsPrefix.applied_load = 'data_rotor_strain';
 
-%% Tower top moments
-count = count + 1;
-[calib,crosstalk] = calibration_matrix_inputs__tower_top_moments(consts);
-cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'tower'));
-
-%% Tower top forces
-count = count + 1;
-[calib,crosstalk] = calibration_matrix_inputs__tower_top_forces(consts);
-cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'tower'));
-
+% %% Tower top moments
+% count = count + 1;
+% [calib,crosstalk] = calibration_matrix_inputs__tower_top_moments(consts);
+% cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'tower'));
+% 
+% %% Tower top forces
+% % count = count + 1;
+% % [calib,crosstalk] = calibration_matrix_inputs__tower_top_forces(consts);
+% % cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'tower'));
+% 
 %% Rotor Torque
 count = count + 1;
 [calib,crosstalk] = calibration_matrix_inputs__rotor_torque(consts);
 cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'installed_rotor'));
 
-%% Save
+%% Combined tower to force/moment
+count = count + 1;
+[calib,crosstalk] = calibration_matrix_inputs__tower_top_all(consts);
+cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'installed_rotor'));
+
+%% Just nacelle bending strain gauge (moments)
+count = count + 1;
+[calib,crosstalk] = calibration_matrix_inputs__tower_top_moments(consts);
+cal(count) = build_crosstalk_matrix(crosstalk,calib,data_path,data_folder,tdmsPrefix,makePlots,fullfile(savePath,'installed_rotor'));
+
 for i = 1:length(cal)
     cal(i).stage = 'afterResample';
 end
