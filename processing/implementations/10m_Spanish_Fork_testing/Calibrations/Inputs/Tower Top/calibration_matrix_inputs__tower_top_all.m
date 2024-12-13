@@ -12,7 +12,7 @@ crosstalk.loads_names = {'Tower_Top_Fx','Tower_Top_Fy','GW_Tower_Top_Mx','GW_Tow
 crosstalk.channel_names = {'Upper GW N','Upper GW S','Upper GW E','Upper GW W',...
     'Lower GW N','Lower GW S','Lower GW E','Lower GW W',...
     'Torque Arm Left','Torque Arm Right','Nacelle Bending A','Nacelle Bending B'}; % Names of load channels of intrest
-crosstalk.output_units = {'N','N','N-m','N-m'};
+crosstalk.output_units = {'N','N','N-m','N-m','N-m'};
 calibNum = 0; % Initiate counting varible
 
 %% V-A, H-A

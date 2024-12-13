@@ -7,6 +7,7 @@ out.isRaw = zeros(size(cal.outputNames));
 out.taskName = 'cal output';
 out.samplePeriod = samplePeriod;
 out.metaData = metaData;
+out.tareApplied = [];
 
 switch cal.type
     case {'linear_k','multi_part_linear_k'}
@@ -31,6 +32,22 @@ switch cal.type
 
         % do the conversion
         out.data = cal.data.slope*data + cal.data.offset;
+    case 'arb_fcn'
+        % Step 1: apply arbitrary function
+        out.data = cal.data.fcn(data,cal.data.consts);
+
+         % Step 2: Anti-aliasing filter (FIR)
+        if isfield(cal.data,'filterCutoffHz')
+            if isfield(cal.data,'filterOrder')
+                forder = cal.data.filterOrder;
+            else
+                forder = 6;
+            end
+            Fs = 1/(seconds(time(2)-time(1)));
+            Wn = cal.data.filterCutoffHz / (Fs / 2);
+            b = fir1(forder,Wn,'low');
+            out.data = filtfilt(b,1,out.data);
+        end
 
     case 'counter_voltage_signal_basic'
         % get the indicies of the dataColumns listed in cal.inputChannels
