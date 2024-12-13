@@ -58,7 +58,7 @@ else
     endTime = taskRaw(resampleTaskInd).time(end);
 end
 
-resampleTime = startTime:seconds(1/rate):endTime;
+resampleTime = (startTime:seconds(1/rate):endTime)';
 
 % resample all the channe;s
 out.taskName = 'resampled';
@@ -69,14 +69,18 @@ out.isRaw = 0;
 out.time = resampleTime;
 out.metaData = [];
 out.isRaw = [];
+out.tareApplied = [];
 for i = 1:length(taskRaw)
     out.chanNames = [out.chanNames, taskRaw(i).chanNames];
     out.isRaw = [out.isRaw, taskRaw(i).isRaw];
     if i == resampleTaskInd && (~isfield(opts,'rate') || isempty(opts.rate))
         out.data = [out.data,taskRaw(i).data];
     else
-
+            try
         out.data = [out.data,resampleXFlow(taskRaw(i).data,taskRaw(i).time,resampleTime)];
+            catch
+                1+1
+            end
 
     end
 end

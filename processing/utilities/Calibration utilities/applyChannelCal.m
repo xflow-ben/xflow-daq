@@ -7,6 +7,7 @@ out.isRaw = zeros(size(cal.outputNames));
 out.taskName = 'cal output';
 out.samplePeriod = samplePeriod;
 out.metaData = metaData;
+out.tareApplied = [];
 
 switch cal.type
     case {'linear_k','multi_part_linear_k'}

@@ -59,11 +59,14 @@ if length(fileList) > 1 % only bother if processing more than one file
             end
         end
     end
-    if length(unique(nFiles)) > 1
-        error('The number of tdms files in fileList of different types must be the same')
-    else
+    % if length(unique(nFiles)) > 1
+        % NOTE: Ian commented out this check. Some data has different
+        % numbers of files per task since some daqs tasks ended without
+        % stopping the others from continuing the collect data.
+        %error('The number of tdms files in fileList of different types must be the same')
+    % else
         nFilesPerTask = unique(nFiles);
-    end
+    % end
 
 else
     taskListUnique = {d.taskName};
