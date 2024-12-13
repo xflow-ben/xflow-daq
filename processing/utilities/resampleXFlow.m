@@ -6,10 +6,10 @@ function data = resampleXFlow(data,time,targetTime)
 freqOrig = 1/(seconds(time(2)-time(1)));
 freqTarget = 1/(seconds(targetTime(2)-targetTime(1)));
 
-freqMult = 5;% how many x above freqTarget our upsampling will be
+freqMult = 5;% how many x above freqTarget our upsampling will be (minimum)
 
 if freqOrig < freqMult*freqTarget % then upsample first
-    interpolationFactor = round(freqTarget*freqMult/freqOrig);
+    interpolationFactor = ceil(freqTarget*freqMult/freqOrig);
     if interpolationFactor < 5
         M = 50;
     else
