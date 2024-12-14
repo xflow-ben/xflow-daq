@@ -3,7 +3,7 @@ clear all
 clc
 
 repoDir = 'C:\Users\Ben\Documents\GitHub\xflow-daq';
-calSubPat = 'processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct_25_11_24.mat';
+calSubPat = 'processing\implementations\10m_Spanish_Fork_testing\Calibrations\Results\cal_struct.mat';
 calPath = fullfile(repoDir,calSubPat);
 in = load(calPath);
 

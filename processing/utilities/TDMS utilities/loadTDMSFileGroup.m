@@ -66,6 +66,7 @@ if length(fileList) > 1 % only bother if processing more than one file
         %error('The number of tdms files in fileList of different types must be the same')
     % else
         nFilesPerTask = unique(nFiles);
+        CHeck here to see instead how nFiles of the resample-driving task
     % end
 
 else

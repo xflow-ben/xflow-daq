@@ -85,9 +85,10 @@ fileNums(indices) = [];
 
 groupInds = arrayfun(@(x) find(fileNums == x), unique(fileNums), 'UniformOutput', false);
          
-for i = 6%1:length(groupInds)
+for i = 2%1:length(groupInds)
     fprintf('Processing file group %d of %d\n', i, length(groupInds))
     taskRaw = loadTDMSFileGroup(tdmsFileNames(groupInds{i}),directory);
+    fprintf('files loaded \n')
     [tdtemp,~] = applyCalAndResample(taskRaw,tareStr,cal,opts);
     for j = 1:length(tdtemp.chanNames) % I don't like this but I will do it to use Ian's existing codes.
         td(i).(tdtemp.chanNames{j}) = tdtemp.data(:,j);

@@ -55,7 +55,7 @@ for i = 1:length(taskRaw)
     taskRaw(i).isRaw = ones(size(taskRaw(i).chanNames));
 end
 %% Apply pre-resample calibrations
-
+fprintf('Applying beforeResample cals\n')
 taskRaw = applyAllCalForStage(taskRaw,cal,'beforeResample'); % adds a single field called rawCal
 
 %% Resample
@@ -64,14 +64,16 @@ if ~isfield(opts,'resample')
 else
     resampleOpts = opts.resample;
 end
+fprintf('Resampling and combining\n')
 td = resampleAndCombine(taskRaw,resampleOpts); % adds a task named "resampled" to the task list
 
 
 %% Apply post-resample calibrations
-
+fprintf('Applying afterResample cals\n')
 td = applyAllCalForStage(td,cal,'afterResample'); % adds a single field called rawCal
 
 %% Apply final calibrations
+fprintf('Applying final cals\n')
 td = applyAllCalForStage(td,cal,'final'); % adds a single field called rawCal
 
 %% remove the raw data from our struct (don't need it any more)

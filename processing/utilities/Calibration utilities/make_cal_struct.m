@@ -25,7 +25,8 @@ for II = 1:length(cal_names)
     % end
 end
 
-save(fullfile(path,['cal_struct_',datestr(datetime('now'), 'dd_mm_yy')]),'cal')
+% save(fullfile(path,['cal_struct_',datestr(datetime('now'), 'dd_mm_yy')]),'cal')
+save(fullfile(path,'cal_struct'),'cal')
 % We  programatically put today's date into the cal file name so that it
 % does not overwrite making old ones are available for use with older data
 

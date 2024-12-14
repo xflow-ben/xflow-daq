@@ -71,16 +71,19 @@ out.metaData = [];
 out.isRaw = [];
 out.tareApplied = [];
 for i = 1:length(taskRaw)
-    out.chanNames = [out.chanNames, taskRaw(i).chanNames];
-    out.isRaw = [out.isRaw, taskRaw(i).isRaw];
-    if i == resampleTaskInd && (~isfield(opts,'rate') || isempty(opts.rate))
-        out.data = [out.data,taskRaw(i).data];
-    else
+    % if all the data is NaN, skip it, as the resampler won't work
+    if ~all(isnan(taskRaw(i).data))
+        out.chanNames = [out.chanNames, taskRaw(i).chanNames];
+        out.isRaw = [out.isRaw, taskRaw(i).isRaw];
+        if i == resampleTaskInd && (~isfield(opts,'rate') || isempty(opts.rate))
+            out.data = [out.data,taskRaw(i).data];
+        else
             try
-        out.data = [out.data,resampleXFlow(taskRaw(i).data,taskRaw(i).time,resampleTime)];
+                out.data = [out.data,resampleXFlow(taskRaw(i).data,taskRaw(i).time,resampleTime)];
             catch
                 1+1
             end
 
+        end
     end
 end

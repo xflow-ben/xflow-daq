@@ -43,10 +43,18 @@ switch cal.type
             else
                 forder = 6;
             end
-            Fs = 1/(seconds(time(2)-time(1)));
+            midInd = round(length(time)/2);
+            if time(midInd+1) == time(midInd)
+                error('Can''t determine sample freque from timestamps because timestamps are the same?');
+            end
+            Fs = 1/(seconds(time(midInd+1)-time(midInd)));
             Wn = cal.data.filterCutoffHz / (Fs / 2);
             b = fir1(forder,Wn,'low');
-            out.data = filtfilt(b,1,out.data);
+            if any(isnan(out.data))
+                out.data(~isnan(out.data)) = filtfilt(b,1,out.data(~isnan(out.data)));
+            else
+                out.data = filtfilt(b,1,out.data);
+            end
         end
 
     case 'counter_voltage_signal_basic'
@@ -114,12 +122,15 @@ switch cal.type
 
         % create out.(field_names), where filed names are from cal.output_names
         out.data = [y, dydt, ddyddt];
-    case 'rpm_resets'
 
-        % save reset times here
-        out.time = findResetRPM(data,time);
-        out.data = NaN(size(out.time));
-        out.isRaw = 1; % we want this to get removed later
+        resetTimes = findResetRPM(data,time);
+        save('resetTimes','resetTimes');
+    case 'rpm_resets'
+        error('this is obsolete')
+        % % save reset times here
+        % out.time = findResetRPM(data,time);
+        % out.data = NaN(size(out.time));
+        % out.isRaw = 1; % we want this to get removed later
 
     case 'encoder'
         % get the indicies of the dataColumns listed in cal.inputChannels
@@ -136,13 +147,14 @@ switch cal.type
 
     case 'reset_encoder_via_rpm_sensor'
 
-        [~,tr] = extractChanData(taskRaw,'resetTimes',cal.outputNames);
-
+        % [~,tr] = extractChanData(taskRaw,{'resetTimes'},cal.outputNames);
+        in = load('resetTimes.mat');
+        tr = in.resetTimes;
         tenc = time;
         theta = data;
-        if theta(end) == 0
-            theta(end) = NaN;
-        end
+        % if theta(end) == 0
+        %     theta(end) = NaN;
+        % end
         r_ind = 1;
         for i = 1:length(tr)
             % Skip if tr(i) is outside the range of tenc

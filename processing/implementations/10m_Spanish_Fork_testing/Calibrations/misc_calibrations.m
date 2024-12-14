@@ -83,6 +83,15 @@ cal(count).outputNames = {'Hub_Battery_Voltage'};
 cal(count).outputUnits = {'VDC'}; % Hub DAQ battery voltage
 cal(count).stage = 'afterResample';
 
+% count = count + 1;
+% cal(count).type = 'rpm_resets';
+% cal(count).data.PPR = 2^14; % pulse per revolution of encoder
+% cal(count).data.windowSize = 0.01; % Size of the time window for averaging (in seconds)
+% cal(count).inputChannels = {'RPM Sensor'};
+% cal(count).outputNames = {'resetTimes'}; % Names of physical loads of intrest which are applied during calibrations
+% cal(count).outputUnits = {''}; % Units of load channels after calibration
+% cal(count).stage = 'afterResample';
+
 count = count + 1;
 cal(count).type = 'reset_encoder_via_rpm_sensor';
 cal(count).data.PPR = 2^14; % pulse per revolution of encoder
@@ -90,7 +99,7 @@ cal(count).data.windowSize = 0.01; % Size of the time window for averaging (in s
 cal(count).inputChannels = {'theta_encoder'};
 cal(count).outputNames = {'theta_encoder_reset'}; % Names of physical loads of intrest which are applied during calibrations
 cal(count).outputUnits = {'rad'}; % Units of load channels after calibration
-cal(count).stage = 'beforeResample';
+cal(count).stage = 'afterResample';
 
 count = count + 1;
 cal(count).type = 'arb_fcn';
@@ -123,7 +132,7 @@ cal(count).stage = 'final';
 
 count = count + 1;
 cal(count).type = 'arb_fcn';
-cal(count).data.fcn = @(x,consts)td.tau_gen - td.acc_encoder.*consts.turb.J;
+cal(count).data.fcn = @(x,consts)x(:,1) - x(:,2).*consts.turb.J;
 cal(count).data.consts = consts;
 cal(count).inputChannels = {'tau_gen','acc_encoder'};
 cal(count).outputNames = {'tau_aero'}; % Names of physical loads of intrest which are applied during calibrations
